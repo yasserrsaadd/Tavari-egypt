@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tavari Egypt — Bespoke Desert & Red Sea Trips</title>
+<meta name="description" content="Tavari Egypt is a premier luxury travel atelier crafting bespoke trips across the Sahara and the Red Sea.">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+:root{
+  --ivory: #FAF8F5;
+  --ivory-deep: #F3EEE6;
+  --ink: #1E1C19;
+  --ink-soft: rgba(30,28,25,0.62);
+  --ink-faint: rgba(30,28,25,0.4);
+  --gold: #D4AF37;
+  --gold-deep: #B8932A;
+  --sand: #C5A880;
+  --gold-line: rgba(212,175,55,0.18);
+  --gold-line-strong: rgba(212,175,55,0.38);
+  --glass: rgba(255,255,255,0.45);
+  --glass-strong: rgba(255,255,255,0.66);
+  --glass-border: rgba(212,175,55,0.18);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-soft: 0 20px 60px -20px rgba(30,28,25,0.18);
+  --shadow-lift: 0 30px 80px -24px rgba(30,28,25,0.28);
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+
+body{
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,h4,.font-display{
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.eyebrow{
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 600;
+}
+
+a{ text-decoration:none; color: inherit; }
+::selection{ background: var(--gold-line-strong); }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+  outline: 2px solid var(--gold-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.glass{
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+.glass-strong{
+  background: var(--glass-strong);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+.horizon{
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-line-strong) 50%, transparent);
+}
+.horizon::before{
+  content:"";
+  position:absolute; top:-1.5px; left:50%;
+  width:6px; height:4px;
+  background: var(--gold);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  box-shadow: 0 0 12px 2px rgba(212,175,55,0.45);
+}
+
+.tv-nav{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1101;
+  padding: 26px 0;
+  transition: padding 0.5s var(--ease), background 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.5s var(--ease);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+.tv-nav.scrolled{
+  padding: 14px 0;
+  background: rgba(250,248,245,0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--gold-line-strong);
+  box-shadow: 0 8px 30px -16px rgba(30,28,25,0.15);
+}
+.tv-nav .container{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+}
+.tv-brand{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:600;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  transition: font-size 0.5s var(--ease);
+  text-decoration: none;
+}
+.tv-nav.scrolled .tv-brand{ font-size: 1.3rem; }
+.tv-brand span{
+  color: var(--gold-deep);
+  font-style: italic;
+}
+/* Logo image */
+.tv-logo{
+  height: 44px;
+  width: auto;
+  display: block;
+  mix-blend-mode: multiply;   /* drops the white JPEG background on light surfaces */
+  transition: height 0.5s var(--ease), opacity 0.4s var(--ease);
+  object-fit: contain;
+}
+.tv-nav.scrolled .tv-logo{ height: 34px; }
+.tv-logo-footer{
+  height: 38px;
+  mix-blend-mode: normal;     /* footer is dark — multiply would hide it; use normal */
+  filter: brightness(0) invert(1);  /* make logo white on the dark footer */
+  opacity: 0.9;
+}
+.tv-links{
+  display:flex;
+  align-items:center;
+  gap: 2.1rem;
+}
+.tv-links a{
+  font-size: 0.84rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 0.4s var(--ease);
+}
+.tv-links a::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:0;
+  width:0; height:1px;
+  background: var(--gold-deep);
+  transition: width 0.5s var(--ease);
+}
+.tv-links a:hover{ color: var(--ink); }
+.tv-links a:hover::after{ width:100%; }
+
+.btn-tv-gold{
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: #1E1C19;
+  border: none;
+  padding: 0.62rem 1.5rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  border-radius: 2px;
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), letter-spacing 0.45s var(--ease);
+  box-shadow: 0 8px 24px -10px rgba(212,175,55,0.55);
+  min-height: 44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.btn-tv-gold:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px -10px rgba(212,175,55,0.7);
+  letter-spacing: 0.08em;
+  color: #1E1C19;
+}
+.btn-tv-outline{
+  background: transparent;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  padding: 0.62rem 1.5rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  border-radius: 2px;
+  transition: background 0.45s var(--ease), color 0.45s var(--ease), border-color .45s var(--ease);
+  min-height: 44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.btn-tv-outline:hover{
+  background: var(--ink);
+  color: var(--ivory);
+}
+
+.tv-burger{
+  display:none;
+  width: 44px; height: 44px;
+  align-items:center; justify-content:center;
+  border:1px solid var(--gold-line-strong);
+  border-radius: 2px;
+  background: var(--glass);
+  font-size: 1.1rem;
+}
+
+.tv-mobile-cta{ display:none; }
+
+@media (max-width: 991px){
+  .tv-links{
+    position: fixed;
+    top: 0; right: 0;
+    height: 100vh;
+    width: min(78vw, 340px);
+    background: var(--ivory);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.8rem;
+    padding: 2rem 2.4rem;
+    transform: translateX(100%);
+    transition: transform 0.55s var(--ease);
+    box-shadow: -30px 0 60px -20px rgba(30,28,25,0.2);
+    z-index: 1100;
+    pointer-events: none;
+  }
+  .tv-links.open{ transform: translateX(0); pointer-events: auto; }
+  .tv-links a{ font-size: 1.05rem; }
+  .tv-burger{ display:flex; }
+  .tv-nav-cta-desktop{ display:none; }
+  .tv-mobile-cta{ display:inline-flex; margin-top: 0.4rem; }
+}
+
+.tv-scrim{
+  position:fixed; inset:0; background: rgba(30,28,25,0.35);
+  z-index: 1050; opacity:0; pointer-events:none;
+  transition: opacity 0.5s var(--ease);
+}
+.tv-scrim.show{ opacity:1; pointer-events:auto; }
+
+.hero{
+  position: relative;
+  height: 100vh;
+  min-height: 640px;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+}
+.hero-video-layer{
+  position:absolute; inset:-3%;
+  z-index: 0;
+  will-change: transform;
+  transition: transform 0.15s linear;
+}
+.hero video{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit: cover;
+  z-index: 0;
+  transform: scale(1.08);
+  transition: transform 9s var(--ease);
+}
+.hero.loaded video{ transform: scale(1.16); }
+.hero-video-controls{
+  position:absolute; bottom: 34px; right: 34px; z-index: 3;
+  display:flex; gap: 0.6rem;
+}
+.hero-vctrl{
+  width: 46px; height: 46px; border-radius: 50%;
+  background: rgba(250,248,245,0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(250,248,245,0.4);
+  color: var(--ivory);
+  display:flex; align-items:center; justify-content:center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.4s var(--ease), transform 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+.hero-vctrl:hover{ background: var(--gold); color:#1E1C19; border-color: var(--gold); transform: scale(1.08); }
+@media (max-width: 640px){
+  .hero-video-controls{ bottom: 96px; right: 18px; }
+}
+.hero::after{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(180deg,
+    rgba(250,248,245,0.1) 0%,
+    rgba(250,248,245,0.34) 38%,
+    rgba(250,248,245,0.86) 78%,
+    rgba(250,248,245,0.98) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-glow{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background: radial-gradient(480px circle at var(--mx,50%) var(--my,40%), rgba(212,175,55,0.16), transparent 60%);
+  transition: background 0.3s ease-out;
+}
+.hero-content{
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+.hero .eyebrow{ color: var(--gold-deep); opacity:0; animation: heroFadeUp 1s var(--ease) 0.2s forwards; }
+.hero h1{
+  font-size: clamp(2.6rem, 6vw, 5.1rem);
+  line-height: 1.04;
+  margin: 0.6rem 0 1.3rem;
+  max-width: 780px;
+  overflow: hidden;
+}
+.hero h1 .word{
+  display: inline-block;
+  opacity:0;
+  transform: translateY(110%) rotate(2deg);
+  animation: heroWordIn 1.1s var(--ease) forwards;
+}
+@keyframes heroWordIn{ to{ opacity:1; transform: translateY(0) rotate(0); } }
+@keyframes heroFadeUp{ from{ opacity:0; transform: translateY(16px); } to{ opacity:1; transform: translateY(0); } }
+.hero h1 em{
+  font-style: italic;
+  color: var(--gold-deep);
+}
+.hero p.lede{
+  font-size: 1.08rem;
+  color: var(--ink-soft);
+  max-width: 480px;
+  margin-bottom: 2.1rem;
+  line-height: 1.65;
+  opacity:0;
+  animation: heroFadeUp 1s var(--ease) 0.9s forwards;
+}
+.hero-cta-row{ display:flex; gap: 1rem; flex-wrap:wrap; align-items:center; opacity:0; animation: heroFadeUp 1s var(--ease) 1.15s forwards; }
+.hero-insights{ opacity:0; animation: heroFadeUp 0.6s var(--ease) 1.3s forwards; }
+.hero-scroll-cue{
+  position:absolute; bottom: 34px; left: 50%; transform: translateX(-50%);
+  z-index:2;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+}
+.hero-scroll-cue .line{
+  width:1px; height: 34px;
+  background: linear-gradient(180deg, var(--gold-deep), transparent);
+  animation: scrollPulse 2.2s var(--ease) infinite;
+}
+@keyframes scrollPulse{
+  0%{ opacity:.2; transform: scaleY(0.4); transform-origin: top; }
+  50%{ opacity:1; transform: scaleY(1); transform-origin: top; }
+  100%{ opacity:.2; transform: scaleY(0.4); transform-origin: top; }
+}
+
+.reveal{
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+.reveal.in{ opacity:1; transform: translateY(0) translateX(0) scale(1); }
+.reveal-d1{ transition-delay: 0.08s; }
+.reveal-d2{ transition-delay: 0.16s; }
+.reveal-d3{ transition-delay: 0.24s; }
+.reveal-d4{ transition-delay: 0.32s; }
+.reveal-d5{ transition-delay: 0.40s; }
+
+.reveal-left{ transform: translateX(-48px); }
+.reveal-left.in{ transform: translateX(0); }
+.reveal-right{ transform: translateX(48px); }
+.reveal-right.in{ transform: translateX(0); }
+.reveal-scale{ transform: scale(0.92); }
+.reveal-scale.in{ transform: scale(1); }
+.reveal-blur{ filter: blur(8px); transform: translateY(18px); }
+.reveal-blur.in{ filter: blur(0); transform: translateY(0); }
+
+/* parallax — JS sets --py via transform on scroll */
+.parallax{ will-change: transform; }
+
+/* magnetic tilt cards — JS adds rotateX/rotateY via inline transform on mousemove */
+.tilt-card{ transform-style: preserve-3d; transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease); }
+
+/* animated underline-reveal for section eyebrows/titles */
+.title-line{
+  position: relative;
+  display:inline-block;
+  overflow:hidden;
+}
+.title-line::after{
+  content:"";
+  position:absolute; left:0; bottom:-6px;
+  width:100%; height:1px;
+  background: var(--gold-deep);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s var(--ease);
+}
+.reveal.in .title-line::after{ transform: scaleX(1); }
+
+.section{ padding: 6.5rem 0; position: relative; scroll-margin-top: 90px; }
+.section-tight{ padding: 4rem 0; }
+.section-title{
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+  margin: 0.4rem 0 0;
+}
+.section-head{ max-width: 640px; margin-bottom: 3rem; }
+
+.about-photo-wrap{
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.about-photo-wrap img{
+  width:100%; height: 100%;
+  object-fit: cover;
+  display:block;
+  min-height: 460px;
+  transition: transform 1.2s var(--ease);
+}
+.about-photo-wrap:hover img{ transform: scale(1.045); }
+.about-photo-wrap::after{
+  content:"";
+  position:absolute; inset:0;
+  border: 1px solid var(--gold-line-strong);
+  pointer-events:none;
+}
+.about-quote{
+  font-family:'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  line-height: 1.5;
+  color: var(--ink);
+}
+.about-quote::before{
+  content: "";
+  display:block;
+  width: 46px; height: 1px;
+  background: var(--gold-deep);
+  margin-bottom: 1.6rem;
+}
+
+.hero-insights{
+  display:flex;
+  align-items:center;
+  gap: 0;
+  margin-top: 2.6rem;
+  flex-wrap: nowrap;
+}
+.hero-insight{
+  text-align:left;
+  padding: 0 1.6rem;
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.hero-insight:first-child{ padding-left: 0; }
+.hero-insight:not(:last-child)::after{
+  content:"";
+  position:absolute; right:0; top:50%; transform: translateY(-50%);
+  width:1px; height: 30px;
+  background: var(--gold-line-strong);
+}
+.hero-insight-num{
+  font-family:'Cormorant Garamond', serif;
+  font-size: clamp(1.2rem, 3.5vw, 1.85rem);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  display:flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.hero-insight-num .unit{ color: var(--gold-deep); font-size: 0.9em; }
+.hero-insight-label{
+  font-size: clamp(0.54rem, 1.4vw, 0.65rem);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 0.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 575px){
+  .hero-insights{ margin-top: 1.8rem; }
+  .hero-insight{ padding: 0 0.65rem; }
+  .hero-insight:first-child{ padding-left: 0; }
+  .hero-insight:not(:last-child)::after{ height: 22px; }
+}
+
+.dest-card{
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 420px;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+.dest-card:hover{ transform: translateY(-8px); box-shadow: var(--shadow-lift); }
+.dest-card img{
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover;
+  transition: transform 1.4s var(--ease);
+}
+.dest-card:hover img{ transform: scale(1.08); }
+.dest-card::after{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(30,28,25,0) 35%, rgba(30,28,25,0.82) 100%);
+}
+.dest-card-body{
+  position:absolute; left:0; right:0; bottom:0;
+  padding: 1.6rem;
+  z-index: 2;
+  color: var(--ivory);
+}
+.dest-card-body h3{ color: var(--ivory); margin:0 0 0.7rem; font-size: 1.7rem; }
+.dest-view-btn{
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ivory);
+  border: 1px solid rgba(250,248,245,0.55);
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  display:inline-flex;
+  align-items:center;
+  gap: 0.5rem;
+  transition: background 0.4s var(--ease), border-color 0.4s var(--ease);
+  background: rgba(250,248,245,0.06);
+  min-height: 44px;
+}
+.dest-view-btn:hover{
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+.tv-lightbox{
+  position: fixed; inset:0; z-index: 1400;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(20,18,16,0.88);
+  opacity:0; pointer-events:none;
+  transition: opacity 0.5s var(--ease);
+  padding: 2rem;
+}
+.tv-lightbox.show{ opacity:1; pointer-events:auto; }
+.tv-lightbox-frame{
+  position:relative;
+  max-width: 920px; width:100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(212,175,55,0.3);
+  border-radius: 4px;
+  padding: 1rem;
+  transform: scale(0.94);
+  transition: transform 0.5s var(--ease);
+}
+.tv-lightbox.show .tv-lightbox-frame{ transform: scale(1); }
+.tv-lightbox-img-wrap{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #000;
+}
+.tv-lightbox-img-wrap img{
+  position:absolute; inset:0;
+  width:100%; height:100%; object-fit:cover;
+  opacity:0;
+  transition: opacity 0.5s var(--ease);
+}
+.tv-lightbox-img-wrap img.active{ opacity:1; }
+.tv-lightbox-meta{
+  display:flex; justify-content:space-between; align-items:center;
+  color: var(--ivory); padding: 0.9rem 0.4rem 0.2rem;
+  font-size: 0.82rem; letter-spacing: 0.04em;
+}
+.tv-lightbox-nav{
+  position:absolute; top:50%; transform: translateY(-50%);
+  width: 46px; height:46px; border-radius:50%;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  transition: background 0.4s var(--ease);
+  font-size: 1.1rem;
+}
+.tv-lightbox-nav:hover{ background: var(--gold); color:#1E1C19; border-color: var(--gold); }
+.tv-lightbox-nav.prev{ left: -22px; }
+.tv-lightbox-nav.next{ right: -22px; }
+@media (max-width: 640px){
+  .tv-lightbox-nav.prev{ left: 6px; }
+  .tv-lightbox-nav.next{ right: 6px; }
+}
+.tv-lightbox-close{
+  position:absolute; top: -18px; right: -18px;
+  width: 40px; height:40px; border-radius:50%;
+  background: var(--gold); color:#1E1C19;
+  display:flex; align-items:center; justify-content:center;
+  font-size: 1.1rem;
+  box-shadow: 0 8px 20px -6px rgba(0,0,0,0.5);
+}
+
+.trip-card{
+  border-radius: 4px;
+  overflow:hidden;
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  height: 100%;
+  display:flex;
+  flex-direction: column;
+  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+.trip-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-lift); }
+.trip-thumb-wrap{
+  position:relative; height: 230px; overflow:hidden;
+}
+.trip-thumb-wrap img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  transition: transform 1.3s var(--ease);
+}
+.trip-card:hover .trip-thumb-wrap img{ transform: scale(1.07); }
+.trip-price-chip{
+  position:absolute; top:14px; right:14px;
+  background: rgba(30,28,25,0.78);
+  color: var(--gold);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  padding: 0.4rem 0.85rem;
+  border-radius: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.trip-body{ padding: 1.5rem; flex:1; display:flex; flex-direction:column; }
+.trip-body h3{ font-size: 1.45rem; margin: 0 0 0.3rem; }
+.trip-dates{
+  font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 1.1rem;
+  display:flex; align-items:center; gap:0.4rem;
+}
+.trip-actions{ margin-top: auto; display:flex; gap:0.7rem; flex-wrap:wrap; }
+.btn-trip-secondary{
+  flex:1; min-width: 130px;
+  border: 1px solid var(--gold-line-strong);
+  color: var(--ink);
+  background: transparent;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 0.9rem;
+  border-radius: 2px;
+  text-align:center;
+  display:inline-flex; align-items:center; justify-content:center; gap:0.4rem;
+  min-height: 44px;
+  transition: background 0.4s var(--ease), color 0.4s var(--ease);
+}
+.btn-trip-secondary:hover{ background: var(--ivory-deep); }
+.btn-trip-primary{
+  flex:1; min-width: 130px;
+  background: var(--ink);
+  color: var(--ivory);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  padding: 0.65rem 0.9rem;
+  border: none;
+  border-radius: 2px;
+  display:inline-flex; align-items:center; justify-content:center; gap:0.4rem;
+  min-height: 44px;
+  transition: background 0.4s var(--ease);
+}
+.btn-trip-primary:hover{ background: var(--gold-deep); color: #1E1C19; }
+.trips-skeleton{
+  height: 230px;
+  background: linear-gradient(100deg, var(--ivory-deep) 30%, rgba(255,255,255,0.7) 50%, var(--ivory-deep) 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 4px;
+}
+@keyframes shimmer{ 0%{ background-position: 200% 0; } 100%{ background-position: -200% 0; } }
+.trips-empty{
+  text-align:center; padding: 3rem 1.5rem;
+  color: var(--ink-soft);
+  border: 1px dashed var(--gold-line-strong);
+  border-radius: 4px;
+}
+
+.review-card{
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  padding: 2.1rem 1.8rem;
+  height: 100%;
+  display:flex;
+  flex-direction:column;
+  transition: transform 0.55s var(--ease), box-shadow 0.55s var(--ease), border-color 0.55s var(--ease);
+}
+.review-card:hover{ transform: translateY(-5px); box-shadow: var(--shadow-soft); border-color: var(--gold-line-strong); }
+.review-mono{
+  width: 52px; height:52px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-line-strong);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond', serif;
+  font-weight:600;
+  color: var(--gold-deep);
+  font-size: 1.15rem;
+  margin-bottom: 1.1rem;
+}
+.review-stars{ color: var(--gold); font-size: 0.85rem; letter-spacing: 0.12em; margin-bottom: 0.9rem; }
+.review-quote{
+  font-family:'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.12rem;
+  line-height: 1.6;
+  color: var(--ink);
+  flex:1;
+  margin-bottom: 1.3rem;
+}
+.review-name{ font-size: 0.9rem; font-weight:600; }
+.review-trip{ font-size: 0.78rem; color: var(--ink-soft); }
+
+.contact-wrap{
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+.contact-info{
+  background: var(--ink);
+  color: var(--ivory);
+  padding: 3rem 2.4rem;
+  height: 100%;
+}
+.contact-info h3{ color: var(--ivory); }
+.contact-line{
+  display:flex; gap: 0.9rem; align-items:flex-start;
+  margin-bottom: 1.5rem;
+  font-size: 0.92rem;
+  color: rgba(250,248,245,0.82);
+}
+.contact-line i{ color: var(--gold); font-size: 1.05rem; margin-top: 2px; }
+.contact-form-pane{ padding: 3rem 2.4rem; }
+.tv-field-label{
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  margin-bottom: 0.45rem;
+  display:block;
+}
+.tv-input, .tv-select, .tv-textarea{
+  width: 100%;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid var(--gold-line-strong);
+  border-radius: 3px;
+  padding: 0.75rem 0.95rem;
+  font-size: 0.92rem;
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+  min-height: 44px;
+}
+.tv-textarea{ min-height: 110px; resize: vertical; }
+.tv-input:focus, .tv-select:focus, .tv-textarea:focus{
+  outline:none;
+  border-color: var(--gold-deep);
+  background: rgba(255,255,255,0.85);
+}
+.tv-input::placeholder, .tv-textarea::placeholder{ color: var(--ink-faint); }
+.tv-num-stepper{
+  display:flex; align-items:center; border: 1px solid var(--gold-line-strong);
+  border-radius: 3px; background: rgba(255,255,255,0.55); overflow:hidden;
+}
+.tv-num-stepper button{
+  width: 44px; height: 44px; flex-shrink:0;
+  border:none; background: transparent; font-size:1.1rem; color: var(--ink);
+  transition: background 0.3s var(--ease);
+}
+.tv-num-stepper button:hover{ background: var(--gold-line); }
+.tv-num-stepper input{
+  border:none; background:transparent; text-align:center; width: 100%;
+  font-size: 0.95rem; font-variant-numeric: tabular-nums;
+}
+.tv-num-stepper input:focus{ outline:none; }
+.contact-submit-foot{
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+  margin-top: 0.8rem;
+}
+
+.tv-drawer-scrim{
+  position: fixed; inset:0; z-index: 1290;
+  background: rgba(20,18,16,0.45);
+  opacity:0; pointer-events:none;
+  transition: opacity 0.55s var(--ease);
+}
+.tv-drawer-scrim.show{ opacity:1; pointer-events:auto; }
+.tv-drawer{
+  position: fixed; top:0; right:0; bottom:0;
+  width: min(460px, 100vw);
+  background: var(--ivory);
+  z-index: 1300;
+  box-shadow: -40px 0 80px -20px rgba(30,28,25,0.35);
+  transform: translateX(100%);
+  transition: transform 0.6s var(--ease);
+  display:flex; flex-direction:column;
+}
+.tv-drawer.show{ transform: translateX(0); }
+.tv-drawer-head{
+  padding: 1.6rem 1.8rem;
+  border-bottom: 1px solid var(--gold-line);
+  display:flex; align-items:flex-start; justify-content:space-between;
+  background: var(--glass-strong);
+  backdrop-filter: blur(10px);
+}
+.tv-drawer-head h4{ margin:0; font-size: 1.4rem; }
+.tv-drawer-head .sub{ font-size: 0.78rem; color: var(--ink-soft); margin-top:0.2rem; }
+.tv-drawer-close{
+  width: 38px; height:38px; border-radius:50%;
+  border: 1px solid var(--gold-line-strong);
+  display:flex; align-items:center; justify-content:center;
+  background: transparent; flex-shrink:0;
+  transition: background 0.3s var(--ease);
+}
+.tv-drawer-close:hover{ background: var(--gold-line); }
+.tv-drawer-body{
+  flex:1; overflow-y:auto;
+  padding: 1.8rem;
+}
+.tv-stage-track{ position:relative; }
+.tv-stage{
+  display:none;
+}
+.tv-stage.active{ display:block; animation: stageIn 0.5s var(--ease); }
+@keyframes stageIn{ from{ opacity:0; transform: translateX(14px); } to{ opacity:1; transform: translateX(0); } }
+.tv-stage-pips{
+  display:flex; align-items:center; gap: 0.6rem; margin-bottom: 1.7rem;
+}
+.tv-pip{
+  width: 26px; height: 26px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size: 0.74rem; font-weight:600;
+  border: 1px solid var(--gold-line-strong);
+  color: var(--ink-soft);
+  transition: background 0.4s var(--ease), color 0.4s var(--ease), border-color 0.4s var(--ease);
+}
+.tv-pip.active{ background: var(--gold); color: #1E1C19; border-color: var(--gold); }
+.tv-pip-line{ width: 30px; height:1px; background: var(--gold-line-strong); }
+
+.tv-price-engine{
+  background: var(--ink);
+  color: var(--ivory);
+  border-radius: 4px;
+  padding: 1.3rem 1.5rem;
+  margin: 1.6rem 0;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.tv-price-engine .label{ font-size: 0.78rem; color: rgba(250,248,245,0.6); letter-spacing: 0.04em; }
+.tv-price-engine .amount{
+  font-family:'Cormorant Garamond', serif;
+  font-size: 1.9rem; color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  transition: opacity 0.25s ease;
+}
+
+.tv-pay-row{
+  display:flex; align-items:center; gap: 0.9rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--gold-line-strong);
+  border-radius: 3px;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+}
+.tv-pay-row .ic{ font-size: 1.25rem; }
+.tv-pay-row code{
+  background: var(--ivory-deep); padding: 0.15rem 0.5rem; border-radius:2px;
+  color: var(--ink); font-size: 0.86rem;
+}
+
+.tv-dropzone{
+  border: 1.5px dashed var(--gold-line-strong);
+  border-radius: 4px;
+  padding: 1.6rem;
+  text-align:center;
+  cursor:pointer;
+  transition: border-color 0.4s var(--ease), background 0.4s var(--ease);
+  background: rgba(255,255,255,0.4);
+  min-height: 120px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap: 0.5rem;
+}
+.tv-dropzone:hover, .tv-dropzone.drag{ border-color: var(--gold-deep); background: rgba(212,175,55,0.06); }
+.tv-dropzone i{ font-size: 1.6rem; color: var(--gold-deep); }
+.tv-dropzone .hint{ font-size: 0.78rem; color: var(--ink-soft); }
+.tv-dropzone .filename{ font-size: 0.84rem; color: var(--ink); font-weight:500; word-break:break-all; }
+.tv-dropzone-preview{
+  max-width: 100%; max-height: 130px; border-radius:3px; margin-top:0.5rem;
+  display:none;
+}
+
+.tv-stage-actions{ display:flex; gap: 0.8rem; margin-top: 1.6rem; }
+.btn-tv-disabled{ opacity: 0.45; cursor: not-allowed; pointer-events:none; }
+
+.spinner-gold{
+  width: 16px; height:16px;
+  border: 2px solid rgba(250,248,245,0.35);
+  border-top-color: #1E1C19;
+  border-radius:50%;
+  animation: spin 0.8s linear infinite;
+  display:inline-block;
+}
+@keyframes spin{ to{ transform: rotate(360deg); } }
+
+.tv-toast-stack{
+  position: fixed; top: 22px; left:50%; transform: translateX(-50%);
+  z-index: 1600;
+  display:flex; flex-direction:column; gap: 0.7rem;
+  width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+.tv-toast{
+  background: var(--glass-strong);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--gold-line-strong);
+  border-radius: 5px;
+  box-shadow: var(--shadow-soft);
+  padding: 0.9rem 1.1rem;
+  display:flex; align-items:flex-start; gap: 0.7rem;
+  transform: translateY(-18px) scale(0.96);
+  opacity: 0;
+  transition: transform 0.55s var(--ease), opacity 0.55s var(--ease);
+  pointer-events: auto;
+}
+.tv-toast.show{ transform: translateY(0) scale(1); opacity:1; }
+.tv-toast .ic{
+  width: 26px; height:26px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size: 0.85rem;
+  margin-top: 1px;
+}
+.tv-toast.success .ic{ background: rgba(46,138,86,0.15); color:#2E8A56; }
+.tv-toast.error .ic{ background: rgba(184,60,60,0.15); color:#B83C3C; }
+.tv-toast.info .ic{ background: var(--gold-line); color: var(--gold-deep); }
+.tv-toast .msg{ font-size: 0.86rem; line-height:1.4; color: var(--ink); }
+.tv-toast .close-x{
+  margin-left:auto; font-size: 0.9rem; color: var(--ink-faint); cursor:pointer; flex-shrink:0;
+}
+
+.tv-modal-scrim{
+  position: fixed; inset:0; z-index: 1500;
+  background: rgba(20,18,16,0.55);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition: opacity 0.5s var(--ease);
+  padding: 1.5rem;
+}
+.tv-modal-scrim.show{ opacity:1; pointer-events:auto; }
+.tv-success-modal{
+  max-width: 460px; width:100%;
+  background: var(--ivory);
+  border-radius: 6px;
+  border: 1px solid var(--gold-line-strong);
+  padding: 2.6rem 2.2rem;
+  text-align:center;
+  transform: translateY(24px) scale(0.96);
+  transition: transform 0.55s var(--ease);
+}
+.tv-modal-scrim.show .tv-success-modal{ transform: translateY(0) scale(1); }
+.tv-success-icon{
+  width: 64px; height:64px; border-radius:50%;
+  background: var(--gold-line); color: var(--gold-deep);
+  display:flex; align-items:center; justify-content:center;
+  font-size: 1.8rem; margin: 0 auto 1.3rem;
+}
+.tv-success-modal h3{ margin-bottom: 0.8rem; }
+.tv-success-modal p{ color: var(--ink-soft); font-size: 0.95rem; line-height:1.6; margin-bottom: 1.6rem; }
+
+.tv-footer{
+  background: var(--ink); color: rgba(250,248,245,0.7);
+  padding: 3rem 0 2rem;
+  font-size: 0.85rem;
+}
+.tv-footer .tv-brand{ color: var(--ivory); }
+.tv-footer .tv-brand span{ color: var(--gold); }
+.tv-footer a:hover{ color: var(--gold); }
+.footer-bottom{
+  border-top: 1px solid rgba(250,248,245,0.12);
+  margin-top: 2.2rem; padding-top: 1.3rem;
+  font-size: 0.76rem; color: rgba(250,248,245,0.45);
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap: 0.6rem;
+}
+
+.text-gold{ color: var(--gold-deep) !important; }
+.bg-ivory-deep{ background: var(--ivory-deep); }
+</style>
+</head>
+<body>
+
+<div class="tv-toast-stack" id="toastStack" aria-live="polite"></div>
+
+<nav class="tv-nav" id="tvNav">
+  <div class="container">
+    <a href="#" class="tv-brand" aria-label="Tavari Egypt — Home"><img src="/images/pietro-de-grandi-T7K4aEPoGGk-unsplash.jpg" alt="Tavari Egypt logo" class="tv-logo"></a>
+
+    <div class="tv-links" id="tvLinks">
+      <a href="#about" class="tv-link-item">About</a>
+      <a href="#gallery" class="tv-link-item">Gallery</a>
+      <a href="#trips" class="tv-link-item">Trips</a>
+      <a href="#reviews" class="tv-link-item">Reviews</a>
+      <a href="#contact" class="tv-link-item">Contact</a>
+      <a href="#trips" class="btn-tv-gold tv-link-item tv-mobile-cta">Book a Journey</a>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <a href="#trips" class="btn-tv-gold tv-nav-cta-desktop d-none d-lg-inline-flex">Book a Journey</a>
+      <button class="tv-burger d-lg-none" id="tvBurger" aria-label="Open menu" aria-expanded="false">
+        <i class="bi bi-list" id="burgerIcon"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="tv-scrim" id="tvScrim"></div>
+
+
+<header class="hero" id="tvHero">
+  <div class="hero-video-layer" id="heroVideoLayer">
+    <video id="heroVideo" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1920&auto=format&fit=crop">
+      <source src="https://cdn.coverr.co/videos/coverr-driving-through-the-desert-9573/1080p.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-glow" id="heroGlow"></div>
+  <div class="container hero-content">
+    <div class="row">
+      <div class="col-lg-8">
+        <p class="eyebrow">Tavari Egypt &nbsp;&middot;&nbsp; Bespoke Wilderness Atelier</p>
+        <h1 id="heroHeadline" aria-label="Journeys carved by desert and tide."></h1>
+        <p class="lede">Private trips across the Sahara's dunes and the Red Sea's reefs &mdash; guided by native Bedouin hands, away from the tourist trail.</p>
+        <div class="hero-cta-row">
+          <a href="#trips" class="btn-tv-gold">View Trips</a>
+          <a href="#about" class="btn-tv-outline">Our Philosophy</a>
+        </div>
+        <div class="hero-insights">
+          <div class="hero-insight">
+            <div class="hero-insight-num"><span class="metric-num" data-count="180" data-suffix="+">0</span></div>
+            <div class="hero-insight-label">Completed Journeys</div>
+          </div>
+          <div class="hero-insight">
+            <div class="hero-insight-num"><span class="metric-num" data-count="4200" data-suffix="+">0</span></div>
+            <div class="hero-insight-label">Discovered Paths</div>
+          </div>
+          <div class="hero-insight">
+            <div class="hero-insight-num"><span class="metric-num" data-count="100" data-suffix="%">0</span></div>
+            <div class="hero-insight-label">Vetted Native Guides</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-video-controls">
+    <button class="hero-vctrl" id="heroPlayToggle" aria-label="Pause background video"><i class="bi bi-pause-fill" id="heroPlayIcon"></i></button>
+    <button class="hero-vctrl" id="heroMuteToggle" aria-label="Unmute background video"><i class="bi bi-volume-mute-fill" id="heroMuteIcon"></i></button>
+  </div>
+  <div class="hero-scroll-cue">
+    <span>SCROLL</span>
+    <span class="line"></span>
+  </div>
+</header>
+
+<section class="section bg-ivory-deep" id="trips">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Active Trips</p>
+      <h2 class="section-title"><span class="title-line">Choose your horizon.</span></h2>
+    </div>
+    <div class="row g-4" id="tripsGrid">
+      <div class="col-md-6 col-lg-4"><div class="trips-skeleton"></div></div>
+      <div class="col-md-6 col-lg-4"><div class="trips-skeleton"></div></div>
+      <div class="col-md-6 col-lg-4"><div class="trips-skeleton"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-5 reveal reveal-left">
+        <div class="about-photo-wrap parallax" data-parallax-speed="0.08">
+          <img src="https://images.unsplash.com/photo-1539650116574-8efeb43e2750?q=80&w=1000&auto=format&fit=crop" alt="Editorial photograph of the Egyptian desert landscape at golden hour">
+        </div>
+      </div>
+      <div class="col-lg-7 reveal reveal-right reveal-d2">
+        <p class="eyebrow">Our Philosophy</p>
+        <h2 class="section-title mb-4"><span class="title-line">A native, unhurried Egypt.</span></h2>
+        <p class="about-quote">&ldquo;Tavari Egypt is a premier luxury travel atelier dedicated to crafting untamed, deeply immersive wilderness trips across the ancient sands of the Sahara and the vibrant reefs of the Red Sea. By blending bespoke private hospitality with the native ancestral wisdom of local Bedouin guides, we bypass tourist crowds to unlock exclusive, raw moments of wonder &mdash; ensuring absolute security, transaction transparency, and legendary desert journeys that honor the land and captivate the soul.&rdquo;</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<div class="container"><div class="horizon"></div></div>
+
+<section class="section" id="gallery">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Mixed Media</p>
+      <h2 class="section-title"><span class="title-line">Destinations worth the dust.</span></h2>
+    </div>
+    <div class="row g-4" id="galleryGrid"></div>
+  </div>
+</section>
+
+<div class="tv-lightbox" id="tvLightbox" role="dialog" aria-modal="true" aria-label="Image gallery">
+  <div class="tv-lightbox-frame">
+    <button class="tv-lightbox-close" id="lightboxClose" aria-label="Close gallery"><i class="bi bi-x-lg"></i></button>
+    <div class="tv-lightbox-img-wrap" id="lightboxImgWrap"></div>
+    <button class="tv-lightbox-nav prev" id="lightboxPrev" aria-label="Previous image"><i class="bi bi-chevron-left"></i></button>
+    <button class="tv-lightbox-nav next" id="lightboxNext" aria-label="Next image"><i class="bi bi-chevron-right"></i></button>
+    <div class="tv-lightbox-meta">
+      <span id="lightboxTitle">Destination</span>
+      <span id="lightboxCounter">Image 1 of 5</span>
+    </div>
+  </div>
+</div>
+
+
+<section class="section" id="reviews">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Traveler Reviews</p>
+      <h2 class="section-title"><span class="title-line">Carried home in their words.</span></h2>
+    </div>
+    <div class="row g-4" id="reviewsGrid"></div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Get In Touch</p>
+      <h2 class="section-title"><span class="title-line">Tell us where, we'll handle how.</span></h2>
+    </div>
+
+    <div class="contact-wrap reveal reveal-scale">
+      <div class="row g-0">
+        <div class="col-lg-5">
+          <div class="contact-info">
+            <h3 class="mb-4">Tavari Egypt</h3>
+            <div class="contact-line"><i class="bi bi-geo-alt"></i><span>12 El Nasr Road, New Cairo, Cairo Governorate, Egypt</span></div>
+            <div class="contact-line"><i class="bi bi-whatsapp"></i><span>WhatsApp Hotline &mdash; +20 100 123 4567</span></div>
+            <div class="contact-line"><i class="bi bi-telephone"></i><span>Reservations &mdash; +20 2 2345 6789</span></div>
+            <div class="contact-line"><i class="bi bi-clock"></i><span>Support hours &mdash; Daily, 9:00 AM &ndash; 11:00 PM (Cairo time)</span></div>
+            <div class="contact-line"><i class="bi bi-envelope"></i><span>concierge@tavariegypt.com</span></div>
+            <div class="horizon my-4" style="background:linear-gradient(90deg, transparent, rgba(212,175,55,0.45) 50%, transparent);"></div>
+            <p style="font-size:0.85rem; color:rgba(250,248,245,0.55); line-height:1.6;">Every inquiry is reviewed personally by our booking desk &mdash; no call centers, no scripts.</p>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="contact-form-pane">
+            <form id="inquiryForm" novalidate>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="tv-field-label" for="inqName">Full name</label>
+                  <input class="tv-input" type="text" id="inqName" placeholder="e.g. Yasser Saad" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="tv-field-label" for="inqPhone">Phone number</label>
+                  <input class="tv-input" type="tel" id="inqPhone" placeholder="01xxxxxxxxx" required>
+                </div>
+                <div class="col-12">
+                  <label class="tv-field-label" for="inqEmail">Email address</label>
+                  <input class="tv-input" type="email" id="inqEmail" placeholder="you@email.com" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="tv-field-label" for="inqTrip">Trip you're interested in</label>
+                  <select class="tv-select" id="inqTrip">
+                    <option selected>Not sure yet</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="tv-field-label" for="inqTravelers">Travelers</label>
+                  <div class="tv-num-stepper">
+                    <button type="button" id="inqTravelersMinus" aria-label="Decrease travelers">&minus;</button>
+                    <input type="number" id="inqTravelers" value="2" min="1" max="20" aria-label="Number of travelers" inputmode="numeric">
+                    <button type="button" id="inqTravelersPlus" aria-label="Increase travelers">+</button>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <label class="tv-field-label" for="inqNotes">Anything we should know?</label>
+                  <textarea class="tv-textarea" id="inqNotes" placeholder="Dates you're thinking of, special requests, etc."></textarea>
+                </div>
+                <div class="col-12 pt-2">
+                  <button type="submit" class="btn-tv-gold w-100 w-md-auto" id="inquirySubmitBtn">
+                    <span class="btn-label">Send Request</span>&nbsp; <i class="bi bi-send-fill ms-1"></i>
+                  </button>
+                  <p class="contact-submit-foot">We'll reply by WhatsApp or call within a few hours.</p>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="tv-footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <a href="#" class="tv-brand mb-3 d-inline-block" aria-label="Tavari Egypt — Home"><img src="data:image/jpeg;base64,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" alt="Tavari Egypt logo" class="tv-logo tv-logo-footer"></a>
+        <p style="font-size:0.85rem; color:rgba(250,248,245,0.5); max-width:280px;">Bespoke desert and Red Sea trips, guided by native hands.</p>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <p class="eyebrow mb-3" style="color:rgba(250,248,245,0.5);">Explore</p>
+        <div class="d-flex flex-column gap-2">
+          <a href="#about">About</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#trips">Trips</a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <p class="eyebrow mb-3" style="color:rgba(250,248,245,0.5);">Company</p>
+        <div class="d-flex flex-column gap-2">
+          <a href="#reviews">Reviews</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <p class="eyebrow mb-3" style="color:rgba(250,248,245,0.5);">Reach Us</p>
+        <p style="font-size:0.85rem;">concierge@tavariegypt.com<br>WhatsApp +20 100 123 4567</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; <span id="yearNow"></span> Tavari Egypt. All rights reserved.</span>
+      <span>Crafted for the untamed traveler.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="tv-drawer-scrim" id="drawerScrim"></div>
+<aside class="tv-drawer" id="bookingDrawer" role="dialog" aria-modal="true" aria-label="Booking">
+  <div class="tv-drawer-head">
+    <div>
+      <h4 id="drawerTripTitle">Trip Title</h4>
+      <div class="sub" id="drawerTripDates">Dates</div>
+    </div>
+    <button class="tv-drawer-close" id="drawerCloseBtn" aria-label="Close booking panel"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="tv-drawer-body">
+
+    <div class="tv-stage-pips">
+      <div class="tv-pip active" id="pip1">1</div>
+      <div class="tv-pip-line"></div>
+      <div class="tv-pip" id="pip2">2</div>
+    </div>
+
+    <div class="tv-stage active" id="stage1">
+      <p class="eyebrow mb-3">Traveler Details</p>
+
+      <label class="tv-field-label" for="bkName">Full Name</label>
+      <input class="tv-input mb-3" type="text" id="bkName" placeholder="e.g. Yasser Saad" required>
+
+      <label class="tv-field-label" for="bkPhone">Mobile Number</label>
+      <input class="tv-input mb-3" type="tel" id="bkPhone" placeholder="01xxxxxxxxx" required>
+
+      <label class="tv-field-label" for="bkEmail">Email Address</label>
+      <input class="tv-input mb-3" type="email" id="bkEmail" placeholder="you@email.com" required>
+
+      <label class="tv-field-label" for="bkPersons">Number of Persons</label>
+      <div class="tv-num-stepper mb-2">
+        <button type="button" id="bkPersonsMinus" aria-label="Decrease travelers">&minus;</button>
+        <input type="number" id="bkPersons" value="1" min="1" max="20" aria-label="Number of persons" inputmode="numeric">
+        <button type="button" id="bkPersonsPlus" aria-label="Increase travelers">+</button>
+      </div>
+
+      <div class="tv-price-engine">
+        <div>
+          <div class="label">Total Price</div>
+          <div class="amount" id="stage1Price">EGP 0</div>
+        </div>
+        <div class="text-end" style="font-size:0.74rem; color:rgba(250,248,245,0.55);" id="stage1PriceBreakdown">&mdash; &times; 1</div>
+      </div>
+
+      <div class="tv-stage-actions">
+        <button class="btn-tv-gold flex-fill" id="toStage2Btn">Continue to Payment</button>
+      </div>
+    </div>
+
+    <div class="tv-stage" id="stage2">
+      <p class="eyebrow mb-3">Payment</p>
+
+      <div class="tv-price-engine mb-4">
+        <div>
+          <div class="label">Amount Due</div>
+          <div class="amount" id="stage2Price">EGP 0</div>
+        </div>
+      </div>
+
+      <div class="tv-pay-row"><span class="ic">&#128179;</span><div>Instapay &mdash; <code>tavari.egypt@instapay</code></div></div>
+      <div class="tv-pay-row"><span class="ic">&#128241;</span><div>Vodafone Cash &mdash; <code>010XXXXXXX</code></div></div>
+
+      <label class="tv-field-label mt-3">Transaction Receipt Screenshot</label>
+      <div class="tv-dropzone" id="receiptDropzone">
+        <i class="bi bi-cloud-arrow-up"></i>
+        <div class="hint" id="dropzoneHint">Tap to upload, or drag a screenshot here</div>
+        <div class="filename" id="dropzoneFilename"></div>
+        <img id="dropzonePreview" class="tv-dropzone-preview" alt="Receipt preview">
+      </div>
+      <input type="file" id="receiptInput" accept="image/*" class="d-none">
+
+      <div class="tv-stage-actions">
+        <button class="btn-tv-outline" id="backToStage1Btn" style="flex:0 0 auto;">Back</button>
+        <button class="btn-tv-gold flex-fill btn-tv-disabled" id="completeBookingBtn" disabled>
+          <span class="btn-label">Complete My Booking</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<div class="tv-modal-scrim" id="successScrim">
+  <div class="tv-success-modal">
+    <div class="tv-success-icon"><i class="bi bi-check-lg"></i></div>
+    <h3 id="successTitle">Thank you, Traveler.</h3>
+    <p id="successMessage">Your request has been received.</p>
+    <button class="btn-tv-gold" id="successCloseBtn">Return to Homepage</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+const useLiveBackend = false;
+
+const SUPABASE_URL = "https://YOUR-PROJECT-REF.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR-PUBLIC-ANON-KEY";
+
+const EMAILJS_PUBLIC_KEY = "YOUR-EMAILJS-PUBLIC-KEY";
+const EMAILJS_SERVICE_ID = "YOUR-EMAILJS-SERVICE-ID";
+const EMAILJS_TEMPLATE_ID = "YOUR-EMAILJS-TEMPLATE-ID";
+const useEmailJS = false;
+
+const RECEIPTS_BUCKET = "payment-receipts";
+
+let supabaseClient = null;
+if (typeof supabase !== "undefined" && SUPABASE_URL.indexOf("YOUR-PROJECT-REF") === -1) {
+  try {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch (e) {
+    console.warn("Supabase client failed to initialize:", e);
+  }
+}
+
+if (useEmailJS && typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY.indexOf("YOUR-EMAILJS") === -1) {
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+}
+
+const toastStack = document.getElementById("toastStack");
+function showToast(message, type = "info", duration = 4200) {
+  const el = document.createElement("div");
+  el.className = `tv-toast ${type}`;
+  const iconMap = { success: "bi-check-circle-fill", error: "bi-exclamation-circle-fill", info: "bi-info-circle-fill" };
+  el.innerHTML = `
+    <span class="ic"><i class="bi ${iconMap[type] || iconMap.info}"></i></span>
+    <span class="msg">${message}</span>
+    <span class="close-x"><i class="bi bi-x"></i></span>
+  `;
+  toastStack.appendChild(el);
+  requestAnimationFrame(() => el.classList.add("show"));
+
+  const remove = () => {
+    el.classList.remove("show");
+    setTimeout(() => el.remove(), 500);
+  };
+  el.querySelector(".close-x").addEventListener("click", remove);
+  setTimeout(remove, duration);
+}
+
+const tvNav = document.getElementById("tvNav");
+const tvLinks = document.getElementById("tvLinks");
+const tvBurger = document.getElementById("tvBurger");
+const tvScrim = document.getElementById("tvScrim");
+const burgerIcon = document.getElementById("burgerIcon");
+
+window.addEventListener("scroll", () => {
+  tvNav.classList.toggle("scrolled", window.scrollY > 50);
+}, { passive: true });
+
+function closeMobileMenu() {
+  tvLinks.classList.remove("open");
+  tvScrim.classList.remove("show");
+  tvScrim.style.pointerEvents = "none"; // immediately kill scrim hit-testing, don't wait for CSS transition
+  tvBurger.setAttribute("aria-expanded", "false");
+  burgerIcon.className = "bi bi-list";
+}
+tvBurger.addEventListener("click", () => {
+  const isOpen = tvLinks.classList.toggle("open");
+  tvScrim.classList.toggle("show", isOpen);
+  tvScrim.style.pointerEvents = isOpen ? "auto" : "none";
+  tvBurger.setAttribute("aria-expanded", String(isOpen));
+  burgerIcon.className = isOpen ? "bi bi-x-lg" : "bi bi-list";
+});
+tvScrim.addEventListener("click", closeMobileMenu);
+
+// Handle nav link clicks: close the menu first, then navigate after the
+// slide-out animation completes so the scrim never intercepts the scroll.
+document.querySelectorAll(".tv-link-item").forEach(a => {
+  a.addEventListener("click", (e) => {
+    const href = a.getAttribute("href");
+    const isAnchor = href && href.startsWith("#") && href.length > 1;
+    if (isAnchor && tvLinks.classList.contains("open")) {
+      e.preventDefault();             // stop instant browser anchor jump
+      closeMobileMenu();
+      // wait for the menu slide-out (0.55s) then scroll
+      setTimeout(() => {
+        const target = document.querySelector(href);
+        if (target) {
+          const navHeight = tvNav.getBoundingClientRect().height;
+          const y = target.getBoundingClientRect().top + window.scrollY - navHeight - 12;
+          window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+        }
+      }, 600);
+    } else {
+      closeMobileMenu();
+    }
+  });
+});
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("in");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+
+/* =====================================================================
+   METRICS COUNT-UP
+   The .hero-insights strip has a CSS opacity animation: it starts
+   invisible and fades in at 1.3s. We fire the count-up at exactly
+   that moment so the user always sees the numbers animate visibly.
+   The IntersectionObserver is only used for metrics that are genuinely
+   off-screen on page load (i.e. not in the hero).
+   ===================================================================== */
+const metricEls = document.querySelectorAll(".metric-num");
+const aboveFoldMetrics = [];
+const belowFoldMetrics = [];
+
+// Classify immediately — before any scroll could change viewport state
+metricEls.forEach(el => {
+  const rect = el.getBoundingClientRect();
+  if (rect.top < window.innerHeight && rect.bottom > 0) {
+    aboveFoldMetrics.push(el);
+  } else {
+    belowFoldMetrics.push(el);
+  }
+});
+
+function animateMetric(el) {
+  if (el.dataset.counted === "1") return;
+  el.dataset.counted = "1";
+  const target = parseInt(el.dataset.count, 10);
+  const suffix = el.dataset.suffix || "";
+  const totalSteps = 50;
+  const stepMs = 36;               // 50 × 36ms ≈ 1800ms duration
+  let step = 0;
+  el.textContent = "0" + suffix;
+  const timer = setInterval(() => {
+    step++;
+    const p = Math.min(step / totalSteps, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * target).toLocaleString() + suffix;
+    if (step >= totalSteps) {
+      clearInterval(timer);
+      el.textContent = target.toLocaleString() + suffix;
+    }
+  }, stepMs);
+}
+
+// Above-fold metrics: fire exactly when the CSS fade-in begins (1.3s delay)
+// Do NOT use IntersectionObserver for these — it fires immediately and
+// causes the count-up to finish while the container is still opacity:0.
+setTimeout(() => {
+  aboveFoldMetrics.forEach(animateMetric);
+}, 1300);
+
+// Below-fold metrics: use IntersectionObserver as before
+if (belowFoldMetrics.length) {
+  const metricsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      animateMetric(entry.target);
+      metricsObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.4 });
+  belowFoldMetrics.forEach(el => metricsObserver.observe(el));
+}
+
+document.getElementById("yearNow").textContent = new Date().getFullYear();
+
+/* =====================================================================
+   HERO — word-split headline animation
+   ===================================================================== */
+(function buildHeroHeadline(){
+  const el = document.getElementById("heroHeadline");
+  if (!el) return;
+  const parts = [
+    { text: "Journeys carved by", em: false },
+    { text: "desert", em: true },
+    { text: "&", em: false },
+    { text: "tide.", em: true }
+  ];
+  let delay = 0.05;
+  let html = "";
+  parts.forEach((p) => {
+    const words = p.text.split(" ");
+    words.forEach((w, wi) => {
+      const isLast = p.em ? "em" : "span";
+      html += `<${isLast === "em" ? "em" : "span"} class="word" style="animation-delay:${delay.toFixed(2)}s">${w}</${isLast === "em" ? "em" : "span"}>&nbsp;`;
+      delay += 0.09;
+    });
+  });
+  el.innerHTML = html;
+})();
+
+/* =====================================================================
+   HERO — cursor-reactive + scroll-reactive video parallax, glow, controls
+   ===================================================================== */
+(function heroInteractivity(){
+  const hero = document.getElementById("tvHero");
+  const videoLayer = document.getElementById("heroVideoLayer");
+  const glow = document.getElementById("heroGlow");
+  const video = document.getElementById("heroVideo");
+  if (!hero || !videoLayer || !video) return;
+
+  // mark loaded after first frame so the slow Ken Burns zoom can kick in
+  video.addEventListener("loadeddata", () => hero.classList.add("loaded"));
+  setTimeout(() => hero.classList.add("loaded"), 600);
+
+  // cursor-reactive parallax + glow (desktop only — skip on touch to avoid jank)
+  const isTouch = window.matchMedia("(pointer: coarse)").matches;
+  if (!isTouch) {
+    hero.addEventListener("mousemove", (e) => {
+      const rect = hero.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;   // 0..1
+      const py = (e.clientY - rect.top) / rect.height;   // 0..1
+      const shiftX = (px - 0.5) * 22;
+      const shiftY = (py - 0.5) * 14;
+      videoLayer.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
+      glow.style.setProperty("--mx", (px * 100) + "%");
+      glow.style.setProperty("--my", (py * 100) + "%");
+    });
+    hero.addEventListener("mouseleave", () => {
+      videoLayer.style.transform = "translate(0,0)";
+    });
+  }
+
+  // scroll-reactive drift — subtle vertical parallax as the hero scrolls out of view
+  window.addEventListener("scroll", () => {
+    const rect = hero.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    const progress = 1 - Math.max(0, Math.min(1, rect.bottom / (rect.height + window.innerHeight)));
+    const drift = progress * 60;
+    video.style.transform = `scale(${hero.classList.contains("loaded") ? 1.16 : 1.08}) translateY(${drift}px)`;
+  }, { passive: true });
+
+  // play / pause toggle
+  const playBtn = document.getElementById("heroPlayToggle");
+  const playIcon = document.getElementById("heroPlayIcon");
+  let isPlaying = true;
+  playBtn.addEventListener("click", () => {
+    if (isPlaying) {
+      video.pause();
+      playIcon.className = "bi bi-play-fill";
+      playBtn.setAttribute("aria-label", "Play background video");
+    } else {
+      video.play();
+      playIcon.className = "bi bi-pause-fill";
+      playBtn.setAttribute("aria-label", "Pause background video");
+    }
+    isPlaying = !isPlaying;
+  });
+
+  // mute / unmute toggle — lets the traveler actually feel the experience with sound
+  const muteBtn = document.getElementById("heroMuteToggle");
+  const muteIcon = document.getElementById("heroMuteIcon");
+  let isMuted = true;
+  muteBtn.addEventListener("click", () => {
+    isMuted = !isMuted;
+    video.muted = isMuted;
+    if (!isMuted) video.play().catch(() => {});
+    muteIcon.className = isMuted ? "bi bi-volume-mute-fill" : "bi bi-volume-up-fill";
+    muteBtn.setAttribute("aria-label", isMuted ? "Unmute background video" : "Mute background video");
+    if (!isMuted) showToast("Sound on — feel the journey.", "info", 2600);
+  });
+})();
+
+/* =====================================================================
+   GENERIC SCROLL PARALLAX  (.parallax elements drift via data-parallax-speed)
+   ===================================================================== */
+(function setupParallax(){
+  const els = Array.from(document.querySelectorAll(".parallax"));
+  if (!els.length) return;
+  const isTouch = window.matchMedia("(pointer: coarse)").matches;
+  if (isTouch) return; // keep mobile scroll buttery — skip parallax there
+  function update() {
+    const vh = window.innerHeight;
+    els.forEach(el => {
+      const speed = parseFloat(el.dataset.parallaxSpeed || "0.08");
+      const rect = el.getBoundingClientRect();
+      const center = rect.top + rect.height / 2 - vh / 2;
+      el.style.transform = `translateY(${(-center * speed).toFixed(1)}px)`;
+    });
+  }
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+})();
+
+/* =====================================================================
+   MAGNETIC TILT — gallery & trip cards lean toward the cursor
+   ===================================================================== */
+(function setupTilt(){
+  const isTouch = window.matchMedia("(pointer: coarse)").matches;
+  if (isTouch) return;
+  function bindTilt(el) {
+    el.addEventListener("mousemove", (e) => {
+      const rect = el.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      el.style.transform = `perspective(900px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 6).toFixed(2)}deg) translateY(-4px)`;
+    });
+    el.addEventListener("mouseleave", () => {
+      el.style.transform = "";
+    });
+  }
+  // re-bind whenever cards are (re)rendered
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll(".dest-card:not([data-tilt-bound]), .trip-card:not([data-tilt-bound])").forEach(el => {
+      el.setAttribute("data-tilt-bound", "1");
+      el.classList.add("tilt-card");
+      bindTilt(el);
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+})();
+
+const FALLBACK_TRIPS = [
+  {
+    id: "fallback-siwa",
+    title: "Siwa Oasis Wilderness Expedition",
+    base_price: 8200,
+    pdf_url: "#",
+    image_urls: ["https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop"],
+    dates_label: "Departs every Thursday \u00b7 4 days"
+  },
+  {
+    id: "fallback-dahab",
+    title: "Dahab Reef & Blue Hole Retreat",
+    base_price: 6450,
+    pdf_url: "#",
+    image_urls: ["https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop"],
+    dates_label: "Departs every Sunday \u00b7 3 days"
+  },
+  {
+    id: "fallback-whitedesert",
+    title: "White Desert Stargazer Camp",
+    base_price: 7100,
+    pdf_url: "#",
+    image_urls: ["https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop"],
+    dates_label: "Departs every Friday \u00b7 2 nights"
+  }
+];
+
+const FALLBACK_GALLERY = [
+  { destination: "Hurghada", media_url: "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1200&auto=format&fit=crop" },
+  { destination: "Hurghada", media_url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=1200&auto=format&fit=crop" },
+  { destination: "Siwa", media_url: "https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop" },
+  { destination: "Siwa", media_url: "https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop" },
+  { destination: "Sinai", media_url: "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop" },
+  { destination: "Sinai", media_url: "https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop" }
+];
+
+const FALLBACK_REVIEWS = [
+  { customer_name: "Mariam K.", trip_title: "Siwa Oasis Wilderness Expedition", rating: 5, quote: "We slept beneath more stars than I knew existed, and our Bedouin guide spoke of the dunes like old friends. Nothing about it felt staged." },
+  { customer_name: "Omar R.", trip_title: "Dahab Reef & Blue Hole Retreat", rating: 5, quote: "Tavari handled every detail before we even thought to ask. The reef itself felt like a secret only we had been let in on." },
+  { customer_name: "Laila H.", trip_title: "White Desert Stargazer Camp", rating: 5, quote: "Quietly luxurious in exactly the way the desert deserves \u2014 no excess, just attention to what mattered." },
+  { customer_name: "Karim S.", trip_title: "Siwa Oasis Wilderness Expedition", rating: 5, quote: "The kind of trip you measure time by afterward. Effortless, private, and deeply rooted in the land." }
+];
+
+let TRIPS_CACHE = [];
+
+function monogram(name) {
+  return name.split(" ").filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join("");
+}
+
+function starString(rating) {
+  const r = Math.max(1, Math.min(5, rating || 5));
+  return "\u2605\u2605\u2605\u2605\u2605".slice(0, r) + "\u2606\u2606\u2606\u2606\u2606".slice(0, 5 - r);
+}
+
+function fmtMoney(n) {
+  return "EGP " + Number(n || 0).toLocaleString();
+}
+
+async function loadTrips() {
+  let trips = FALLBACK_TRIPS;
+
+  if (useLiveBackend && supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient
+        .from("trips")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      if (data && data.length) trips = data;
+    } catch (e) {
+      console.warn("Falling back to curated trips \u2014 Supabase fetch failed:", e);
+      showToast("Showing sample trips \u2014 live trip data is unavailable.", "info");
+    }
+  }
+
+  TRIPS_CACHE = trips;
+  renderTrips(trips);
+  populateInquiryTripOptions(trips);
+}
+
+function renderTrips(trips) {
+  const grid = document.getElementById("tripsGrid");
+  if (!trips.length) {
+    grid.innerHTML = `<div class="col-12"><div class="trips-empty">No trips are listed yet \u2014 check back shortly.</div></div>`;
+    return;
+  }
+  grid.innerHTML = trips.map((t, i) => {
+    const img = (t.image_urls && t.image_urls[0]) || "https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop";
+    const dates = t.dates_label || "Dates on request";
+    const pdf = t.pdf_url && t.pdf_url !== "#" ? t.pdf_url : null;
+    return `
+      <div class="col-md-6 col-lg-4 reveal reveal-d${Math.min((i % 3) + 1, 5)}">
+        <div class="trip-card">
+          <div class="trip-thumb-wrap">
+            <img src="${img}" alt="${t.title}" loading="lazy">
+            <span class="trip-price-chip">${fmtMoney(t.base_price)} / person</span>
+          </div>
+          <div class="trip-body">
+            <h3>${t.title}</h3>
+            <div class="trip-dates"><i class="bi bi-calendar3"></i> ${dates}</div>
+            <div class="trip-actions">
+              ${pdf
+                ? `<a class="btn-trip-secondary" href="${pdf}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf"></i> Itinerary PDF</a>`
+                : `<button class="btn-trip-secondary" type="button" onclick="showToast('Itinerary PDF coming soon for this trip.', 'info')"><i class="bi bi-file-earmark-pdf"></i> Itinerary PDF</button>`}
+              <button class="btn-trip-primary" type="button" onclick="openBookingDrawer('${t.id}')">Book now</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }).join("");
+
+  grid.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+}
+
+function populateInquiryTripOptions(trips) {
+  const select = document.getElementById("inqTrip");
+  select.innerHTML = `<option selected>Not sure yet</option>`;
+  trips.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t.title;
+    opt.textContent = t.title;
+    select.appendChild(opt);
+  });
+}
+
+async function loadGallery() {
+  const grid = document.getElementById("galleryGrid");
+  let items = FALLBACK_GALLERY;
+
+  if (useLiveBackend && supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient.from("gallery").select("*");
+      if (error) throw error;
+      if (data && data.length) {
+        items = data.map(d => ({ destination: d.destination || "Gallery", media_url: d.media_url, is_video: d.is_video }));
+      }
+    } catch (e) {
+      console.warn("Falling back to curated gallery \u2014 Supabase fetch failed:", e);
+    }
+  }
+
+  const grouped = {};
+  items.forEach(it => {
+    if (!grouped[it.destination]) grouped[it.destination] = [];
+    grouped[it.destination].push(it.media_url);
+  });
+
+  const destinations = Object.keys(grouped);
+  grid.innerHTML = destinations.map((dest, i) => `
+    <div class="col-md-6 col-lg-4 reveal reveal-d${Math.min(i + 1, 5)}">
+      <div class="dest-card" onclick="openLightbox('${dest.replace(/'/g, "\\'")}')">
+        <img src="${grouped[dest][0]}" alt="${dest}" loading="lazy">
+        <div class="dest-card-body">
+          <h3>${dest}</h3>
+          <span class="dest-view-btn">View More Photos <i class="bi bi-arrow-right"></i></span>
+        </div>
+      </div>
+    </div>`).join("");
+
+  grid.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+  window.GALLERY_GROUPED = grouped;
+}
+
+async function loadReviews() {
+  const grid = document.getElementById("reviewsGrid");
+  let reviews = FALLBACK_REVIEWS;
+
+  if (useLiveBackend && supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient.from("reviews").select("*").order("created_at", { ascending: false }).limit(5);
+      if (error) throw error;
+      if (data && data.length) reviews = data;
+    } catch (e) {
+      console.warn("Falling back to curated reviews \u2014 Supabase fetch failed:", e);
+    }
+  }
+
+  grid.innerHTML = reviews.slice(0, 5).map((r, i) => `
+    <div class="col-md-6 col-lg-4 reveal reveal-d${Math.min(i + 1, 5)}">
+      <div class="review-card">
+        <div class="review-mono">${monogram(r.customer_name)}</div>
+        <div class="review-stars">${starString(r.rating)}</div>
+        <p class="review-quote">&ldquo;${r.quote}&rdquo;</p>
+        <div class="review-name">${r.customer_name}</div>
+        <div class="review-trip">${r.trip_title}</div>
+      </div>
+    </div>`).join("");
+
+  grid.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+}
+
+loadTrips();
+loadGallery();
+loadReviews();
+
+const lightbox = document.getElementById("tvLightbox");
+const lightboxImgWrap = document.getElementById("lightboxImgWrap");
+const lightboxTitle = document.getElementById("lightboxTitle");
+const lightboxCounter = document.getElementById("lightboxCounter");
+let lightboxImages = [];
+let lightboxIndex = 0;
+
+function openLightbox(destination) {
+  const imgs = (window.GALLERY_GROUPED && window.GALLERY_GROUPED[destination]) || [];
+  if (!imgs.length) return;
+  lightboxImages = imgs;
+  lightboxIndex = 0;
+  lightboxTitle.textContent = destination;
+  renderLightboxImages();
+  lightbox.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+function renderLightboxImages() {
+  lightboxImgWrap.innerHTML = lightboxImages.map((src, i) =>
+    `<img src="${src}" class="${i === lightboxIndex ? "active" : ""}" alt="Gallery image ${i + 1}">`
+  ).join("");
+  lightboxCounter.textContent = `Image ${lightboxIndex + 1} of ${lightboxImages.length}`;
+}
+function closeLightbox() {
+  lightbox.classList.remove("show");
+  document.body.style.overflow = "";
+}
+document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+document.getElementById("lightboxPrev").addEventListener("click", () => {
+  lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+  renderLightboxImages();
+});
+document.getElementById("lightboxNext").addEventListener("click", () => {
+  lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+  renderLightboxImages();
+});
+document.addEventListener("keydown", (e) => {
+  if (!lightbox.classList.contains("show")) return;
+  if (e.key === "Escape") closeLightbox();
+  if (e.key === "ArrowLeft") document.getElementById("lightboxPrev").click();
+  if (e.key === "ArrowRight") document.getElementById("lightboxNext").click();
+});
+
+const drawer = document.getElementById("bookingDrawer");
+const drawerScrim = document.getElementById("drawerScrim");
+let currentTrip = null;
+let receiptFile = null;
+let receiptDataUrl = null;
+
+function openBookingDrawer(tripId) {
+  const trip = TRIPS_CACHE.find(t => String(t.id) === String(tripId));
+  if (!trip) { showToast("That trip could not be found.", "error"); return; }
+  currentTrip = trip;
+
+  document.getElementById("drawerTripTitle").textContent = trip.title;
+  document.getElementById("drawerTripDates").textContent = trip.dates_label || "Dates on request";
+
+  goToStage(1);
+  document.getElementById("bkName").value = "";
+  document.getElementById("bkPhone").value = "";
+  document.getElementById("bkEmail").value = "";
+  document.getElementById("bkPersons").value = 1;
+  resetReceiptZone();
+  updatePriceEngine();
+
+  drawer.classList.add("show");
+  drawerScrim.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+function closeBookingDrawer() {
+  drawer.classList.remove("show");
+  drawerScrim.classList.remove("show");
+  document.body.style.overflow = "";
+}
+document.getElementById("drawerCloseBtn").addEventListener("click", closeBookingDrawer);
+drawerScrim.addEventListener("click", closeBookingDrawer);
+
+function goToStage(n) {
+  document.getElementById("stage1").classList.toggle("active", n === 1);
+  document.getElementById("stage2").classList.toggle("active", n === 2);
+  document.getElementById("pip1").classList.toggle("active", n === 1);
+  document.getElementById("pip2").classList.toggle("active", n === 2);
+}
+
+const bkPersonsInput = document.getElementById("bkPersons");
+function clampPersons(val) {
+  let n = parseInt(val, 10);
+  if (isNaN(n) || n < 1) n = 1;
+  if (n > 20) n = 20;
+  return n;
+}
+function updatePriceEngine() {
+  if (!currentTrip) return;
+  const persons = clampPersons(bkPersonsInput.value);
+  bkPersonsInput.value = persons;
+  const total = (currentTrip.base_price || 0) * persons;
+  document.getElementById("stage1Price").textContent = fmtMoney(total);
+  document.getElementById("stage1PriceBreakdown").textContent = `${fmtMoney(currentTrip.base_price)} \u00d7 ${persons}`;
+  document.getElementById("stage2Price").textContent = fmtMoney(total);
+}
+bkPersonsInput.addEventListener("input", updatePriceEngine);
+document.getElementById("bkPersonsMinus").addEventListener("click", () => { bkPersonsInput.value = clampPersons(bkPersonsInput.value) - 1; updatePriceEngine(); });
+document.getElementById("bkPersonsPlus").addEventListener("click", () => { bkPersonsInput.value = clampPersons(bkPersonsInput.value) + 1; updatePriceEngine(); });
+
+document.getElementById("toStage2Btn").addEventListener("click", () => {
+  const name = document.getElementById("bkName").value.trim();
+  const phone = document.getElementById("bkPhone").value.trim();
+  const email = document.getElementById("bkEmail").value.trim();
+  if (!name || !phone || !email) {
+    showToast("Please fill in your name, mobile number, and email to continue.", "error");
+    return;
+  }
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    showToast("That email address doesn't look quite right.", "error");
+    return;
+  }
+  updatePriceEngine();
+  goToStage(2);
+});
+document.getElementById("backToStage1Btn").addEventListener("click", () => goToStage(1));
+
+const dropzone = document.getElementById("receiptDropzone");
+const receiptInput = document.getElementById("receiptInput");
+const completeBtn = document.getElementById("completeBookingBtn");
+
+function resetReceiptZone() {
+  receiptFile = null;
+  receiptDataUrl = null;
+  receiptInput.value = "";
+  document.getElementById("dropzoneHint").textContent = "Tap to upload, or drag a screenshot here";
+  document.getElementById("dropzoneFilename").textContent = "";
+  const preview = document.getElementById("dropzonePreview");
+  preview.style.display = "none";
+  preview.src = "";
+  completeBtn.disabled = true;
+  completeBtn.classList.add("btn-tv-disabled");
+}
+
+dropzone.addEventListener("click", () => receiptInput.click());
+dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("drag"); });
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("drag"));
+dropzone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropzone.classList.remove("drag");
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) handleReceiptFile(e.dataTransfer.files[0]);
+});
+receiptInput.addEventListener("change", (e) => {
+  if (e.target.files && e.target.files[0]) handleReceiptFile(e.target.files[0]);
+});
+
+function handleReceiptFile(file) {
+  if (!file.type.startsWith("image/")) {
+    showToast("Please upload an image file (screenshot of your receipt).", "error");
+    return;
+  }
+  receiptFile = file;
+  document.getElementById("dropzoneHint").textContent = "Receipt loaded \u2014 tap to replace";
+  document.getElementById("dropzoneFilename").textContent = file.name;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    receiptDataUrl = e.target.result;
+    const preview = document.getElementById("dropzonePreview");
+    preview.src = receiptDataUrl;
+    preview.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+
+  completeBtn.disabled = false;
+  completeBtn.classList.remove("btn-tv-disabled");
+  showToast("Receipt screenshot loaded.", "success", 2400);
+}
+
+document.getElementById("completeBookingBtn").addEventListener("click", async () => {
+  if (!receiptFile || !currentTrip) return;
+
+  const name = document.getElementById("bkName").value.trim();
+  const phone = document.getElementById("bkPhone").value.trim();
+  const email = document.getElementById("bkEmail").value.trim();
+  const persons = clampPersons(bkPersonsInput.value);
+  const total = (currentTrip.base_price || 0) * persons;
+
+  const btn = completeBtn;
+  const originalLabel = btn.querySelector(".btn-label").textContent;
+  setButtonLoading(btn, true, "Processing\u2026");
+
+  try {
+    let receiptUrl = receiptDataUrl;
+
+    if (useLiveBackend && supabaseClient) {
+      const path = `receipts/${currentTrip.id}_${Date.now()}_proof.png`;
+      const { error: uploadError } = await supabaseClient
+        .storage
+        .from(RECEIPTS_BUCKET)
+        .upload(path, receiptFile);
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabaseClient.storage.from(RECEIPTS_BUCKET).getPublicUrl(path);
+      receiptUrl = urlData.publicUrl;
+
+      const { error: insertError } = await supabaseClient.from("bookings").insert({
+        trip_id: currentTrip.id,
+        customer_name: name,
+        customer_phone: phone,
+        customer_email: email,
+        num_persons: persons,
+        total_price: total,
+        receipt_url: receiptUrl,
+        status: "pending_verification"
+      });
+      if (insertError) throw insertError;
+    } else {
+      const bookings = JSON.parse(localStorage.getItem("tavari_bookings") || "[]");
+      bookings.push({
+        id: "local-" + Date.now(),
+        trip_id: currentTrip.id,
+        trip_title: currentTrip.title,
+        customer_name: name,
+        customer_phone: phone,
+        customer_email: email,
+        num_persons: persons,
+        total_price: total,
+        receipt_url: receiptUrl,
+        status: "pending_verification",
+        created_at: new Date().toISOString()
+      });
+      localStorage.setItem("tavari_bookings", JSON.stringify(bookings));
+    }
+
+    closeBookingDrawer();
+    showSuccessModal(
+      `Thank you, ${name}.`,
+      `Your receipt for the <strong>${currentTrip.title}</strong> has been received and uploaded successfully. Our payment desk is now verifying your transfer and will reach out on <strong>${phone}</strong> via WhatsApp or call shortly to deliver your tickets.`
+    );
+    resetReceiptZone();
+  } catch (err) {
+    console.error(err);
+    showToast("Something went wrong while submitting your booking. Please try again.", "error");
+  } finally {
+    setButtonLoading(btn, false, originalLabel);
+  }
+});
+
+function setButtonLoading(btn, loading, label) {
+  if (loading) {
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-gold"></span>&nbsp; ${label}`;
+  } else {
+    btn.disabled = !receiptFile;
+    btn.classList.toggle("btn-tv-disabled", !receiptFile);
+    btn.innerHTML = `<span class="btn-label">${label}</span>`;
+  }
+}
+
+const inqTravelersInput = document.getElementById("inqTravelers");
+function clampInqTravelers(val) {
+  let n = parseInt(val, 10);
+  if (isNaN(n) || n < 1) n = 1;
+  if (n > 20) n = 20;
+  return n;
+}
+document.getElementById("inqTravelersMinus").addEventListener("click", () => {
+  inqTravelersInput.value = clampInqTravelers(inqTravelersInput.value) - 1;
+});
+document.getElementById("inqTravelersPlus").addEventListener("click", () => {
+  inqTravelersInput.value = clampInqTravelers(inqTravelersInput.value) + 1;
+});
+inqTravelersInput.addEventListener("input", () => { inqTravelersInput.value = clampInqTravelers(inqTravelersInput.value); });
+
+document.getElementById("inquiryForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("inqName").value.trim();
+  const phone = document.getElementById("inqPhone").value.trim();
+  const email = document.getElementById("inqEmail").value.trim();
+  const trip = document.getElementById("inqTrip").value;
+  const persons = clampInqTravelers(inqTravelersInput.value);
+  const notes = document.getElementById("inqNotes").value.trim();
+
+  if (!name || !phone || !email) {
+    showToast("Please fill in your name, phone, and email.", "error");
+    return;
+  }
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    showToast("That email address doesn't look quite right.", "error");
+    return;
+  }
+
+  const btn = document.getElementById("inquirySubmitBtn");
+  setButtonLoading(btn, true, "Sending\u2026");
+
+  try {
+    if (useLiveBackend && supabaseClient) {
+      const { error } = await supabaseClient.from("inquiries").insert({
+        customer_name: name,
+        customer_phone: phone,
+        customer_email: email,
+        interested_trip: trip,
+        num_persons: persons,
+        notes: notes,
+        status: "pending_contact"
+      });
+      if (error) throw error;
+    } else {
+      const inquiries = JSON.parse(localStorage.getItem("tavari_inquiries") || "[]");
+      inquiries.push({
+        id: "local-" + Date.now(),
+        customer_name: name,
+        customer_phone: phone,
+        customer_email: email,
+        interested_trip: trip,
+        num_persons: persons,
+        notes,
+        status: "pending_contact",
+        created_at: new Date().toISOString()
+      });
+      localStorage.setItem("tavari_inquiries", JSON.stringify(inquiries));
+    }
+
+    if (useEmailJS && typeof emailjs !== "undefined" && EMAILJS_SERVICE_ID.indexOf("YOUR-EMAILJS") === -1) {
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          from_name: name, from_phone: phone, from_email: email, trip, persons, notes
+        });
+      } catch (mailErr) {
+        console.warn("EmailJS notification failed (non-blocking):", mailErr);
+      }
+    }
+
+    document.getElementById("inquiryForm").reset();
+    inqTravelersInput.value = 2;
+    showSuccessModal(
+      `Thank you, ${name}.`,
+      `Your custom inquiry has been received. A booking manager will reply by WhatsApp or call within a few hours.`
+    );
+  } catch (err) {
+    console.error(err);
+    showToast("Something went wrong sending your request. Please try again.", "error");
+  } finally {
+    setButtonLoading(btn, false, "Send Request");
+    if (!btn.querySelector(".btn-label")) {
+      btn.innerHTML = `<span class="btn-label">Send Request</span>&nbsp; <i class="bi bi-send-fill ms-1"></i>`;
+    }
+  }
+});
+
+const successScrim = document.getElementById("successScrim");
+function showSuccessModal(title, messageHtml) {
+  document.getElementById("successTitle").textContent = title;
+  document.getElementById("successMessage").innerHTML = messageHtml;
+  successScrim.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+document.getElementById("successCloseBtn").addEventListener("click", () => {
+  successScrim.classList.remove("show");
+  document.body.style.overflow = "";
+});
+successScrim.addEventListener("click", (e) => {
+  if (e.target === successScrim) {
+    successScrim.classList.remove("show");
+    document.body.style.overflow = "";
+  }
+});
+</script>
+</body>
+</html>
