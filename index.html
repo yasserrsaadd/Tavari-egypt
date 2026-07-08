@@ -100,7 +100,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hero-insights{ opacity:0; animation: heroFadeUp 0.6s var(--ease) 1.3s forwards; }
 .hero .hero-insight-num{ color: rgb(0, 0, 0); }
 .hero .hero-insight-num .unit{ color: #9a2020; }
-.hero .hero-insight-label{ color: rgb(0, 0, 0); letter-spacing: 0.12em; }
+.hero .hero-insight-label{ color: rgb(0, 0, 0); letter-spacing: 0.12em; font-weight: bolder; }
 .hero-scroll-cue{ position:absolute; bottom: 34px; left: 50%; transform: translateX(-50%); z-index:2; display:flex; flex-direction:column; align-items:center; gap:8px; color: rgba(30,28,25,0.78); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.2em; }
 .hero-scroll-cue .line{ width:1px; height: 34px; background: linear-gradient(180deg, var(--gold-deep), transparent); animation: scrollPulse 2.2s var(--ease) infinite; }
 @keyframes scrollPulse{ 0%{ opacity:.2; transform: scaleY(0.4); transform-origin: top; } 50%{ opacity:1; transform: scaleY(1); transform-origin: top; } 100%{ opacity:.2; transform: scaleY(0.4); transform-origin: top; } }
@@ -127,13 +127,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .about-quote{ font-family:'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.3rem, 2.2vw, 1.7rem); line-height: 1.5; color: var(--ink); }
 .about-quote::before{ content: ""; display:block; width: 46px; height: 1px; background: var(--gold-deep); margin-bottom: 1.6rem; }
 .hero-insights{ display:flex; align-items:center; gap: 0; margin-top: 2.6rem; flex-wrap: nowrap; }
-.hero-insight{ text-align:left; padding: 0 1.6rem; position: relative; flex: 1; min-width: 0; }
+.hero-insight{ text-align:left; padding: 0 1.6rem; position: relative; flex: 1; width: 50px;; }
 .hero-insight:first-child{ padding-left: 0; }
 .hero-insight:not(:last-child)::after{ content:""; position:absolute; right:0; top:50%; transform: translateY(-50%); width:1px; height: 30px; background: var(--gold-line-strong); }
 .hero-insight-num{ font-family:'Cormorant Garamond', serif; font-size: clamp(1.2rem, 3.5vw, 1.85rem); font-weight: 600; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; display:flex; align-items: baseline; gap: 2px; }
 .hero-insight-num .unit{ color: var(--gold-deep); font-size: 0.9em; }
-.hero-insight-label{ font-size: 13px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-faint); margin-top: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-@media (max-width: 575px){ .hero-insights{ margin-top: 1.8rem; } .hero-insight{ padding: 0 0.65rem; } .hero-insight:first-child{ padding-left: 0; } .hero-insight:not(:last-child)::after{ height: 22px; } }
+.hero-insight-label{ font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-faint); margin-top: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 575px){.hero-insight-label{font-size: 10px;} .hero-insights{ margin-top: 1.8rem; } .hero-insight{ padding: 0 0.65rem; } .hero-insight:first-child{ padding-left: 0; } .hero-insight:not(:last-child)::after{ height: 22px; } }
 .dest-card{ position: relative; border-radius: 4px; overflow: hidden; height: 420px; cursor: pointer; box-shadow: var(--shadow-soft); transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease); }
 .dest-card:hover{ transform: translateY(-8px); box-shadow: var(--shadow-lift); }
 .dest-card img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 1.4s var(--ease); }
@@ -318,11 +318,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
         <div class="hero-insights">
           <div class="hero-insight">
             <div class="hero-insight-num"><span class="metric-num" data-count="70" data-suffix="+">0</span></div>
-            <div class="hero-insight-label">Completed Trips</div>
+            <div class="hero-insight-label">Completed <br> Trips</div>
           </div>
           <div class="hero-insight">
             <div class="hero-insight-num"><span class="metric-num" data-count="3000" data-suffix="+">0</span></div>
-            <div class="hero-insight-label">Solo &amp; group travellers</div>
+            <div class="hero-insight-label">travellers</div>
           </div>
           <div class="hero-insight">
           </div>
@@ -331,10 +331,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     </div>
   </div>
   <div class="hero-video-controls"></div>
-  <div class="hero-scroll-cue">
-    <span>SCROLL</span>
-    <span class="line"></span>
-  </div>
+ 
 </header>
 
 <section class="section bg-ivory-deep" id="trips">
