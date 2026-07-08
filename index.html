@@ -77,10 +77,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-logo-footer{ height: 80px; mix-blend-mode: normal; filter: brightness(0) invert(1); opacity: 0.92; }
 .tv-links{ display:flex; align-items:center; gap: 2.1rem; }
 .tv-links a{ font-size: 0.99rem; letter-spacing: 0.05em; color: var(--ink); font-weight: 500; position: relative; padding-bottom: 4px; transition: color 0.4s var(--ease), text-shadow 0.4s var(--ease); }
-.tv-nav:not(.scrolled) .tv-links a{ color: #FFFFFF; text-shadow: 0 1px 0 rgba(0,0,0,0.45), 0 2px 18px rgba(22,38,59,0.55); }
+/* White links only on desktop, where they sit directly over the hero image */
+@media (min-width: 992px){
+  .tv-nav:not(.scrolled) .tv-links a{ color: #FFFFFF; text-shadow: 0 1px 0 rgba(0,0,0,0.45), 0 2px 18px rgba(22,38,59,0.55); }
+  .tv-nav:not(.scrolled) .tv-links a:hover{ color: #FFFFFF; }
+}
 .tv-links a::after{ content:""; position:absolute; left:0; bottom:0; width:0; height:2px; background: var(--red); transition: width 0.5s var(--ease); border-radius: 2px; }
 .tv-links a:hover{ color: var(--red-deep); }
-.tv-nav:not(.scrolled) .tv-links a:hover{ color: #FFFFFF; }
 .tv-links a:hover::after{ width:100%; }
 .btn-tv-gold{ background: linear-gradient(135deg, var(--red-bright) 0%, var(--red-deep) 100%); color: #FFFFFF; border: none; padding: 0.62rem 1.5rem; font-size: 0.82rem; letter-spacing: 0.05em; font-weight: 600; border-radius: var(--radius-btn); transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), letter-spacing 0.45s var(--ease); box-shadow: 0 10px 26px -10px rgba(224,72,59,0.6); min-height: 44px; display:inline-flex; align-items:center; justify-content:center; }
 .btn-tv-gold:hover{ transform: translateY(-2px); box-shadow: 0 16px 34px -10px rgba(224,72,59,0.75); letter-spacing: 0.08em; color: #FFFFFF; }
@@ -122,6 +125,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hero::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, transparent 55%, rgba(250,248,245,0.22) 82%, rgba(250,248,245,0.58) 100%); z-index: 1; pointer-events: none; }
 .hero-glow{ position:absolute; inset:0; z-index:1; pointer-events:none; background: radial-gradient(480px circle at var(--mx,50%) var(--my,40%), rgba(244,113,94,0.18), transparent 60%); transition: background 0.3s ease-out; }
 .hero-content{ position: relative; z-index: 2; width: 100%; padding-top: 1.5rem; }
+@media (min-width: 992px){
+  .hero-content .row{ margin-left: 3vw; }
+  .tv-nav .container{ padding-left: 3vw; padding-right: 3vw; }
+}
 .hero .eyebrow{ color: #3E7FCB; font-weight: 600; letter-spacing: 0.24em; opacity:0; animation: heroFadeUp 1s var(--ease) 0.2s forwards; }
 .hero h1{ font-size: clamp(2.6rem, 6vw, 5.1rem); line-height: 1.04; margin: 0.6rem 0 1.3rem; max-width: 780px; overflow: hidden; color: var(--ink); text-shadow: 0 2px 28px rgba(251,253,255,0.45); }
 .hero h1 .word{ display: inline-block; opacity:0; transform: translateY(110%) rotate(2deg); animation: heroWordIn 1.1s var(--ease) forwards; }
@@ -308,6 +315,113 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .social-btn-contact:hover{ background:var(--red); border-color:var(--red); color:#FFFFFF; }
 
+/* ════════════════════════════════════════════════════════════
+   MOBILE-FIRST RESPONSIVE ENHANCEMENTS (smartphone priority)
+   ════════════════════════════════════════════════════════════ */
+
+/* Tablets & small laptops */
+@media (max-width: 991px){
+  .section{ padding: 4.5rem 0; }
+  .about-photo-wrap img{ min-height: 340px; }
+  .hero-insight{ padding: 0 1rem; }
+  .hero-insight:first-child{ padding-left: 0; }
+}
+
+/* Large phones */
+@media (max-width: 767px){
+  .section{ padding: 3.6rem 0; }
+  .section-head{ margin-bottom: 2rem; }
+
+  /* Nav */
+  .tv-nav{ padding: 16px 0; }
+  .tv-nav.scrolled{ padding: 10px 0; }
+
+  /* Hero */
+  .hero{ min-height: 600px; }
+  .hero-content{ padding-top: 0.5rem; }
+  .hero-scroll-cue{ display: none; }
+  .hero h1{ font-size: clamp(2.1rem, 9vw, 3rem); line-height: 1.08; margin: 0.5rem 0 1rem; }
+  .hero p.lede{ font-size: 1rem; line-height: 1.65; margin-bottom: 1.5rem; }
+  .hero-cta-row{ gap: 0.7rem; }
+  .hero-cta-row .btn-tv-gold,
+  .hero-cta-row .btn-tv-outline{ flex: 1 1 auto; min-width: 140px; justify-content: center; }
+  .hero-insights{ gap: 0; margin-top: 1.8rem; }
+  .hero-insight{ padding: 0 0.7rem; }
+  .hero-insight:first-child{ padding-left: 0; }
+  .hero-insight-num{ font-size: 1.45rem; }
+  .hero-insight-label{ font-size: 9.5px; letter-spacing: 0.06em; white-space: normal; line-height: 1.25; max-width: 92px; }
+  .hero-insight:not(:last-child)::after{ height: 22px; }
+
+  /* About */
+  .about-photo-wrap img{ min-height: 260px; }
+  .about-quote{ font-size: 1.2rem; line-height: 1.55; }
+
+  /* Destinations / trips / reviews cards spacing already via g-4 */
+  .dest-card{ height: 340px; }
+  .dest-card-body{ padding: 1.2rem; }
+  .dest-card-body h3{ font-size: 1.4rem; }
+
+  /* Contact */
+  .contact-wrap{ border-radius: 18px; }
+  .contact-info{ padding: 2rem 1.4rem; }
+  .contact-form-pane{ padding: 1.8rem 1.4rem; }
+  .tv-price-engine{ flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+
+  /* Footer */
+  .tv-footer{ padding: 2.4rem 0 1.6rem; }
+  .footer-bottom{ flex-direction: column; align-items: flex-start; gap: 0.9rem; }
+
+  /* Lightbox */
+  .tv-lightbox{ padding: 1rem; }
+  .tv-lightbox-frame{ padding: 0.6rem; }
+  .tv-lightbox-meta{ flex-direction: column; align-items: flex-start; gap: 0.2rem; font-size: 0.78rem; }
+  .tv-lightbox-nav{ width: 40px; height: 40px; }
+
+  /* Drawer */
+  .tv-drawer{ width: 100vw; }
+  .tv-drawer-head{ padding: 1.3rem 1.3rem; }
+  .tv-drawer-head h4{ font-size: 1.2rem; }
+  .tv-drawer-body{ padding: 1.3rem; }
+}
+
+/* Small phones */
+@media (max-width: 480px){
+  body{ font-size: 15px; }
+  .section{ padding: 3rem 0; }
+  .container{ padding-left: 1.1rem; padding-right: 1.1rem; }
+
+  .hero h1{ font-size: clamp(1.9rem, 10vw, 2.5rem); }
+  .hero p.lede{ font-size: 0.95rem; }
+
+  /* Stack insight labels cleanly */
+  .hero-insight{ flex: 1 0 0; padding: 0 0.4rem; }
+  .hero-insight-label{ max-width: 76px; }
+
+  /* Full-width primary buttons inside forms */
+  .btn-tv-gold.w-100,
+  .contact-submit-foot{ text-align: center; }
+  .tv-stage-actions{ flex-direction: column; }
+  .tv-stage-actions .btn-tv-outline{ width: 100%; }
+  .trip-actions{ flex-direction: column; }
+  .btn-trip-secondary, .btn-trip-primary{ width: 100%; }
+
+  /* Metric counters in contact form become full width */
+  .contact-form-pane .col-md-6{ flex: 0 0 100%; max-width: 100%; }
+
+  /* Drawer stepper pips wrap nicely */
+  .tv-stage-pips{ flex-wrap: wrap; }
+}
+
+/* Very small phones */
+@media (max-width: 360px){
+  .hero h1{ font-size: 1.75rem; }
+  .hero-insight-label{ font-size: 8.5px; max-width: 64px; }
+  .tv-logo{ height: 54px; }
+  .tv-nav.scrolled .tv-logo{ height: 46px; }
+}
+
+/* Prevent horizontal overflow from any element */
+img, video, .container, .row{ max-width: 100%; }
 </style>
 </head>
 <body>
