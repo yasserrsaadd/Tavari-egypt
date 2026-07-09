@@ -7,7 +7,14 @@
 <meta name="description" content="Tavari Egypt is a premier luxury travel atelier crafting bespoke trips across the Sahara and the Red Sea.">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/png" href="images/logo-01.png"><!--
+Source - https://stackoverflow.com/a/4888458
+Posted by Gustavo Costa De Oliveira, modified by community. See post 'Timeline' for change history
+Retrieved 2026-07-09, License - CC BY-SA 3.0
+-->
+
+<link rel="shortcut icon" href="http://sstatic.net/stackoverflow/img/favicon.ico">
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -162,6 +169,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .section{ padding: 6.5rem 0; position: relative; scroll-margin-top: 90px; }
 .section-tight{ padding: 4rem 0; }
 .section-title{ font-size: clamp(2rem, 3.6vw, 2.9rem); margin: 0.4rem 0 0; }
+.section-title--rabbit{ position: relative; display: inline-block; padding-left: clamp(1.6rem, 5vw, 2.8rem); }
+.section-title--rabbit .section-title-icon{ position:absolute; top:0.1rem; left:0.1rem; height: clamp(2.2rem, 9vw, 4rem); width:auto; object-fit:contain; }
 .section-head{ max-width: 640px; margin-bottom: 3rem; }
 @media (min-width: 992px){
   .section > .container{ padding-left: 3vw; }
@@ -498,7 +507,7 @@ img, video, .container, .row{ max-width: 100%; }
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">Active Trips</p>
-      <h2 class="section-title"><span class="title-line">Choose your horizon.</span></h2>
+      <h2 class="section-title section-title--rabbit"><img src="images/character Icon.png" alt="" class="section-title-icon" aria-hidden="true"><span class="title-line">Choose your horizon.</span></h2>
     </div>
     <div class="row g-4" id="tripsGrid">
       <div class="col-md-6 col-lg-4"><div class="trips-skeleton"></div></div>
@@ -1010,9 +1019,9 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
 })();
 
 const FALLBACK_TRIPS = [
-  { id:"fallback-siwa", title:"Siwa Oasis Wilderness Expedition", base_price:8200, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop"], dates_label:"Departs every Thursday · 4 days" },
-  { id:"fallback-dahab", title:"Dahab Reef & Blue Hole Retreat", base_price:6450, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop"], dates_label:"Departs every Sunday · 3 days" },
-  { id:"fallback-whitedesert", title:"White Desert Stargazer Camp", base_price:7100, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop"], dates_label:"Departs every Friday · 2 nights" }
+  { id:"fallback-siwa", title:"Siwa Oasis Wilderness Expedition", base_price:8200, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-14", end_date:"2026-07-17" },
+  { id:"fallback-dahab", title:"Dahab Reef & Blue Hole Retreat", base_price:6450, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-19", end_date:"2026-07-22" },
+  { id:"fallback-whitedesert", title:"White Desert Stargazer Camp", base_price:7100, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-24", end_date:"2026-07-26" }
 ];
 const FALLBACK_GALLERY = [
   { destination:"Hurghada", media_url:"https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1200&auto=format&fit=crop" },
@@ -1033,6 +1042,31 @@ let TRIPS_CACHE = [];
 function monogram(name) { return name.split(" ").filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join(""); }
 function starString(rating) { const r=Math.max(1,Math.min(5,rating||5)); return "★★★★★".slice(0,r)+"☆☆☆☆☆".slice(0,5-r); }
 function fmtMoney(n) { return "EGP "+Number(n||0).toLocaleString(); }
+function fmtTripDateRange(t) {
+  if (t.start_date) {
+    const sd = parseLocalDate(t.start_date);
+    if (!sd) return t.dates_label||"Dates on request";
+    const ed = t.end_date ? parseLocalDate(t.end_date) : null;
+    const optMD = { month:"long", day:"numeric" };
+    const optY = { year:"numeric" };
+    if (ed && !isNaN(ed)) {
+      const sameY = sd.getFullYear()===ed.getFullYear();
+      const sameM = sameY && sd.getMonth()===ed.getMonth();
+      const start = sd.toLocaleDateString("en-US", optMD);
+      const end = (sameM? ed.toLocaleDateString("en-US",{day:"numeric"}) : ed.toLocaleDateString("en-US", optMD)) + ", " + ed.getFullYear();
+      return sameY ? `${start} – ${end}` : `${start}, ${sd.getFullYear()} – ${end}`;
+    }
+    return sd.toLocaleDateString("en-US", { ...optMD, ...optY });
+  }
+  return t.dates_label||"Dates on request";
+}
+function parseLocalDate(s) {
+  if (typeof s!=="string"||!s) return null;
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) return new Date(Number(m[1]), Number(m[2])-1, Number(m[3]));
+  const d = new Date(s);
+  return isNaN(d) ? null : d;
+}
 
 async function loadTrips() {
   let trips = FALLBACK_TRIPS;
@@ -1053,7 +1087,7 @@ function renderTrips(trips) {
   if (!trips.length) { grid.innerHTML = `<div class="col-12"><div class="trips-empty">No trips listed yet — check back shortly.</div></div>`; return; }
   grid.innerHTML = trips.map((t,i) => {
     const img = (t.image_urls&&t.image_urls[0])||"https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop";
-    const dates = t.dates_label||"Dates on request";
+    const dates = fmtTripDateRange(t);
     const pdf = t.pdf_url&&t.pdf_url!=="#"?t.pdf_url:null;
     return `<div class="col-md-6 col-lg-4 reveal reveal-d${Math.min((i%3)+1,5)}">
       <div class="trip-card">
@@ -1173,7 +1207,7 @@ function openBookingDrawer(tripId) {
   if (!trip) { showToast("That trip could not be found.", "error"); return; }
   currentTrip = trip;
   document.getElementById("drawerTripTitle").textContent = trip.title;
-  document.getElementById("drawerTripDates").textContent = trip.dates_label||"Dates on request";
+  document.getElementById("drawerTripDates").textContent = fmtTripDateRange(trip);
   goToStage(1);
   ["bkName","bkPhone","bkEmail"].forEach(id => document.getElementById(id).value="");
   document.getElementById("bkPersons").value = 1;
