@@ -96,6 +96,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .tv-links.open{ transform: translateX(0); pointer-events: auto; }
   .tv-links a{ font-size: 1.05rem; }
   .tv-burger{ display:flex; }
+  .tv-nav:not(.scrolled) .tv-burger{ color: #FFFFFF; border-color: rgba(255,255,255,0.55); background: rgba(250,248,245,0.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .tv-nav-cta-desktop{ display:none; }
   .tv-mobile-cta{ display:inline-flex; margin-top: 0.4rem; }
 }
@@ -162,6 +163,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .section-tight{ padding: 4rem 0; }
 .section-title{ font-size: clamp(2rem, 3.6vw, 2.9rem); margin: 0.4rem 0 0; }
 .section-head{ max-width: 640px; margin-bottom: 3rem; }
+@media (min-width: 992px){
+  .section > .container{ padding-left: 3vw; }
+}
 .about-photo-wrap{ position: relative; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-soft); }
 .about-photo-wrap img{ width:100%; height: 100%; object-fit: cover; display:block; min-height: 460px; transition: transform 1.2s var(--ease); }
 .about-photo-wrap:hover img{ transform: scale(1.045); }
@@ -169,7 +173,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .about-quote{ font-family:'Cormorant Garamond', serif; font-style: italic; font-size: clamp(1.3rem, 2.2vw, 1.7rem); line-height: 1.5; color: var(--ink); }
 .about-quote::before{ content: ""; display:block; width: 46px; height: 1px; background: var(--red-deep); margin-bottom: 1.6rem; }
 .hero-insights{ display:flex; align-items:center; gap: 0; margin-top: 2.6rem; flex-wrap: nowrap; }
-.hero-insight{ text-align:left; padding: 0 1.6rem; position: relative; flex: 1; width: 50px;; }
+.hero-insight{ text-align:left; padding: 0 1.6rem; position: relative; flex: 1; width: 50px; }
 .hero-insight:first-child{ padding-left: 0; }
 .hero-insight:not(:last-child)::after{ content:""; position:absolute; right:0; top:50%; transform: translateY(-50%); width:1px; height: 30px; background: var(--red-line-strong); }
 .hero-insight-num{ font-family:'Cormorant Garamond', serif; font-size: clamp(1.2rem, 3.5vw, 1.85rem); font-weight: 600; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums; display:flex; align-items: baseline; gap: 2px; }
@@ -300,9 +304,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* ─── Social icon buttons ─────────────────────────────── */
 .social-btn{
   width:42px; height:42px; border-radius:50%;
-  border:1px solid rgba(224,72,59,0.35);
+  border:1px solid rgba(255,255,255,0.35);
   display:inline-flex; align-items:center; justify-content:center;
-  color:rgba(224,72,59,0.7);
+  color:rgba(255,255,255,0.85);
   transition:background 0.4s var(--ease),border-color 0.4s var(--ease),color 0.4s var(--ease),transform 0.4s var(--ease);
   flex-shrink:0;
 }
@@ -452,11 +456,11 @@ img, video, .container, .row{ max-width: 100%; }
 <header class="hero" id="tvHero">
   <div class="hero-video-layer" id="heroVideoLayer">
     <div class="hero-slides" id="heroSlides">
-      <div class="hero-slide is-active"><img src="images/Hero background 2.PNG" alt="Egyptian desert landscape at golden hour" loading="eager"></div>
+      <div class="hero-slide is-active"><img src="images/Hero background 3.PNG" alt="Egyptian desert landscape at golden hour" loading="eager"></div>
       <div class="hero-slide"><img src="images/Hero background 1.PNG" alt="Scenic travel destination" loading="lazy"></div>
-      <div class="hero-slide"><img src="images/Hero background 3.PNG" alt="Tavari travel backdrop" loading="lazy"></div>
       <div class="hero-slide"><img src="images/Hero background 2.PNG" alt="Tavari travel backdrop" loading="lazy"></div>
       <div class="hero-slide"><img src="images/Hero background 1.PNG" alt="Tavari travel backdrop" loading="lazy"></div>
+      <div class="hero-slide"><img src="images/Hero background 3.PNG" alt="Tavari travel backdrop" loading="lazy"></div>
     </div>
   </div>
   <div class="hero-glow" id="heroGlow"></div>
@@ -477,8 +481,6 @@ img, video, .container, .row{ max-width: 100%; }
           <div class="hero-insight">
             <div class="hero-insight-num"><span class="metric-num" data-count="3000" data-suffix="+">0</span></div>
             <div class="hero-insight-label">travellers</div>
-          </div>
-          <div class="hero-insight">
           </div>
         </div>
       </div>
