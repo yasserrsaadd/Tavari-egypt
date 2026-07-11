@@ -217,6 +217,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .trip-thumb-wrap img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 1.3s var(--ease); }
 .trip-card:hover .trip-thumb-wrap img{ transform: scale(1.07); }
 .trip-price-chip{ position:absolute; top:14px; right:14px; background: rgba(22,38,59,0.78); color: #9BC4F2; font-size: 0.78rem; letter-spacing: 0.03em; padding: 0.4rem 0.85rem; border-radius: 50px; font-variant-numeric: tabular-nums; }
+.best-seller-badge{ position:absolute; top:14px; left:14px; z-index:3; background: linear-gradient(135deg, var(--red-bright), var(--red-deep)); color:#FFFFFF; font-size:0.7rem; letter-spacing:0.06em; font-weight:600; padding:0.35rem 0.75rem; border-radius:50px; display:inline-flex; align-items:center; gap:0.35rem; box-shadow:0 8px 18px -8px rgba(224,72,59,0.7); pointer-events:none; }
+.best-seller-badge i{ font-size:0.8rem; }
 .trip-body{ padding: 1.5rem; flex:1; display:flex; flex-direction:column; }
 .trip-body h3{ font-size: 1.45rem; margin: 0 0 0.3rem; }
 .trip-dates{ font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 1.1rem; display:flex; align-items:center; gap:0.4rem; }
@@ -588,7 +590,7 @@ img, video, .container, .row{ max-width: 100%; }
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">Active Trips</p>
-      <h2 class="section-title section-title--rabbit"><img src="images/character Icon.png" alt="" class="section-title-icon" aria-hidden="true"><span class="title-line">Choose your horizon.</span></h2>
+      <h2 class="section-title section-title--rabbit"><img src="images/character Icon.png" alt="" class="section-title-icon" aria-hidden="true"><span class="title-line">Choose your Trip.</span></h2>
     </div>
     <div class="row g-4" id="tripsGrid">
       <div class="col-md-6 col-lg-4"><div class="trips-skeleton"></div></div>
@@ -667,7 +669,7 @@ img, video, .container, .row{ max-width: 100%; }
             <div class="contact-line"><i class="bi bi-whatsapp"></i><span>WhatsApp Hotline &mdash; +20 1061336882</span></div>
             <div class="contact-line"><i class="bi bi-telephone"></i><span>Reservations &mdash; +20 01061336882</span></div>
             <div class="contact-line"><i class="bi bi-clock"></i><span>Support hours &mdash; Daily, 9:00 AM &ndash; 11:00 PM (Cairo time)</span></div>
-            <div class="contact-line"><i class="bi bi-envelope"></i><span>concierge@tavariegypt.com</span></div>
+            <div class="contact-line"><i class="bi bi-envelope"></i><span>TavariEgypt@gmail.com</span></div>
             <div class="horizon my-4" style="background:linear-gradient(90deg, transparent, rgba(224,72,59,0.45) 50%, transparent);"></div>
             <p class="eyebrow mb-3" style="color:rgba(231,196,188,0.95); letter-spacing:0.18em;">Follow Us</p>
             <div class="d-flex gap-2 flex-wrap mb-3">
@@ -795,7 +797,7 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
       </div>
       <div class="col-lg-4">
         <p class="eyebrow mb-3" style="color:rgba(250,248,245,0.5);">Reach Us</p>
-        <p style="font-size:0.85rem; line-height:1.8;">concierge@tavariegypt.com<br>WhatsApp +20 100 123 4567</p>
+        <p style="font-size:0.85rem; line-height:1.8;">TavariEgypt@gmail.com<br>WhatsApp +20 100 123 4567</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -892,9 +894,9 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <script>
-const useLiveBackend = false;
-const SUPABASE_URL = "https://YOUR-PROJECT-REF.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR-PUBLIC-ANON-KEY";
+const useLiveBackend = true;
+const SUPABASE_URL = "https://eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwd2dubXRsZmJtYWlzZHhlenJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NjU1MTYsImV4cCI6MjA5OTM0MTUxNn0.0k6lSxDX4J2Qz-163fDnRsTQieQ-H2i5IFfeKx-59hY.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwd2dubXRsZmJtYWlzZHhlenJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NjU1MTYsImV4cCI6MjA5OTM0MTUxNn0.0k6lSxDX4J2Qz-163fDnRsTQieQ-H2i5IFfeKx-59hY";
 const EMAILJS_PUBLIC_KEY = "YOUR-EMAILJS-PUBLIC-KEY";
 const EMAILJS_SERVICE_ID = "YOUR-EMAILJS-SERVICE-ID";
 const EMAILJS_TEMPLATE_ID = "YOUR-EMAILJS-TEMPLATE-ID";
@@ -1136,8 +1138,8 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
 })();
 
 const FALLBACK_TRIPS = [
-  { id:"fallback-siwa", title:"Siwa Oasis Wilderness Expedition", base_price:8200, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-14", end_date:"2026-07-17" },
-  { id:"fallback-dahab", title:"Dahab Reef & Blue Hole Retreat", base_price:6450, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-19", end_date:"2026-07-22" },
+  { id:"fallback-siwa", title:"Siwa Oasis Wilderness Expedition", base_price:8200, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-14", end_date:"2026-07-17", is_best_seller:true },
+  { id:"fallback-dahab", title:"Dahab Reef & Blue Hole Retreat", base_price:6450, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-19", end_date:"2026-07-22", is_best_seller:true },
   { id:"fallback-whitedesert", title:"White Desert Stargazer Camp", base_price:7100, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-24", end_date:"2026-07-26" }
 ];
 const FALLBACK_GALLERY = [
@@ -1210,6 +1212,7 @@ function renderTrips(trips) {
         <div class="trip-thumb-wrap">
           <img src="${img}" alt="${t.title}" loading="lazy">
           <span class="trip-price-chip">${fmtMoney(t.base_price)} / person</span>
+          ${t.is_best_seller ? `<span class="best-seller-badge"><i class="bi bi-fire"></i> Best Seller</span>` : ""}
         </div>
         <div class="trip-body">
           <h3>${t.title}</h3>
