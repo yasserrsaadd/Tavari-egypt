@@ -305,6 +305,77 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-success-icon{ width: 64px; height:64px; border-radius:50%; background: var(--red-soft); color: var(--red-deep); display:flex; align-items:center; justify-content:center; font-size: 1.8rem; margin: 0 auto 1.3rem; }
 .tv-success-modal h3{ margin-bottom: 0.8rem; }
 .tv-success-modal p{ color: var(--ink-soft); font-size: 0.95rem; line-height:1.6; margin-bottom: 1.6rem; }
+
+/* TRIP DETAIL MODAL */
+.tv-trip-detail-modal{
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: var(--ivory);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--red-line-strong);
+  box-shadow: var(--shadow-lift);
+  transform: translateY(24px) scale(0.96);
+  transition: transform 0.55s var(--ease);
+}
+.tv-modal-scrim.show .tv-trip-detail-modal{ transform: translateY(0) scale(1); }
+.tv-trip-detail-close{
+  position: absolute; top: 14px; right: 14px; z-index: 6;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--red); color:#fff; border: none;
+  display:flex; align-items:center; justify-content:center; font-size: 1.1rem;
+  box-shadow: 0 8px 20px -6px rgba(0,0,0,0.4); cursor:pointer;
+  transition: background 0.3s var(--ease), transform 0.35s var(--ease);
+}
+.tv-trip-detail-close:hover{ background: var(--red-deep); transform: rotate(90deg); }
+.tv-td-hero{ position: relative; height: 280px; overflow: hidden; border-radius: var(--radius-card) var(--radius-card) 0 0; background:#000; }
+.tv-td-hero img{ width:100%; height:100%; object-fit: cover; }
+.tv-td-hero::after{ content:""; position:absolute; inset:0; background: linear-gradient(to top, rgba(16,30,48,0.78), rgba(16,30,48,0.04) 62%); }
+.tv-td-hero-text{ position:absolute; left: 2rem; right: 2rem; bottom: 1.4rem; z-index: 2; color:#fff; }
+.tv-td-hero-text h2{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 2.4rem; line-height:1.05; margin:0; text-shadow: 0 2px 18px rgba(0,0,0,0.35); }
+.tv-td-hero-text .tv-td-dates{ font-size: 0.85rem; letter-spacing:0.05em; opacity:0.92; margin-top:0.4rem; }
+.tv-td-hero-text .tv-td-price{ display:inline-block; margin-top:0.7rem; background: var(--red); color:#fff; padding:0.35rem 0.9rem; border-radius: var(--radius-btn); font-size:0.85rem; font-weight:600; }
+.tv-td-body{ padding: 1.8rem 2rem 2.4rem; }
+.tv-td-section{ margin-bottom: 1.8rem; }
+.tv-td-section h3{ font-family:'Cormorant Garamond', serif; font-size: 1.7rem; font-weight:600; color: var(--ink); margin-bottom: 0.7rem; display:flex; align-items:center; gap:0.5rem; }
+.tv-td-section h3 i{ color: var(--red); font-size: 1.25rem; }
+.tv-td-section p{ color: var(--ink-soft); font-size: 0.96rem; line-height:1.7; margin:0; }
+.tv-td-timeline{ position: relative; padding-left: 1.4rem; }
+.tv-td-timeline::before{ content:""; position:absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--red-line); }
+.tv-td-day{ position: relative; padding: 0 0 1.2rem 0.8rem; }
+.tv-td-day::before{ content:""; position:absolute; left: -1.4rem; top: 6px; width: 14px; height:14px; border-radius:50%; background: var(--red); box-shadow: 0 0 0 4px var(--red-soft); }
+.tv-td-day .d-day{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 1.15rem; color: var(--red-deep); }
+.tv-td-day .d-title{ font-weight:600; color: var(--ink); margin-left:0.4rem; }
+.tv-td-day .d-details{ color: var(--ink-soft); font-size:0.92rem; line-height:1.6; margin-top:0.2rem; }
+.tv-td-gallery{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+.tv-td-gallery img{ width:100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 12px; cursor:pointer; transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease); }
+.tv-td-gallery img:hover{ transform: translateY(-3px) scale(1.02); box-shadow: var(--shadow-soft); }
+.tv-td-cols{ display:grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.tv-td-bullets{ list-style:none; padding:0; margin:0; }
+.tv-td-bullets li{ display:flex; align-items:flex-start; gap:0.5rem; margin-bottom:0.55rem; color: var(--ink-soft); font-size:0.92rem; line-height:1.5; }
+.tv-td-bullets li i{ color: var(--red-deep); font-size:1.05rem; margin-top:0.12rem; flex-shrink:0; }
+.tv-td-bullets.excluded li i{ color: var(--ink-faint); }
+.tv-td-solo{ background: var(--red-soft); border:1px solid var(--red-line); border-radius: var(--radius-card); padding: 1.2rem 1.4rem; display:flex; gap:0.9rem; align-items:flex-start; }
+.tv-td-solo > i{ font-size: 1.5rem; color: var(--red); flex-shrink:0; margin-top:0.1rem; }
+.tv-td-solo p{ margin:0; color: var(--ink-soft); font-size:0.95rem; line-height:1.6; }
+.tv-td-solo strong{ color: var(--red-deep); }
+.tv-td-pay{ display:flex; flex-direction:column; gap:0.6rem; }
+.tv-td-pay .pay-row{ display:flex; align-items:center; gap:0.7rem; background: var(--glass); border:1px solid var(--red-line); border-radius: var(--radius-input); padding:0.7rem 1rem; }
+.tv-td-pay .pay-row .ic{ font-size:1.3rem; color: var(--red); }
+.tv-td-pay .pay-row code{ background: var(--ivory-deep); padding:0.15rem 0.5rem; border-radius:6px; color: var(--ink); }
+.tv-td-cta{ display:flex; gap:0.8rem; flex-wrap:wrap; margin-top: 0.4rem; }
+.tv-td-cta .btn-trip-primary, .tv-td-cta .btn-trip-secondary{ flex:1 1 auto; justify-content:center; }
+.tv-td-pdf{ display:inline-flex; align-items:center; gap:0.5rem; margin-top:0.8rem; color: var(--red-deep); font-weight:600; text-decoration:none; }
+.tv-td-pdf:hover{ text-decoration: underline; }
+@media (max-width: 640px){
+  .tv-td-gallery{ grid-template-columns: repeat(2,1fr); }
+  .tv-td-cols{ grid-template-columns: 1fr; }
+  .tv-td-hero{ height: 220px; }
+  .tv-td-hero-text h2{ font-size: 1.9rem; }
+  .tv-td-body{ padding: 1.4rem 1.2rem 2rem; }
+}
 .tv-footer{ background: #a31202; color: rgba(255,255,255,0.7); padding: 3rem 0 2rem; font-size: 0.85rem; }
 .tv-footer .tv-brand{ color: #FFFFFF; }
 .tv-footer .tv-brand span{ color: var(--red-bright); }
@@ -890,6 +961,13 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
   </div>
 </div>
 
+<div class="tv-modal-scrim" id="tripDetailScrim">
+  <div class="tv-trip-detail-modal" role="dialog" aria-modal="true" aria-label="Trip details">
+    <button class="tv-trip-detail-close" id="tripDetailClose" aria-label="Close details"><i class="bi bi-x-lg"></i></button>
+    <div id="tripDetailBody"></div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -1139,9 +1217,54 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
 })();
 
 const FALLBACK_TRIPS = [
-  { id:"fallback-siwa", title:"Siwa Oasis Wilderness Expedition", base_price:8200, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-14", end_date:"2026-07-17", is_best_seller:true },
-  { id:"fallback-dahab", title:"Dahab Reef & Blue Hole Retreat", base_price:6450, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-19", end_date:"2026-07-22", is_best_seller:true },
-  { id:"fallback-whitedesert", title:"White Desert Stargazer Camp", base_price:7100, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-24", end_date:"2026-07-26" }
+  { id:"fallback-siwa", title:"Siwa Oasis Wilderness Expedition", base_price:8200, pdf_url:"#",
+    image_urls:["https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop","https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop","https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop"],
+    start_date:"2026-07-14", end_date:"2026-07-17", is_best_seller:true,
+    description:"Journey deep into Egypt's most remote oasis for salt lakes, golden dunes, and star-filled skies — a soul-resetting escape far from the crowds.",
+    itinerary:[
+      { day:1, title:"Arrival in Siwa", details:"Your driver meets you at Marsa Matruh for the scenic drive into the oasis. After check-in at the eco-lodge we head to Fatnas Island for a golden-hour swim and sunset over the salt lakes. The evening opens with a welcome dinner of traditional Siwi dishes — tagine, stuffed dates, and bread baked in the sand." },
+      { day:2, title:"Desert & Springs", details:"A 4x4 convoy carries us deep into the Great Sand Sea for dune boarding and endless photo stops. Midday we cool off in the mineral-rich Cleopatra Spring, then share a slow lunch of mezze and grilled meats in a shaded palm grove. The afternoon is yours — explore the olive and date cooperatives or rest by the pool." },
+      { day:3, title:"Mountain of the Dead", details:"We climb to the Mountain of the Dead to explore Pharaonic and Greco-Roman tombs carved into the cliffs, then wander the crumbling mud-brick lanes of Shali Fortress. As night falls we gather around the campfire for mint tea, music, and a final stargazing session before your transfer back." }
+    ],
+    accommodation:"Boutique eco-lodge with private desert-view rooms, a palm-shaded pool, and half-board meals of local Siwi cuisine.",
+    solo_message:"Traveling solo? No problem — over 80% of our Siwa travellers journey on their own and leave with lifelong friends.",
+    included:["Private 4x4 desert tours","All breakfasts & dinners","Boutique eco-lodge stay","Expert local guide","Airport transfers"],
+    excluded:["Flights to Marsa Matruh","Personal expenses","Travel insurance","Optional spa treatments"],
+    payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
+    refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
+  },
+  { id:"fallback-dahab", title:"Dahab Reef & Blue Hole Retreat", base_price:6450, pdf_url:"#",
+    image_urls:["https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop","https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=1200&auto=format&fit=crop","https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1200&auto=format&fit=crop"],
+    start_date:"2026-07-19", end_date:"2026-07-22", is_best_seller:true,
+    description:"A laid-back Red Sea escape built around world-class diving, Bedouin hospitality, and the famous Blue Hole.",
+    itinerary:[
+      { day:1, title:"Arrival & Lagoon", details:"Check in to your sea-view stay and drop your bags before a barefoot sunset walk along the Lagoon. We ease in with a seafood welcome dinner on the waterfront and a first taste of Dahab's relaxed pace." },
+      { day:2, title:"Blue Hole Dive", details:"A guided dive or snorkel at the legendary Blue Hole and the Canyon, with all equipment and an instructor on hand. The afternoon is free to lounge on the beach, try kitesurfing, or browse the seaside cafés." },
+      { day:3, title:"Sinai Highlands", details:"A Bedouin-led hike into the coloured canyons with shaded breaks and sweet tea, ending in a starlit beach barbecue. We roll back into town under the stars, with transfers arranged the next morning." }
+    ],
+    accommodation:"Sea-view boutique hotel with daily breakfast, a rooftop lounge, and secure dive lockers.",
+    solo_message:"Traveling solo? No problem — over 80% of our Dahab travellers come alone and pair up with buddies on day one.",
+    included:["Daily guided dives/snorkelling","Sea-view hotel stay","Bedouin canyon hike","All breakfasts","Equipment rental"],
+    excluded:["Flights to Sharm El Sheikh","Personal diving certification fees","Lunches & dinners","Tips"],
+    payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
+    refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
+  },
+  { id:"fallback-whitedesert", title:"White Desert Stargazer Camp", base_price:7100, pdf_url:"#",
+    image_urls:["https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop","https://images.unsplash.com/photo-1418985991508-e47386d96a71?q=80&w=1200&auto=format&fit=crop","https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1200&auto=format&fit=crop"],
+    start_date:"2026-07-24", end_date:"2026-07-26",
+    description:"Camp among the surreal chalk formations of the White Desert and fall asleep beneath one of the clearest night skies on Earth.",
+    itinerary:[
+      { day:1, title:"Drive to the Desert", details:"A scenic drive from Cairo with a stop at the Black Desert's volcanic hills, then a hot-spring sunset at the Valley of El Haize. We reach base camp as the light turns gold and dinner is served under open sky." },
+      { day:2, title:"White Desert Camp", details:"Morning at the chalk sculptures of the White Desert, followed by a baked-in-sand lunch. As temperatures drop we light the fire for a Bedouin dinner and a long night of astrophotography among the formations." },
+      { day:3, title:"Sunrise & Return", details:"We wake for golden-hour photos among the ice-cream rocks, share breakfast, and begin the relaxed drive back to Cairo with a final stop at the crystal mountain." }
+    ],
+    accommodation:"Private furnished dome tent with mattress, bedding, ambient lighting, and shared wash facilities.",
+    solo_message:"Traveling solo? No problem — over 80% of our desert travellers go solo and love the communal campfire nights.",
+    included:["Private 4x4 transfers","Full-board desert camping","Professional guide","All camping gear","National park fees"],
+    excluded:["Flights to Cairo","Personal expenses","Travel insurance","Alcoholic drinks"],
+    payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
+    refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
+  }
 ];
 const FALLBACK_GALLERY = [
   { destination:"Hurghada", title:"Red Sea Escape", image_urls:[
@@ -1210,7 +1333,6 @@ function renderTrips(trips) {
   grid.innerHTML = trips.map((t,i) => {
     const img = (t.image_urls&&t.image_urls[0])||"https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop";
     const dates = fmtTripDateRange(t);
-    const pdf = t.pdf_url&&t.pdf_url!=="#"?t.pdf_url:null;
     return `<div class="col-md-6 col-lg-4 reveal reveal-d${Math.min((i%3)+1,5)}">
       <div class="trip-card">
         <div class="trip-thumb-wrap">
@@ -1222,7 +1344,7 @@ function renderTrips(trips) {
           <h3>${t.title}</h3>
           <div class="trip-dates"><i class="bi bi-calendar3"></i> ${dates}</div>
           <div class="trip-actions">
-            ${pdf?`<a class="btn-trip-secondary" href="${pdf}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf"></i> Itinerary PDF</a>`:`<button class="btn-trip-secondary" type="button" onclick="showToast('Itinerary PDF coming soon.','info')"><i class="bi bi-file-earmark-pdf"></i> Itinerary PDF</button>`}
+            <button class="btn-trip-secondary" type="button" onclick="openTripDetails('${t.id}')"><i class="bi bi-info-circle"></i> Show Details</button>
             <button class="btn-trip-primary" type="button" onclick="openBookingDrawer('${t.id}')">Book now</button>
           </div>
         </div>
@@ -1311,7 +1433,7 @@ function renderLightboxImages() {
   lightboxImgWrap.innerHTML = lightboxImages.map((src,i) => `<img src="${src}" class="${i===lightboxIndex?"active":""}" alt="Gallery image ${i+1}">`).join("");
   lightboxCounter.textContent = `Image ${lightboxIndex+1} of ${lightboxImages.length}`;
 }
-function closeLightbox() { lightbox.classList.remove("show"); document.body.style.overflow = ""; }
+function closeLightbox() { lightbox.classList.remove("show"); if (!tripDetailScrim.classList.contains("show")) document.body.style.overflow = ""; }
 document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
 lightbox.addEventListener("click", (e) => { if (e.target===lightbox) closeLightbox(); });
 document.getElementById("lightboxPrev").addEventListener("click", () => { lightboxIndex=(lightboxIndex-1+lightboxImages.length)%lightboxImages.length; renderLightboxImages(); });
@@ -1322,6 +1444,93 @@ document.addEventListener("keydown", (e) => {
   if (e.key==="ArrowLeft") document.getElementById("lightboxPrev").click();
   if (e.key==="ArrowRight") document.getElementById("lightboxNext").click();
 });
+
+/* TRIP DETAIL MODAL */
+const tripDetailScrim = document.getElementById("tripDetailScrim");
+const tripDetailModal = tripDetailScrim.querySelector(".tv-trip-detail-modal");
+function tvEsc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function closeTripDetails(){ tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
+document.getElementById("tripDetailClose").addEventListener("click", closeTripDetails);
+tripDetailScrim.addEventListener("click", (e) => { if (e.target===tripDetailScrim) closeTripDetails(); });
+document.addEventListener("keydown", (e) => { if (e.key==="Escape" && tripDetailScrim.classList.contains("show")) closeTripDetails(); });
+
+function openTripGallery(index){
+  const imgs = window.__tripGallery || [];
+  if (!imgs.length) return;
+  lightboxImages = imgs; lightboxIndex = index||0;
+  lightboxTitle.textContent = "Trip gallery";
+  renderLightboxImages();
+  lightbox.classList.add("show");
+}
+
+function openTripDetails(tripId){
+  const t = TRIPS_CACHE.find(x => String(x.id)===String(tripId));
+  if (!t) { showToast("Trip details are unavailable right now.","error"); return; }
+  const imgs = (t.image_urls && t.image_urls.length) ? t.image_urls : [];
+  const hero = imgs[0] || "";
+  const dates = fmtTripDateRange(t);
+  const price = fmtMoney(t.base_price) + " / person";
+  const solo = t.solo_message || "Traveling solo? No problem — over 80% of our travellers journey on their own. You'll be in great company.";
+  const itin = (t.itinerary && Array.isArray(t.itinerary)) ? t.itinerary : [];
+  const included = (t.included && t.included.length) ? t.included : [];
+  const excluded = (t.excluded && t.excluded.length) ? t.excluded : [];
+  const pays = (t.payment_methods && t.payment_methods.length) ? t.payment_methods : [];
+  const refund = t.refund_policy || "";
+  const pdf = (t.pdf_url && t.pdf_url!=="#") ? t.pdf_url : null;
+
+  const itinHtml = itin.length ? itin.map(d => `
+    <div class="tv-td-day">
+      <div><span class="d-day">Day ${tvEsc(d.day)}</span><span class="d-title">${tvEsc(d.title||"")}</span></div>
+      <div class="d-details">${tvEsc(d.details||"")}</div>
+    </div>`).join("") : `<p>Full day-by-day itinerary coming soon.</p>`;
+
+  const galleryHtml = imgs.length ? imgs.map((src,i) => `<img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" loading="lazy" onclick="openTripGallery(${i})">`).join("") : "";
+
+  const bullets = (arr, cls) => arr.length
+    ? `<ul class="tv-td-bullets ${cls}">` + arr.map(x => `<li><i class="bi ${cls==="included"?"bi-check-circle-fill":"bi-x-circle-fill"}"></i><span>${tvEsc(x)}</span></li>`).join("") + `</ul>`
+    : `<p>—</p>`;
+
+  const payHtml = pays.length ? pays.map(p => {
+    const m = p.match(/^(.*?)[\s—-]+(.+)$/);
+    const label = m ? m[1].trim() : p;
+    const code = m ? m[2].trim() : "";
+    return `<div class="pay-row"><span class="ic"><i class="bi bi-wallet2"></i></span><div>${tvEsc(label)}${code?` &mdash; <code>${tvEsc(code)}</code>`:""}</div></div>`;
+  }).join("") : `<p>Contact us for payment options.</p>`;
+
+  document.getElementById("tripDetailBody").innerHTML = `
+    <div class="tv-td-hero">
+      ${hero?`<img src="${hero}" alt="${tvEsc(t.title)}">`:""}
+      <div class="tv-td-hero-text">
+        <h2>${tvEsc(t.title)}</h2>
+        <div class="tv-td-dates"><i class="bi bi-calendar3"></i> ${tvEsc(dates)}</div>
+        <span class="tv-td-price">${tvEsc(price)}</span>
+      </div>
+    </div>
+    <div class="tv-td-body">
+      ${t.description?`<div class="tv-td-section"><h3><i class="bi bi-info-circle"></i> About this trip</h3><p>${tvEsc(t.description)}</p></div>`:""}
+      ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> Day by day</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
+      ${t.accommodation?`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p></div>`:""}
+      ${galleryHtml?`<div class="tv-td-section"><h3><i class="bi bi-images"></i> Gallery</h3><div class="tv-td-gallery">${galleryHtml}</div></div>`:""}
+      <div class="tv-td-section"><h3><i class="bi bi-clipboard-check"></i> What's included &amp; excluded</h3>
+        <div class="tv-td-cols">
+          <div><div class="eyebrow mb-2">Included</div>${bullets(included,"included")}</div>
+          <div><div class="eyebrow mb-2">Excluded</div>${bullets(excluded,"excluded")}</div>
+        </div>
+      </div>
+      <div class="tv-td-section"><div class="tv-td-solo"><i class="bi bi-emoji-smile"></i><p>${tvEsc(solo)}</p></div></div>
+      <div class="tv-td-section"><h3><i class="bi bi-credit-card"></i> Payment methods</h3><div class="tv-td-pay">${payHtml}</div></div>
+      ${refund?`<div class="tv-td-section"><h3><i class="bi bi-shield-check"></i> Refund policy</h3><p>${tvEsc(refund)}</p></div>`:""}
+      <div class="tv-td-cta">
+        <button class="btn-trip-primary" type="button" onclick="openBookingDrawer('${t.id}'); closeTripDetails();"><i class="bi bi-calendar-check"></i> Book now</button>
+        ${pdf?`<a class="btn-trip-secondary" href="${pdf}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf"></i> Itinerary PDF</a>`:""}
+      </div>
+    </div>
+  `;
+  window.__tripGallery = imgs;
+  tripDetailScrim.classList.add("show");
+  document.body.style.overflow = "hidden";
+  tripDetailModal.scrollTop = 0;
+}
 
 /* BOOKING DRAWER */
 const drawer = document.getElementById("bookingDrawer");
