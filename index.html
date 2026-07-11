@@ -196,6 +196,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .dest-card::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(22,38,59,0) 35%, rgba(22,38,59,0.82) 100%); }
 .dest-card-body{ position:absolute; left:0; right:0; bottom:0; padding: 1.6rem; z-index: 2; color: var(--ivory); }
 .dest-card-body h3{ color: var(--ivory); margin:0 0 0.7rem; font-size: 1.7rem; }
+.dest-subtitle{ font-size:0.85rem; color: rgba(251,253,255,0.78); margin-top:0.1rem; letter-spacing:0.02em; }
 .dest-view-btn{ font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ivory); border: 1px solid rgba(251,253,255,0.55); padding: 0.5rem 1rem; border-radius: var(--radius-btn); display:inline-flex; align-items:center; gap: 0.5rem; transition: background 0.4s var(--ease), border-color 0.4s var(--ease), transform 0.4s var(--ease); background: rgba(251,253,255,0.10); min-height: 44px; }
 .dest-view-btn:hover{ background: var(--red); border-color: var(--red); color: #FFFFFF; transform: translateY(-2px); }
 .tv-lightbox{ position: fixed; inset:0; z-index: 1400; display:flex; align-items:center; justify-content:center; background: rgba(16,30,48,0.88); opacity:0; pointer-events:none; transition: opacity 0.5s var(--ease); padding: 2rem; }
@@ -1143,12 +1144,15 @@ const FALLBACK_TRIPS = [
   { id:"fallback-whitedesert", title:"White Desert Stargazer Camp", base_price:7100, pdf_url:"#", image_urls:["https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop"], start_date:"2026-07-24", end_date:"2026-07-26" }
 ];
 const FALLBACK_GALLERY = [
-  { destination:"Hurghada", media_url:"https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1200&auto=format&fit=crop" },
-  { destination:"Hurghada", media_url:"https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=1200&auto=format&fit=crop" },
-  { destination:"Siwa", media_url:"https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop" },
-  { destination:"Siwa", media_url:"https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop" },
-  { destination:"Sinai", media_url:"https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop" },
-  { destination:"Sinai", media_url:"https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop" }
+  { destination:"Hurghada", title:"Red Sea Escape", image_urls:[
+    "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=1200&auto=format&fit=crop" ] },
+  { destination:"Siwa", title:"Oasis of Silence", image_urls:[
+    "https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop" ] },
+  { destination:"Sinai", title:"Mountain & Reef", image_urls:[
+    "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop" ] }
 ];
 const FALLBACK_REVIEWS = [
   { customer_name:"Mariam K.", trip_title:"Ras Sedr", rating:5, quote:"I joined Tavari on a trip to Dahab without knowing anyone, and it turned out to be one of the best weekends I've ever had. Everything was perfectly organized, the accommodations were great, and the team made everyone feel welcome. I'll definitely travel with them again." },
@@ -1240,24 +1244,26 @@ async function loadGallery() {
     try {
       const { data, error } = await supabaseClient.from("gallery").select("*");
       if (error) throw error;
-      if (data&&data.length) items = data.map(d=>({destination:d.destination||"Gallery",media_url:d.media_url,is_video:d.is_video}));
+      if (data&&data.length) items = data;
     } catch(e) { console.warn("Gallery fallback:", e); }
   }
-  const grouped = {};
-  items.forEach(it => { if (!grouped[it.destination]) grouped[it.destination]=[]; grouped[it.destination].push(it.media_url); });
   const grid = document.getElementById("galleryGrid");
-  grid.innerHTML = Object.keys(grouped).map((dest,i) => `
+  grid.innerHTML = items.map((g,i) => {
+    const imgs = (g.image_urls && g.image_urls.length) ? g.image_urls : [FALLBACK_GALLERY[0].image_urls[0]];
+    return `
     <div class="col-md-6 col-lg-4 reveal reveal-d${Math.min(i+1,5)}">
-      <div class="dest-card" onclick="openLightbox('${dest.replace(/'/g,"\'")}')">
-        <img src="${grouped[dest][0]}" alt="${dest}" loading="lazy">
+      <div class="dest-card" onclick="openLightbox(${i})">
+        <img src="${imgs[0]}" alt="${g.destination}" loading="lazy">
         <div class="dest-card-body">
-          <h3>${dest}</h3>
+          <h3>${g.destination}</h3>
+          <div class="dest-subtitle">${g.title||""}</div>
           <span class="dest-view-btn">View More Photos <i class="bi bi-arrow-right"></i></span>
         </div>
       </div>
-    </div>`).join("");
+    </div>`;
+  }).join("");
   grid.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
-  window.GALLERY_GROUPED = grouped;
+  window.GALLERY_ITEMS = items;
 }
 
 async function loadReviews() {
@@ -1291,11 +1297,12 @@ const lightboxImgWrap = document.getElementById("lightboxImgWrap");
 const lightboxTitle = document.getElementById("lightboxTitle");
 const lightboxCounter = document.getElementById("lightboxCounter");
 let lightboxImages = [], lightboxIndex = 0;
-function openLightbox(destination) {
-  const imgs = (window.GALLERY_GROUPED&&window.GALLERY_GROUPED[destination])||[];
+function openLightbox(index) {
+  const item = (window.GALLERY_ITEMS||[])[index];
+  const imgs = (item && item.image_urls) || [];
   if (!imgs.length) return;
   lightboxImages = imgs; lightboxIndex = 0;
-  lightboxTitle.textContent = destination;
+  lightboxTitle.textContent = (item.destination||"Gallery") + (item.title ? " — " + item.title : "");
   renderLightboxImages();
   lightbox.classList.add("show");
   document.body.style.overflow = "hidden";
