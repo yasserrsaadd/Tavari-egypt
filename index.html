@@ -1468,6 +1468,7 @@ function openTripDetails(tripId){
   if (!t) { showToast("Trip details are unavailable right now.","error"); return; }
   const imgs = (t.image_urls && t.image_urls.length) ? t.image_urls : [];
   const hero = imgs[0] || "";
+  const galleryImgs = imgs.length > 1 ? imgs.slice(1) : imgs;
   const dates = fmtTripDateRange(t);
   const price = fmtMoney(t.base_price) + " / person";
   const solo = t.solo_message || "Traveling solo? No problem — over 80% of our travellers journey on their own. You'll be in great company.";
@@ -1484,7 +1485,7 @@ function openTripDetails(tripId){
       <div class="d-details">${tvEsc(d.details||"")}</div>
     </div>`).join("") : `<p>Full day-by-day itinerary coming soon.</p>`;
 
-  const galleryHtml = imgs.length ? imgs.map((src,i) => `<img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" loading="lazy" onclick="openTripGallery(${i})">`).join("") : "";
+  const galleryHtml = galleryImgs.length ? galleryImgs.map((src,i) => `<img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" loading="lazy" onclick="openTripGallery(${i})">`).join("") : "";
 
   const bullets = (arr, cls) => arr.length
     ? `<ul class="tv-td-bullets ${cls}">` + arr.map(x => `<li><i class="bi ${cls==="included"?"bi-check-circle-fill":"bi-x-circle-fill"}"></i><span>${tvEsc(x)}</span></li>`).join("") + `</ul>`
@@ -1526,7 +1527,7 @@ function openTripDetails(tripId){
       </div>
     </div>
   `;
-  window.__tripGallery = imgs;
+  window.__tripGallery = galleryImgs;
   tripDetailScrim.classList.add("show");
   document.body.style.overflow = "hidden";
   tripDetailModal.scrollTop = 0;
