@@ -220,6 +220,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .trip-price-chip{ position:absolute; top:14px; right:14px; background: rgba(22,38,59,0.78); color: #9BC4F2; font-size: 0.78rem; letter-spacing: 0.03em; padding: 0.4rem 0.85rem; border-radius: 50px; font-variant-numeric: tabular-nums; }
 .best-seller-badge{ position:absolute; top:14px; left:14px; z-index:3; background: linear-gradient(135deg, var(--red-bright), var(--red-deep)); color:#FFFFFF; font-size:0.7rem; letter-spacing:0.06em; font-weight:600; padding:0.35rem 0.75rem; border-radius:50px; display:inline-flex; align-items:center; gap:0.35rem; box-shadow:0 8px 18px -8px rgba(224,72,59,0.7); pointer-events:none; }
 .best-seller-badge i{ font-size:0.8rem; }
+.trip-thumb-track{ display:flex; height:100%; transition: transform 0.45s var(--ease); will-change: transform; }
+.trip-thumb-slide{ position:relative; flex: 0 0 100%; width:100%; height:100%; }
+.trip-thumb-nav{ position:absolute; top:50%; transform: translateY(-50%); z-index:3; width:34px; height:34px; border:none; border-radius:50%; background: rgba(255,255,255,0.85); color: var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
+.trip-thumb-nav:hover{ background:#fff; }
+.trip-thumb-nav:active{ transform: translateY(-50%) scale(0.94); }
+.trip-thumb-prev{ left: 0.6rem; }
+.trip-thumb-next{ right: 0.6rem; }
+.trip-thumb-nav i{ font-size: 1.1rem; line-height:1; }
+.trip-thumb-dots{ position:absolute; left:0; right:0; bottom: 0.7rem; z-index:3; display:flex; gap:0.35rem; justify-content:center; align-items:center; }
+.trip-thumb-dot{ width:7px; height:7px; padding:0; border:none; border-radius:50%; background: rgba(255,255,255,0.5); cursor:pointer; transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
+.trip-thumb-dot.active{ background:#fff; transform: scale(1.35); }
+.trip-thumb-wrap--single .trip-thumb-nav, .trip-thumb-wrap--single .trip-thumb-dots{ display:none; }
 .trip-body{ padding: 1.5rem; flex:1; display:flex; flex-direction:column; }
 .trip-body h3{ font-size: 1.45rem; margin: 0 0 0.3rem; }
 .trip-dates{ font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 1.1rem; display:flex; align-items:center; gap:0.4rem; }
@@ -331,9 +343,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .tv-trip-detail-close:hover{ background: var(--red-deep); transform: rotate(90deg); }
 .tv-td-hero{ position: relative; height: 280px; overflow: hidden; border-radius: var(--radius-card) var(--radius-card) 0 0; background:#000; }
+.tv-td-hero-track{ display:flex; height:100%; transition: transform 0.45s var(--ease); will-change: transform; }
+.tv-td-hero-slide{ flex: 0 0 100%; width:100%; height:100%; }
 .tv-td-hero img{ width:100%; height:100%; object-fit: cover; }
-.tv-td-hero::after{ content:""; position:absolute; inset:0; background: linear-gradient(to top, rgba(16,30,48,0.78), rgba(16,30,48,0.04) 62%); }
-.tv-td-hero-text{ position:absolute; left: 2rem; right: 2rem; bottom: 1.4rem; z-index: 2; color:#fff; }
+.tv-td-hero::after{ content:""; position:absolute; inset:0; background: linear-gradient(to top, rgba(16,30,48,0.78), rgba(16,30,48,0.04) 62%); pointer-events:none; }
+.tv-td-hero-nav{ position:absolute; top:50%; transform: translateY(-50%); z-index:3; width:42px; height:42px; border:none; border-radius:50%; background: rgba(255,255,255,0.85); color: var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
+.tv-td-hero-nav:hover{ background:#fff; }
+.tv-td-hero-nav:active{ transform: translateY(-50%) scale(0.94); }
+.tv-td-hero-prev{ left: 1rem; }
+.tv-td-hero-next{ right: 1rem; }
+.tv-td-hero-nav i{ font-size: 1.3rem; line-height:1; }
+.tv-td-hero-dots{ position:absolute; left:0; right:0; bottom: 1rem; z-index:3; display:flex; gap:0.45rem; justify-content:center; align-items:center; }
+.tv-td-hero-dot{ width:9px; height:9px; padding:0; border:none; border-radius:50%; background: rgba(255,255,255,0.5); cursor:pointer; transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
+.tv-td-hero-dot.active{ background:#fff; transform: scale(1.35); }
+.tv-td-hero--single .tv-td-hero-nav, .tv-td-hero--single .tv-td-hero-dots{ display:none; }
+.tv-td-hero-text{ position:absolute; left: 2rem; right: 2rem; bottom: 1.4rem; z-index: 2; color:#fff; pointer-events:none; }
 .tv-td-hero-text h2{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 2.4rem; line-height:1.05; margin:0; text-shadow: 0 2px 18px rgba(0,0,0,0.35); }
 .tv-td-hero-text .tv-td-dates{ font-size: 0.85rem; letter-spacing:0.05em; opacity:0.92; margin-top:0.4rem; }
 .tv-td-hero-text .tv-td-price{ display:inline-block; margin-top:0.7rem; background: var(--red); color:#fff; padding:0.35rem 0.9rem; border-radius: var(--radius-btn); font-size:0.85rem; font-weight:600; }
@@ -349,9 +373,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-td-day .d-day{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 1.15rem; color: var(--red-deep); }
 .tv-td-day .d-title{ font-weight:600; color: var(--ink); margin-left:0.4rem; }
 .tv-td-day .d-details{ color: var(--ink-soft); font-size:0.92rem; line-height:1.6; margin-top:0.2rem; }
-.tv-td-gallery{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
-.tv-td-gallery img{ width:100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 12px; cursor:pointer; transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease); }
-.tv-td-gallery img:hover{ transform: translateY(-3px) scale(1.02); box-shadow: var(--shadow-soft); }
 .tv-td-cols{ display:grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
 .tv-td-bullets{ list-style:none; padding:0; margin:0; }
 .tv-td-bullets li{ display:flex; align-items:flex-start; gap:0.5rem; margin-bottom:0.55rem; color: var(--ink-soft); font-size:0.92rem; line-height:1.5; }
@@ -370,10 +391,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-td-pdf{ display:inline-flex; align-items:center; gap:0.5rem; margin-top:0.8rem; color: var(--red-deep); font-weight:600; text-decoration:none; }
 .tv-td-pdf:hover{ text-decoration: underline; }
 @media (max-width: 640px){
-  .tv-td-gallery{ grid-template-columns: repeat(2,1fr); }
   .tv-td-cols{ grid-template-columns: 1fr; }
   .tv-td-hero{ height: 220px; }
-  .tv-td-hero-text h2{ font-size: 1.9rem; }
+  .tv-td-hero-text{ bottom: 3.6rem; }
+  .tv-td-hero-text h2{ font-size: 1.6rem; }
+  .tv-td-hero-nav{ width:38px; height:38px; top:auto; bottom: 1rem; transform:none; }
+  .tv-td-hero-nav:active{ transform: scale(0.94); }
+  .tv-td-hero-prev{ left: 0.8rem; }
+  .tv-td-hero-next{ right: 0.8rem; }
+  .tv-td-hero-dots{ bottom: 1.2rem; }
   .tv-td-body{ padding: 1.4rem 1.2rem 2rem; }
 }
 .tv-footer{ background: #a31202; color: rgba(255,255,255,0.7); padding: 3rem 0 2rem; font-size: 0.85rem; }
@@ -1331,12 +1357,17 @@ function renderTrips(trips) {
   const grid = document.getElementById("tripsGrid");
   if (!trips.length) { grid.innerHTML = `<div class="col-12"><div class="trips-empty">No trips listed yet — check back shortly.</div></div>`; return; }
   grid.innerHTML = trips.map((t,i) => {
-    const img = (t.image_urls&&t.image_urls[0])||"https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop";
+    const imgs = (t.image_urls && t.image_urls.length) ? t.image_urls : ["https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop"];
     const dates = fmtTripDateRange(t);
     return `<div class="col-md-6 col-lg-4 reveal reveal-d${Math.min((i%3)+1,5)}">
       <div class="trip-card">
-        <div class="trip-thumb-wrap">
-          <img src="${img}" alt="${t.title}" loading="lazy">
+        <div class="trip-thumb-wrap ${imgs.length<=1?'trip-thumb-wrap--single':''}">
+          <div class="trip-thumb-track">
+            ${imgs.map((src,k)=>`<div class="trip-thumb-slide"><img src="${src}" alt="${tvEsc(t.title)} photo ${k+1}" ${k?'loading="lazy"':''}></div>`).join("")}
+          </div>
+          <button class="trip-thumb-nav trip-thumb-prev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
+          <button class="trip-thumb-nav trip-thumb-next" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
+          <div class="trip-thumb-dots">${imgs.map((_,k)=>`<button class="trip-thumb-dot${k===0?' active':''}" type="button" data-i="${k}" aria-label="Photo ${k+1}"></button>`).join("")}</div>
           <span class="trip-price-chip">${fmtMoney(t.base_price)} / person</span>
           ${t.is_best_seller ? `<span class="best-seller-badge"><i class="bi bi-fire"></i> Best Seller</span>` : ""}
         </div>
@@ -1352,6 +1383,15 @@ function renderTrips(trips) {
     </div>`;
   }).join("");
   grid.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+  initCardSliders();
+}
+
+function initCardSliders(){
+  document.querySelectorAll(".trip-thumb-wrap").forEach(wrap => {
+    const track = wrap.querySelector(".trip-thumb-track");
+    if (!track) return;
+    bindSlider(track, wrap.querySelector(".trip-thumb-prev"), wrap.querySelector(".trip-thumb-next"), wrap.querySelector(".trip-thumb-dots"));
+  });
 }
 
 function populateInquiryTripOptions(trips) {
@@ -1454,21 +1494,51 @@ document.getElementById("tripDetailClose").addEventListener("click", closeTripDe
 tripDetailScrim.addEventListener("click", (e) => { if (e.target===tripDetailScrim) closeTripDetails(); });
 document.addEventListener("keydown", (e) => { if (e.key==="Escape" && tripDetailScrim.classList.contains("show")) closeTripDetails(); });
 
-function openTripGallery(index){
-  const imgs = window.__tripGallery || [];
-  if (!imgs.length) return;
-  lightboxImages = imgs; lightboxIndex = index||0;
-  lightboxTitle.textContent = "Trip gallery";
-  renderLightboxImages();
-  lightbox.classList.add("show");
+function bindSlider(track, prev, next, dotsWrap){
+  if (!track) return null;
+  const slides = track.children.length;
+  if (slides <= 1) return null;
+  let idx = 0;
+  const dots = dotsWrap ? Array.from(dotsWrap.children) : [];
+  function goTo(i){
+    idx = (i + slides) % slides;
+    track.style.transform = `translateX(-${idx*100}%)`;
+    dots.forEach((d,k) => d.classList.toggle("active", k===idx));
+  }
+  if (prev) prev.addEventListener("click", () => goTo(idx-1));
+  if (next) next.addEventListener("click", () => goTo(idx+1));
+  dots.forEach(d => d.addEventListener("click", () => goTo(parseInt(d.dataset.i,10))));
+  let startX = null, dragging = false;
+  track.addEventListener("pointerdown", (e) => { startX = e.clientX; dragging = true; });
+  track.addEventListener("pointerup", (e) => {
+    if (!dragging || startX === null) return;
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 40) goTo(idx + (dx < 0 ? 1 : -1));
+    startX = null; dragging = false;
+  });
+  track.addEventListener("pointerleave", () => { dragging = false; startX = null; });
+  return goTo;
 }
+
+function initTripHeroSlider(){
+  const track = document.getElementById("tdHeroTrack");
+  if (!track) return;
+  const prev = document.getElementById("tdHeroPrev");
+  const next = document.getElementById("tdHeroNext");
+  const dots = document.getElementById("tdHeroDots");
+  window.__heroSliderGo = bindSlider(track, prev, next, dots);
+}
+
+document.addEventListener("keydown", (e) => {
+  if (!tripDetailScrim.classList.contains("show")) return;
+  if (e.key==="ArrowLeft" && window.__heroSliderGo) window.__heroSliderGo(-1);
+  if (e.key==="ArrowRight" && window.__heroSliderGo) window.__heroSliderGo(1);
+});
 
 function openTripDetails(tripId){
   const t = TRIPS_CACHE.find(x => String(x.id)===String(tripId));
   if (!t) { showToast("Trip details are unavailable right now.","error"); return; }
   const imgs = (t.image_urls && t.image_urls.length) ? t.image_urls : [];
-  const hero = imgs[0] || "";
-  const galleryImgs = imgs.length > 1 ? imgs.slice(1) : imgs;
   const dates = fmtTripDateRange(t);
   const price = fmtMoney(t.base_price) + " / person";
   const solo = t.solo_message || "Traveling solo? No problem — over 80% of our travellers journey on their own. You'll be in great company.";
@@ -1485,8 +1555,6 @@ function openTripDetails(tripId){
       <div class="d-details">${tvEsc(d.details||"")}</div>
     </div>`).join("") : `<p>Full day-by-day itinerary coming soon.</p>`;
 
-  const galleryHtml = galleryImgs.length ? galleryImgs.map((src,i) => `<img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" loading="lazy" onclick="openTripGallery(${i})">`).join("") : "";
-
   const bullets = (arr, cls) => arr.length
     ? `<ul class="tv-td-bullets ${cls}">` + arr.map(x => `<li><i class="bi ${cls==="included"?"bi-check-circle-fill":"bi-x-circle-fill"}"></i><span>${tvEsc(x)}</span></li>`).join("") + `</ul>`
     : `<p>—</p>`;
@@ -1499,8 +1567,13 @@ function openTripDetails(tripId){
   }).join("") : `<p>Contact us for payment options.</p>`;
 
   document.getElementById("tripDetailBody").innerHTML = `
-    <div class="tv-td-hero">
-      ${hero?`<img src="${hero}" alt="${tvEsc(t.title)}">`:""}
+    <div class="tv-td-hero ${imgs.length<=1?'tv-td-hero--single':''}">
+      <div class="tv-td-hero-track" id="tdHeroTrack">
+        ${imgs.map((src,i)=>`<div class="tv-td-hero-slide"><img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" ${i?'loading="lazy"':''}></div>`).join("")}
+      </div>
+      <button class="tv-td-hero-nav tv-td-hero-prev" id="tdHeroPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
+      <button class="tv-td-hero-nav tv-td-hero-next" id="tdHeroNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
+      <div class="tv-td-hero-dots" id="tdHeroDots">${imgs.map((_,i)=>`<button class="tv-td-hero-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div>
       <div class="tv-td-hero-text">
         <h2>${tvEsc(t.title)}</h2>
         <div class="tv-td-dates"><i class="bi bi-calendar3"></i> ${tvEsc(dates)}</div>
@@ -1511,8 +1584,7 @@ function openTripDetails(tripId){
       ${t.description?`<div class="tv-td-section"><h3><i class="bi bi-info-circle"></i> About this trip</h3><p>${tvEsc(t.description)}</p></div>`:""}
       ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> Day by day</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
       ${t.accommodation?`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p></div>`:""}
-      ${galleryHtml?`<div class="tv-td-section"><h3><i class="bi bi-images"></i> Gallery</h3><div class="tv-td-gallery">${galleryHtml}</div></div>`:""}
-      <div class="tv-td-section"><h3><i class="bi bi-clipboard-check"></i> What's included &amp; excluded</h3>
+       <div class="tv-td-section"><h3><i class="bi bi-clipboard-check"></i> What's included &amp; excluded</h3>
         <div class="tv-td-cols">
           <div><div class="eyebrow mb-2">Included</div>${bullets(included,"included")}</div>
           <div><div class="eyebrow mb-2">Excluded</div>${bullets(excluded,"excluded")}</div>
@@ -1527,10 +1599,10 @@ function openTripDetails(tripId){
       </div>
     </div>
   `;
-  window.__tripGallery = galleryImgs;
   tripDetailScrim.classList.add("show");
   document.body.style.overflow = "hidden";
   tripDetailModal.scrollTop = 0;
+  initTripHeroSlider();
 }
 
 /* BOOKING DRAWER */
