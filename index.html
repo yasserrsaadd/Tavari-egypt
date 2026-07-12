@@ -189,29 +189,22 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hero-insight-num .unit{ color: var(--red-deep); font-size: 0.9em; }
 .hero-insight-label{ font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-soft); margin-top: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 575px){.hero-insight-label{font-size: 10px;} .hero-insights{ margin-top: 1.8rem; } .hero-insight{ padding: 0 0.65rem; } .hero-insight:first-child{ padding-left: 0; } .hero-insight:not(:last-child)::after{ height: 22px; } }
-.dest-card{ position: relative; border-radius: var(--radius-card); overflow: hidden; height: 420px; cursor: pointer; box-shadow: var(--shadow-soft); transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease); }
-.dest-card:hover{ transform: translateY(-8px); box-shadow: var(--shadow-lift); }
-.dest-card img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 1.4s var(--ease); }
-.dest-card:hover img{ transform: scale(1.08); }
-.dest-card::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(22,38,59,0) 35%, rgba(22,38,59,0.82) 100%); }
-.dest-card-body{ position:absolute; left:0; right:0; bottom:0; padding: 1.6rem; z-index: 2; color: var(--ivory); }
-.dest-card-body h3{ color: var(--ivory); margin:0 0 0.7rem; font-size: 1.7rem; }
-.dest-subtitle{ font-size:0.85rem; color: rgba(251,253,255,0.78); margin-top:0.1rem; letter-spacing:0.02em; }
-.dest-view-btn{ font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ivory); border: 1px solid rgba(251,253,255,0.55); padding: 0.5rem 1rem; border-radius: var(--radius-btn); display:inline-flex; align-items:center; gap: 0.5rem; transition: background 0.4s var(--ease), border-color 0.4s var(--ease), transform 0.4s var(--ease); background: rgba(251,253,255,0.10); min-height: 44px; }
-.dest-view-btn:hover{ background: var(--red); border-color: var(--red); color: #FFFFFF; transform: translateY(-2px); }
-.tv-lightbox{ position: fixed; inset:0; z-index: 1400; display:flex; align-items:center; justify-content:center; background: rgba(16,30,48,0.88); opacity:0; pointer-events:none; transition: opacity 0.5s var(--ease); padding: 2rem; }
-.tv-lightbox.show{ opacity:1; pointer-events:auto; }
-.tv-lightbox-frame{ position:relative; max-width: 920px; width:100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(224,72,59,0.3); border-radius: var(--radius-card); padding: 1rem; transform: scale(0.94); transition: transform 0.5s var(--ease); }
-.tv-lightbox.show .tv-lightbox-frame{ transform: scale(1); }
-.tv-lightbox-img-wrap{ position: relative; width: 100%; aspect-ratio: 16/10; border-radius: 12px; overflow: hidden; background: #000; }
-.tv-lightbox-img-wrap img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 0.5s var(--ease); }
-.tv-lightbox-img-wrap img.active{ opacity:1; }
-.tv-lightbox-meta{ display:flex; justify-content:space-between; align-items:center; color: var(--ivory); padding: 0.9rem 0.4rem 0.2rem; font-size: 0.82rem; letter-spacing: 0.04em; }
-.tv-lightbox-nav{ position:absolute; top:50%; transform: translateY(-50%); width: 46px; height:46px; border-radius:50%; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color:#fff; display:flex; align-items:center; justify-content:center; transition: background 0.4s var(--ease); font-size: 1.1rem; }
-.tv-lightbox-nav:hover{ background: var(--red); color:#FFFFFF; border-color: var(--red); }
-.tv-lightbox-nav.prev{ left: -22px; } .tv-lightbox-nav.next{ right: -22px; }
-@media (max-width: 640px){ .tv-lightbox-nav.prev{ left: 6px; } .tv-lightbox-nav.next{ right: 6px; } }
-.tv-lightbox-close{ position:absolute; top: -18px; right: -18px; width: 40px; height:40px; border-radius:50%; background: var(--red); color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size: 1.1rem; box-shadow: 0 8px 20px -6px rgba(0,0,0,0.5); }
+/* MIXED MEDIA — auto-scrolling framed photo marquee */
+.mixed-marquee{ overflow:hidden; width:100%; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.mixed-marquee-track{ display:flex; gap:1.1rem; width:max-content; will-change: transform; }
+.gal-frame{ flex:0 0 auto; width:300px; aspect-ratio:4/5; border:10px solid #fff; background:#fff; border-radius:6px; box-shadow: var(--shadow-soft); }
+.gal-photo{ position:relative; width:100%; height:100%; overflow:hidden; }
+.gal-photo img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform 0.7s var(--ease); }
+.gal-frame:hover img{ transform: scale(1.06); }
+.gal-caption{ position:absolute; left:0; right:0; bottom:0; padding: 1rem 1.1rem; z-index:2; color: var(--ivory); opacity:0; transform: translateY(10px); transition: opacity 0.45s var(--ease), transform 0.45s var(--ease); pointer-events:none; }
+.gal-frame:hover .gal-caption{ opacity:1; transform: translateY(0); }
+.gal-caption .gal-title{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 1.5rem; line-height:1; color: var(--ivory); text-shadow: 0 2px 14px rgba(0,0,0,0.4); }
+@media (max-width: 640px){
+  .mixed-marquee-track{ gap:0.8rem; }
+  .gal-frame{ width:230px; border-width:8px; }
+  .gal-caption{ opacity:1; transform:none; }
+}
+
 .trip-card{ border-radius: var(--radius-card); overflow:hidden; background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); height: 100%; display:flex; flex-direction: column; transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease); }
 .trip-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-lift); }
 .trip-thumb-wrap{ position:relative; height: 230px; overflow:hidden; }
@@ -491,9 +484,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .about-quote{ font-size: 1.2rem; line-height: 1.55; }
 
   /* Destinations / trips / reviews cards spacing already via g-4 */
-  .dest-card{ height: 340px; }
-  .dest-card-body{ padding: 1.2rem; }
-  .dest-card-body h3{ font-size: 1.4rem; }
 
   /* Contact */
   .contact-wrap{ border-radius: 18px; }
@@ -504,12 +494,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   /* Footer */
   .tv-footer{ padding: 2.4rem 0 1.6rem; }
   .footer-bottom{ flex-direction: column; align-items: flex-start; gap: 0.9rem; }
-
-  /* Lightbox */
-  .tv-lightbox{ padding: 1rem; }
-  .tv-lightbox-frame{ padding: 0.6rem; }
-  .tv-lightbox-meta{ flex-direction: column; align-items: flex-start; gap: 0.2rem; font-size: 0.78rem; }
-  .tv-lightbox-nav{ width: 40px; height: 40px; }
 
   /* Drawer */
   .tv-drawer{ width: 100vw; }
@@ -723,25 +707,14 @@ img, video, .container, .row{ max-width: 100%; }
 <section class="section" id="gallery">
   <div class="container">
     <div class="section-head reveal">
-      <p class="eyebrow">Mixed Media</p>
-      <h2 class="section-title"><span class="title-line">Destinations worth the dust.</span></h2>
+      <p class="eyebrow">Travel Moments</p>
+      <h2 class="section-title"><span class="title-line">A glimpse of every trip.</span></h2>
     </div>
-    <div class="row g-4" id="galleryGrid"></div>
+    <div class="mixed-marquee reveal" id="galleryGrid">
+      <div class="mixed-marquee-track" id="galleryTrack"></div>
+    </div>
   </div>
 </section>
-
-<div class="tv-lightbox" id="tvLightbox" role="dialog" aria-modal="true" aria-label="Image gallery">
-  <div class="tv-lightbox-frame">
-    <button class="tv-lightbox-close" id="lightboxClose" aria-label="Close gallery"><i class="bi bi-x-lg"></i></button>
-    <div class="tv-lightbox-img-wrap" id="lightboxImgWrap"></div>
-    <button class="tv-lightbox-nav prev" id="lightboxPrev" aria-label="Previous image"><i class="bi bi-chevron-left"></i></button>
-    <button class="tv-lightbox-nav next" id="lightboxNext" aria-label="Next image"><i class="bi bi-chevron-right"></i></button>
-    <div class="tv-lightbox-meta">
-      <span id="lightboxTitle">Destination</span>
-      <span id="lightboxCounter">Image 1 of 5</span>
-    </div>
-  </div>
-</div>
 
 <section class="section" id="reviews">
   <div class="container">
@@ -1236,7 +1209,7 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
     el.addEventListener("mouseleave", () => { el.style.transform = ""; });
   }
   new MutationObserver(() => {
-    document.querySelectorAll(".dest-card:not([data-tilt-bound]), .trip-card:not([data-tilt-bound])").forEach(el => {
+    document.querySelectorAll(".trip-card:not([data-tilt-bound])").forEach(el => {
       el.setAttribute("data-tilt-bound","1"); el.classList.add("tilt-card"); bindTilt(el);
     });
   }).observe(document.body, { childList: true, subtree: true });
@@ -1293,15 +1266,13 @@ const FALLBACK_TRIPS = [
   }
 ];
 const FALLBACK_GALLERY = [
-  { destination:"Hurghada", title:"Red Sea Escape", image_urls:[
-    "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?q=80&w=1200&auto=format&fit=crop" ] },
-  { destination:"Siwa", title:"Oasis of Silence", image_urls:[
-    "https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1547234935-80c7145ec969?q=80&w=1200&auto=format&fit=crop" ] },
-  { destination:"Sinai", title:"Mountain & Reef", image_urls:[
-    "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop" ] }
+  { media_url:"https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1200&auto=format&fit=crop", destination:"Hurghada", title:"Red Sea Escape" },
+  { media_url:"https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop", destination:"Siwa", title:"Oasis of Silence" },
+  { media_url:"https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop", destination:"Sinai", title:"Mountain & Reef" },
+  { media_url:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop", destination:"Desert", title:"Desert Dunes" },
+  { media_url:"https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1200&auto=format&fit=crop", destination:"Coast", title:"Coastal Roads" },
+  { media_url:"https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1200&auto=format&fit=crop", destination:"Mountains", title:"Mountain Horizons" },
+  { media_url:"https://images.unsplash.com/photo-1418985991508-e47386d96a71?q=80&w=1200&auto=format&fit=crop", destination:"Forest", title:"Forest Trails" }
 ];
 const FALLBACK_REVIEWS = [
   { customer_name:"Mariam K.", trip_title:"Ras Sedr", rating:5, quote:"I joined Tavari on a trip to Dahab without knowing anyone, and it turned out to be one of the best weekends I've ever had. Everything was perfectly organized, the accommodations were great, and the team made everyone feel welcome. I'll definitely travel with them again." },
@@ -1400,32 +1371,47 @@ function populateInquiryTripOptions(trips) {
   trips.forEach(t => { const opt=document.createElement("option"); opt.value=t.title; opt.textContent=t.title; select.appendChild(opt); });
 }
 
-async function loadGallery() {
+async function loadGalleryStrip() {
   let items = FALLBACK_GALLERY;
   if (useLiveBackend && supabaseClient) {
     try {
-      const { data, error } = await supabaseClient.from("gallery").select("*");
+      const { data, error } = await supabaseClient.from("gallery").select("*").order("position", { ascending: true });
       if (error) throw error;
-      if (data&&data.length) items = data;
+      if (data && data.length) items = data;
     } catch(e) { console.warn("Gallery fallback:", e); }
   }
-  const grid = document.getElementById("galleryGrid");
-  grid.innerHTML = items.map((g,i) => {
-    const imgs = (g.image_urls && g.image_urls.length) ? g.image_urls : [FALLBACK_GALLERY[0].image_urls[0]];
-    return `
-    <div class="col-md-6 col-lg-4 reveal reveal-d${Math.min(i+1,5)}">
-      <div class="dest-card" onclick="openLightbox(${i})">
-        <img src="${imgs[0]}" alt="${g.destination}" loading="lazy">
-        <div class="dest-card-body">
-          <h3>${g.destination}</h3>
-          <div class="dest-subtitle">${g.title||""}</div>
-          <span class="dest-view-btn">View More Photos <i class="bi bi-arrow-right"></i></span>
-        </div>
-      </div>
-    </div>`;
-  }).join("");
-  grid.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
-  window.GALLERY_ITEMS = items;
+  const norm = (p) => ({
+    url: p.media_url || (p.image_urls && p.image_urls[0]) || "",
+    cap: p.destination || p.title || ""
+  });
+  const photos = items.map(norm).filter(p => p.url);
+  const grid = document.getElementById("galleryTrack");
+  const tile = (p) => `<div class="gal-frame"><div class="gal-photo"><img src="${p.url}" alt="${tvEsc(p.cap)}" loading="lazy"><div class="gal-caption"><div class="gal-title">${tvEsc(p.cap)}</div></div></div></div>`;
+  grid.innerHTML = photos.map(tile).join("");
+  startGalleryMarquee(grid.parentElement, grid);
+}
+
+function startGalleryMarquee(wrap, track){
+  if (!track || track.children.length < 2) return;
+  if (track.scrollWidth <= wrap.clientWidth) return;
+  const speed = 60;
+  let offset = 0, last = performance.now(), paused = false;
+  if (!wrap.dataset.bound){
+    wrap.addEventListener("mouseenter", () => paused = true);
+    wrap.addEventListener("mouseleave", () => paused = false);
+    wrap.dataset.bound = "1";
+  }
+  function frame(now){
+    const dt = (now - last) / 1000; last = now;
+    if (!paused) offset -= speed * dt;
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    const first = track.children[0];
+    const firstW = first.getBoundingClientRect().width + gap;
+    if (-offset >= firstW){ offset += firstW; track.appendChild(first); }
+    track.style.transform = `translateX(${offset}px)`;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 }
 
 async function loadReviews() {
@@ -1451,39 +1437,9 @@ async function loadReviews() {
   grid.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
 }
 
-loadTrips(); loadGallery(); loadReviews();
-
-/* LIGHTBOX */
-const lightbox = document.getElementById("tvLightbox");
-const lightboxImgWrap = document.getElementById("lightboxImgWrap");
-const lightboxTitle = document.getElementById("lightboxTitle");
-const lightboxCounter = document.getElementById("lightboxCounter");
-let lightboxImages = [], lightboxIndex = 0;
-function openLightbox(index) {
-  const item = (window.GALLERY_ITEMS||[])[index];
-  const imgs = (item && item.image_urls) || [];
-  if (!imgs.length) return;
-  lightboxImages = imgs; lightboxIndex = 0;
-  lightboxTitle.textContent = (item.destination||"Gallery") + (item.title ? " — " + item.title : "");
-  renderLightboxImages();
-  lightbox.classList.add("show");
-  document.body.style.overflow = "hidden";
-}
-function renderLightboxImages() {
-  lightboxImgWrap.innerHTML = lightboxImages.map((src,i) => `<img src="${src}" class="${i===lightboxIndex?"active":""}" alt="Gallery image ${i+1}">`).join("");
-  lightboxCounter.textContent = `Image ${lightboxIndex+1} of ${lightboxImages.length}`;
-}
-function closeLightbox() { lightbox.classList.remove("show"); if (!tripDetailScrim.classList.contains("show")) document.body.style.overflow = ""; }
-document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
-lightbox.addEventListener("click", (e) => { if (e.target===lightbox) closeLightbox(); });
-document.getElementById("lightboxPrev").addEventListener("click", () => { lightboxIndex=(lightboxIndex-1+lightboxImages.length)%lightboxImages.length; renderLightboxImages(); });
-document.getElementById("lightboxNext").addEventListener("click", () => { lightboxIndex=(lightboxIndex+1)%lightboxImages.length; renderLightboxImages(); });
-document.addEventListener("keydown", (e) => {
-  if (!lightbox.classList.contains("show")) return;
-  if (e.key==="Escape") closeLightbox();
-  if (e.key==="ArrowLeft") document.getElementById("lightboxPrev").click();
-  if (e.key==="ArrowRight") document.getElementById("lightboxNext").click();
-});
+loadTrips();
+loadGalleryStrip();
+loadReviews();
 
 /* TRIP DETAIL MODAL */
 const tripDetailScrim = document.getElementById("tripDetailScrim");
