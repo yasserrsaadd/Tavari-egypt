@@ -442,6 +442,22 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .social-btn-contact:hover{ background:var(--red); border-color:var(--red); color:#FFFFFF; }
 
+/* ─── Customize your trip ─────────────────────────────── */
+#customize{ padding: 3.25rem 0; }
+.customize-wrap{ background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: var(--radius-card); padding: 3rem 2.6rem; box-shadow: var(--shadow-soft); }
+.tv-service-list{ list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 2rem; }
+.tv-service-item{ display: flex; align-items: center; gap: 0.85rem; font-size: 1.02rem; font-weight: 500; color: var(--ink); padding: 0.85rem 1rem; border: 1px solid var(--red-line); border-radius: var(--radius-input); background: rgba(255,255,255,0.5); transition: transform 0.45s var(--ease), border-color 0.45s var(--ease), background 0.45s var(--ease); }
+.tv-service-item:hover{ transform: translateY(-2px); border-color: var(--red-line-strong); background: #FFFFFF; }
+.tv-service-check{ flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--red-soft); color: var(--red-deep); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; }
+.tv-service-check i{ font-size: 0.95rem; }
+.tv-customize-cta{ margin-top: 2.4rem; display: flex; justify-content: center; }
+.tv-customize-cta .btn-tv-gold{ font-size: 0.9rem; padding: 0.8rem 2.2rem; }
+@media (max-width: 575px){
+  .customize-wrap{ padding: 2rem 1.4rem; }
+  .tv-service-list{ grid-template-columns: 1fr; gap: 0.7rem; }
+  .tv-service-item{ font-size: 0.96rem; padding: 0.75rem 0.9rem; }
+}
+
 /* ════════════════════════════════════════════════════════════
    MOBILE-FIRST RESPONSIVE ENHANCEMENTS (smartphone priority)
    ════════════════════════════════════════════════════════════ */
@@ -615,6 +631,7 @@ img, video, .container, .row{ max-width: 100%; }
       <a href="#gallery" class="tv-link-item">Gallery</a>
       <a href="#trips" class="tv-link-item">Trips</a>
       <a href="#reviews" class="tv-link-item">Reviews</a>
+      <a href="#customize" class="tv-link-item">Customize My Trip</a>
       <a href="#faq" class="tv-link-item">FAQ</a>
       <a href="#contact" class="tv-link-item">Contact</a>
       <a href="#trips" class="btn-tv-gold tv-link-item tv-mobile-cta">Book a Journey</a>
@@ -726,6 +743,29 @@ img, video, .container, .row{ max-width: 100%; }
   </div>
 </section>
 
+<section class="section" id="customize">
+  <div class="container">
+    <div class="section-head reveal text-center" style="max-width:720px; margin-left:auto; margin-right:auto;">
+      <p class="eyebrow">Tailor-Made Journeys</p>
+      <h2 class="section-title"><span class="title-line">Customize Your Trip.</span></h2>
+      <p class="mt-3" style="color: var(--ink-soft); font-size: 1.02rem; line-height: 1.7;">Whatever the occasion, we design the itinerary around your group, your pace, and your vision. Tell us the experience you have in mind and we'll craft it end to end.</p>
+    </div>
+    <div class="customize-wrap reveal reveal-scale">
+      <ul class="tv-service-list">
+        <li class="tv-service-item"><span class="tv-service-check"><i class="bi bi-check-lg"></i></span>Private Groups</li>
+        <li class="tv-service-item"><span class="tv-service-check"><i class="bi bi-check-lg"></i></span>Corporate Retreats</li>
+        <li class="tv-service-item"><span class="tv-service-check"><i class="bi bi-check-lg"></i></span>University Trips</li>
+        <li class="tv-service-item"><span class="tv-service-check"><i class="bi bi-check-lg"></i></span>Team Building Events</li>
+        <li class="tv-service-item"><span class="tv-service-check"><i class="bi bi-check-lg"></i></span>Special Celebrations</li>
+        <li class="tv-service-item"><span class="tv-service-check"><i class="bi bi-check-lg"></i></span>Fully Customized Itineraries</li>
+      </ul>
+      <div class="tv-customize-cta">
+        <a href="#contact" class="btn-tv-gold" id="planMyTripBtn">Plan My Trip <i class="bi bi-arrow-down ms-1"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="contact">
   <div class="container">
     <div class="section-head reveal">
@@ -769,6 +809,18 @@ img, video, .container, .row{ max-width: 100%; }
                   <input class="tv-input" type="email" id="inqEmail" placeholder="you@email.com" required>
                 </div>
                 <div class="col-md-6">
+                  <label class="tv-field-label" for="inqType">What are you planning?</label>
+                  <select class="tv-select" id="inqType">
+                    <option selected>General inquiry</option>
+                    <option>Private Group</option>
+                    <option>Corporate Retreat</option>
+                    <option>University Trip</option>
+                    <option>Team Building Event</option>
+                    <option>Special Celebration</option>
+                    <option>Fully Custom Itinerary</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
                   <label class="tv-field-label" for="inqTrip">Trip you're interested in</label>
                   <select class="tv-select" id="inqTrip">
                     <option selected>Not sure yet</option>
@@ -810,27 +862,35 @@ img, video, .container, .row{ max-width: 100%; }
     <div class="faq-list reveal reveal-d2">
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">How do I book a trip with Tavari?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
-        <div class="faq-a"><p>Browse our active trips and tap <em>Book now</em> to open the booking panel, or send a custom request through the contact form. Our desk confirms availability and replies by WhatsApp within a few hours.</p></div>
+        <div class="faq-a"><p>You can book directly through our <em>website</em>, <em>WhatsApp</em>, or by <em>contacting us directly via DM</em>. Once your reservation is confirmed, we'll guide you through the payment process and share all the details you need before departure.</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">What payment methods do you accept?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
-        <div class="faq-a"><p>We accept Instapay and Vodafone Cash, plus card and bank transfer on request. A deposit secures your spot, with the balance due before departure. You'll upload your receipt right in the booking flow.</p></div>
+        <div class="faq-a"><p>We offer flexible payment options to make booking easy. You can pay using Visa, Mastercard, Debit Cards, Credit Cards, InstaPay, Mobile Wallets, Bank Transfers, Vodafone Cash, and cash for selected trips. We also offer installment plans through providers such as ValU, Souhoola, Contact, and other available financing partners.</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">Is it safe to travel with Tavari?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
-        <div class="faq-a"><p>Your safety is our priority. Every itinerary is led by vetted local guides, with 24/7 on-trip support, verified accommodation, and insured transport. We keep groups small so nothing feels rushed or improvised.</p></div>
+        <div class="faq-a"><p>Absolutely. Safety is our highest priority. Every trip is organized by experienced trip leaders, trusted transportation partners, and carefully selected accommodations to ensure a safe and enjoyable experience.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q" type="button" aria-expanded="false">Are the trips suitable for families and children?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
-        <div class="faq-a"><p>Absolutely. Many of our desert and Red Sea journeys are family-friendly, with flexible pacing and child-appropriate activities. Let us know ages and interests and we'll tailor the experience accordingly.</p></div>
+        <button class="faq-q" type="button" aria-expanded="false">Can I join if I'm traveling solo?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
+        <div class="faq-a"><p>Absolutely. In fact, most of our travelers join solo. Tavari is built around bringing like-minded people together, making it easy to meet new friends and become part of an amazing travel community.</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">Can trips be customized or made private?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
-        <div class="faq-a"><p>Yes. Beyond scheduled departures we craft fully private, bespoke itineraries — from dates and destinations to camps and cuisine. Share your vision in the inquiry form and we'll design around it.</p></div>
+        <div class="faq-a"><p>Yes. We organize fully customized private trips for groups of friends, companies, universities, and special occasions. We'll tailor every detail to match your needs.</p></div>
       </div>
       <div class="faq-item">
         <button class="faq-q" type="button" aria-expanded="false">What group sizes do you run?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
-        <div class="faq-a"><p>Most trips run with intimate groups of around 8–16 travelers to keep the experience personal. Private bookings can be any size — just tell us your party and we'll plan logistics around it.</p></div>
+        <div class="faq-a"><p>Group sizes vary depending on the destination and experience, but we always keep our groups at a comfortable size to ensure everyone enjoys the trip.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">What is your cancellantion policy?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
+        <div class="faq-a"><p>Each trip has its own cancellation and refund policy. Full details are shared before booking and are clearly stated on every trip page.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" type="button" aria-expanded="false">Do you organize corporate or university trips?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
+        <div class="faq-a"><p>Yes. We organize customized experiences for companies, universities, student organizations, and private groups looking for a unique travel experience.</p></div>
       </div>
     </div>
   </div>
@@ -856,6 +916,7 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
           <a href="#about">About</a>
           <a href="#gallery">Gallery</a>
           <a href="#trips">Trips</a>
+          <a href="#customize">Customize My Trip</a>
         </div>
       </div>
       <div class="col-lg-2 col-md-3 col-6">
@@ -1689,6 +1750,7 @@ document.getElementById("inquiryForm").addEventListener("submit", async (e) => {
   const phone=document.getElementById("inqPhone").value.trim();
   const email=document.getElementById("inqEmail").value.trim();
   const trip=document.getElementById("inqTrip").value;
+  const tripType=document.getElementById("inqType").value;
   const persons=clampInqTravelers(inqTravelersInput.value);
   const notes=document.getElementById("inqNotes").value.trim();
   if (!name||!phone||!email) { showToast("Please fill in your name, phone, and email.","error"); return; }
@@ -1697,11 +1759,11 @@ document.getElementById("inquiryForm").addEventListener("submit", async (e) => {
   setButtonLoading(btn,true,"Sending…");
   try {
     if (useLiveBackend&&supabaseClient) {
-      const { error } = await supabaseClient.from("inquiries").insert({ customer_name:name, customer_phone:phone, customer_email:email, interested_trip:trip, num_persons:persons, notes:notes, status:"pending_contact" });
+      const { error } = await supabaseClient.from("inquiries").insert({ customer_name:name, customer_phone:phone, customer_email:email, interested_trip:trip, trip_type:tripType, num_persons:persons, notes:notes, status:"pending_contact" });
       if (error) throw error;
     } else {
       const inquiries=JSON.parse(localStorage.getItem("tavari_inquiries")||"[]");
-      inquiries.push({ id:"local-"+Date.now(), customer_name:name, customer_phone:phone, customer_email:email, interested_trip:trip, num_persons:persons, notes, status:"pending_contact", created_at:new Date().toISOString() });
+      inquiries.push({ id:"local-"+Date.now(), customer_name:name, customer_phone:phone, customer_email:email, interested_trip:trip, trip_type:tripType, num_persons:persons, notes, status:"pending_contact", created_at:new Date().toISOString() });
       localStorage.setItem("tavari_inquiries",JSON.stringify(inquiries));
     }
     if (useEmailJS&&typeof emailjs!=="undefined"&&EMAILJS_SERVICE_ID.indexOf("YOUR-EMAILJS")===-1) {
