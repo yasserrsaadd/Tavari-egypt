@@ -20,6 +20,7 @@ create table if not exists public.trips (
   included text[],
   excluded text[],
   payment_methods text[],
+  price_options text[] not null default '{}',
   refund_policy text,
   created_at timestamptz not null default now()
 );
@@ -66,6 +67,9 @@ create table if not exists public.gallery (
   caption text,
   position integer default 0
 );
+
+-- 1b) ADD COLUMNS (idempotent, re-runnable on existing DBs)
+alter table public.trips add column if not exists price_options text[] not null default '{}';
 
 -- 2) ROW LEVEL SECURITY
 alter table public.trips enable row level security;

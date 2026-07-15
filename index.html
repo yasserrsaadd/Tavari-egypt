@@ -371,6 +371,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-td-bullets li{ display:flex; align-items:flex-start; gap:0.5rem; margin-bottom:0.55rem; color: var(--ink-soft); font-size:0.92rem; line-height:1.5; }
 .tv-td-bullets li i{ color: var(--red-deep); font-size:1.05rem; margin-top:0.12rem; flex-shrink:0; }
 .tv-td-bullets.excluded li i{ color: var(--ink-faint); }
+.tv-td-bullets.prices li{ align-items: center; }
+.tv-td-bullets.prices li i{ color: var(--red); font-size:1.4rem; }
 .tv-td-solo{ background: var(--red-soft); border:1px solid var(--red-line); border-radius: var(--radius-card); padding: 1.2rem 1.4rem; display:flex; gap:0.9rem; align-items:flex-start; }
 .tv-td-solo > i{ font-size: 1.5rem; color: var(--red); flex-shrink:0; margin-top:0.1rem; }
 .tv-td-solo p{ margin:0; color: var(--ink-soft); font-size:0.95rem; line-height:1.6; }
@@ -628,7 +630,7 @@ img, video, .container, .row{ max-width: 100%; }
     <a href="#" class="tv-brand" aria-label="Tavari Egypt — Home"><img src="/images/logo-01.png" alt="Tavari Egypt logo" class="tv-logo"></a>
     <div class="tv-links" id="tvLinks">
       <a href="#about" class="tv-link-item">About</a>
-      <a href="#gallery" class="tv-link-item">Gallery</a>
+      <a href="#community" class="tv-link-item">Community</a>
       <a href="#trips" class="tv-link-item">Trips</a>
       <a href="#reviews" class="tv-link-item">Reviews</a>
       <a href="#customize" class="tv-link-item">Customize My Trip</a>
@@ -721,11 +723,17 @@ img, video, .container, .row{ max-width: 100%; }
 
 <div class="container"><div class="horizon"></div></div>
 
-<section class="section" id="gallery">
+<section class="section" id="community">
   <div class="container">
-    <div class="section-head reveal">
-      <p class="eyebrow">Travel Moments</p>
-      <h2 class="section-title"><span class="title-line">A glimpse of every trip.</span></h2>
+    <div class="section-head reveal text-center" style="max-width:760px; margin-left:auto; margin-right:auto;">
+      <p class="eyebrow">Our Community</p>
+      <h2 class="section-title"><span class="title-line">Travel is always better when shared.</span></h2>
+      <p class="mt-3" style="color: var(--ink-soft); font-size: 1.04rem; line-height: 1.75;">
+        More than 70% of our travelers join solo—and leave with lifelong friendships. Whether you're traveling alone or with friends, Tavari brings together people who share the same passion for adventure, exploration, and unforgettable experiences.
+      </p>
+      <div class="mt-4">
+        <a href="#trips" class="btn-tv-gold"><i class="bi bi-people-fill"></i> Become Part of Our Community</a>
+      </div>
     </div>
     <div class="mixed-marquee reveal" id="galleryGrid">
       <div class="mixed-marquee-track" id="galleryTrack"></div>
@@ -914,7 +922,7 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
         <p class="eyebrow mb-3" style="color:rgba(250,248,245,0.5);">Explore</p>
         <div class="d-flex flex-column gap-2">
           <a href="#about">About</a>
-          <a href="#gallery">Gallery</a>
+          <a href="#community">Community</a>
           <a href="#trips">Trips</a>
           <a href="#customize">Customize My Trip</a>
         </div>
@@ -1290,6 +1298,7 @@ const FALLBACK_TRIPS = [
     solo_message:"Traveling solo? No problem — over 80% of our Siwa travellers journey on their own and leave with lifelong friends.",
     included:["Private 4x4 desert tours","All breakfasts & dinners","Boutique eco-lodge stay","Expert local guide","Airport transfers"],
     excluded:["Flights to Marsa Matruh","Personal expenses","Travel insurance","Optional spa treatments"],
+    price_options:["Single occupancy — EGP 9,800","Double occupancy (per person) — EGP 7,200","Triple occupancy (per person) — EGP 6,400"],
     payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
   },
@@ -1306,6 +1315,7 @@ const FALLBACK_TRIPS = [
     solo_message:"Traveling solo? No problem — over 80% of our Dahab travellers come alone and pair up with buddies on day one.",
     included:["Daily guided dives/snorkelling","Sea-view hotel stay","Bedouin canyon hike","All breakfasts","Equipment rental"],
     excluded:["Flights to Sharm El Sheikh","Personal diving certification fees","Lunches & dinners","Tips"],
+    price_options:["Single occupancy — EGP 7,400","Double occupancy (per person) — EGP 5,900","Triple occupancy (per person) — EGP 5,200"],
     payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
   },
@@ -1322,6 +1332,7 @@ const FALLBACK_TRIPS = [
     solo_message:"Traveling solo? No problem — over 80% of our desert travellers go solo and love the communal campfire nights.",
     included:["Private 4x4 transfers","Full-board desert camping","Professional guide","All camping gear","National park fees"],
     excluded:["Flights to Cairo","Personal expenses","Travel insurance","Alcoholic drinks"],
+    price_options:["Single occupancy — EGP 8,100","Double occupancy (per person) — EGP 6,500","Triple occupancy (per person) — EGP 5,900"],
     payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
   }
@@ -1562,6 +1573,7 @@ function openTripDetails(tripId){
   const itin = (t.itinerary && Array.isArray(t.itinerary)) ? t.itinerary : [];
   const included = (t.included && t.included.length) ? t.included : [];
   const excluded = (t.excluded && t.excluded.length) ? t.excluded : [];
+  const prices = (t.price_options && t.price_options.length) ? t.price_options : [];
   const pays = (t.payment_methods && t.payment_methods.length) ? t.payment_methods : [];
   const refund = t.refund_policy || "";
   const pdf = (t.pdf_url && t.pdf_url!=="#") ? t.pdf_url : null;
@@ -1608,7 +1620,8 @@ function openTripDetails(tripId){
         </div>
       </div>
       <div class="tv-td-section"><div class="tv-td-solo"><i class="bi bi-emoji-smile"></i><p>${tvEsc(solo)}</p></div></div>
-      <div class="tv-td-section"><h3><i class="bi bi-credit-card"></i> Payment methods</h3><div class="tv-td-pay">${payHtml}</div></div>
+       ${prices.length?`<div class="tv-td-section"><h3><i class="bi bi-cash-stack"></i> Prices</h3><ul class="tv-td-bullets prices">${prices.map(p=>`<li><i class="bi bi-dot"></i><span>${tvEsc(p)}</span></li>`).join("")}</ul></div>`:""}
+       <div class="tv-td-section"><h3><i class="bi bi-credit-card"></i> Payment methods</h3><div class="tv-td-pay">${payHtml}</div></div>
       ${refund?`<div class="tv-td-section"><h3><i class="bi bi-shield-check"></i> Refund policy</h3><p>${tvEsc(refund)}</p></div>`:""}
       <div class="tv-td-cta">
         <button class="btn-trip-primary" type="button" onclick="openBookingDrawer('${t.id}'); closeTripDetails();"><i class="bi bi-calendar-check"></i> Book now</button>
