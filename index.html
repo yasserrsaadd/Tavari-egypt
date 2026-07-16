@@ -163,7 +163,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .reveal-blur{ filter: blur(8px); transform: translateY(18px); } .reveal-blur.in{ filter: blur(0); transform: translateY(0); }
 .parallax{ will-change: transform; }
 .tilt-card{ transform-style: preserve-3d; transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease); }
-.title-line{ position: relative; display:inline-block; overflow:hidden; }
+.title-line{ position: relative;  display:inline-block; overflow:hidden; }
 .title-line::after{ content:""; position:absolute; left:0; bottom:-6px; width:100%; height:1px; background: var(--red-deep); transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease); }
 .reveal.in .title-line::after{ transform: scaleX(1); }
 .section{ padding: 4.25rem 0; position: relative; scroll-margin-top: 90px; }
@@ -502,6 +502,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .hero-insight-num{ font-size: 1.45rem; }
   .hero-insight-label{ font-size: 9.5px; letter-spacing: 0.06em; white-space: normal; line-height: 1.25; max-width: 92px; }
   .hero-insight:not(:last-child)::after{ height: 22px; }
+  .align-items-center{
+    position: relative;
+    left :22px;
+  }
 
   /* About */
   .about-photo-wrap img{ min-height: 260px; }
