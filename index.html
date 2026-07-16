@@ -169,8 +169,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .section{ padding: 4.25rem 0; position: relative; scroll-margin-top: 90px; }
 .section-tight{ padding: 4rem 0; }
 .section-title{ font-size: clamp(2rem, 3.6vw, 2.9rem); margin: 0.4rem 0 0; }
-.section-title--rabbit{ position: relative; display: inline-flex; align-items: center; gap: clamp(0.05rem, 0.8vw, 0.35rem); }
-.section-title--rabbit .section-title-icon{ position: static; height: clamp(2.4rem, 9vw, 4.2rem); width: auto; object-fit: contain; margin-right: -1.5rem; transform: translateY(0.06em); }
+.section-title--rabbit{ position: relative;  display: inline-flex; align-items: center; gap: clamp(0.05rem, 0.8vw, 0.35rem); }
+.section-title--rabbit .section-title-icon{ position: static; height: clamp(2.4rem, 9vw, 4.2rem); width: auto; object-fit: contain; margin-right: -1.6rem; transform: translateY(0.06em); }
 .section-head{ max-width: 760px; margin-left:auto; margin-right:auto; margin-bottom: 3rem; text-align: center; }
 @media (min-width: 992px){
   .section > .container{ padding-left: 3vw; }
@@ -205,7 +205,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .gal-caption{ opacity:1; transform:none; }
 }
 
-.trip-card{ border-radius: var(--radius-card); overflow:hidden; background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); height: 100%; display:flex; flex-direction: column; transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease); }
+.trip-card{ border-radius: var(--radius-card); position: relative; left: 10px; overflow:hidden; background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); height: 100%; display:flex; flex-direction: column; transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease); }
 .trip-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-lift); }
 .trip-thumb-wrap{ position:relative; height: 230px; overflow:hidden; }
 .trip-thumb-wrap img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform 1.3s var(--ease); }
@@ -506,6 +506,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   /* About */
   .about-photo-wrap img{ min-height: 260px; }
   .about-quote{ font-size: 1.2rem; line-height: 1.55; }
+  #about .about-quote{ text-align: center; }
+  #about .about-quote::before{ margin-left: auto; margin-right: auto; }
+  #about .eyebrow, #about .section-title{ text-align: center; }
+
+  /* Reviews */
+  #reviews .section-head{ text-align: center; }
+
+  /* Trips — center card internals on mobile */
+  #trips .trip-body{ text-align: center; }
+  #trips .trip-dates{ justify-content: center; }
+  #trips .trip-actions{ justify-content: center; }
+  .section-title--rabbit .section-title-icon{ position: relative; right: 0.8rem; }
 
   /* Destinations / trips / reviews cards spacing already via g-4 */
 
@@ -737,7 +749,7 @@ img, video, .container, .row{ max-width: 100%; }
           <img src="images/Hero background 1.PNG" alt="Editorial photograph of the Egyptian desert landscape at golden hour">
         </div>
       </div>
-      <div class="col-lg-7 reveal reveal-right reveal-d2">
+      <div class="col-lg-7 reveal reveal-right reveal-d2 text-center">
         <p class="eyebrow">About Us</p>
         <h2 class="section-title mb-4"><span class="title-line">We Don’t Just Show You Egypt—We Help You Live It.</span></h2>
         <p class="about-quote">&ldquo;For more than five years, Tavari has been organizing exceptional travel experiences across Egypt
@@ -751,7 +763,7 @@ img, video, .container, .row{ max-width: 100%; }
 
 <section class="section" id="reviews">
   <div class="container">
-    <div class="section-head reveal">
+    <div class="section-head reveal text-center">
       <p class="eyebrow">Traveler Reviews</p>
       <h2 class="section-title"><span class="title-line">Carried home in their words.</span></h2>
     </div>
