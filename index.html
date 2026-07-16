@@ -1583,7 +1583,9 @@ function bindSlider(track, prev, next, dotsWrap){
     const dx = e.touches[0].clientX - startX, dy = e.touches[0].clientY - startY;
     if (axisLocked === null) {
       if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
-      axisLocked = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      /* Bias toward horizontal: a swipe counts as horizontal unless vertical clearly dominates,
+         so a slightly diagonal finger movement still swipes the slider. */
+      axisLocked = Math.abs(dy) > Math.abs(dx) * 1.6 ? "y" : "x";
     }
     if (axisLocked !== "x") return;
     if (e.cancelable) e.preventDefault();   /* swallow horizontal scroll only for a clearly horizontal swipe */
