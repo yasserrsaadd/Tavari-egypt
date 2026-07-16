@@ -213,7 +213,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .trip-price-chip{ position:absolute; top:14px; right:14px; background: rgba(22,38,59,0.78); color: #9BC4F2; font-size: 0.78rem; letter-spacing: 0.03em; padding: 0.4rem 0.85rem; border-radius: 50px; font-variant-numeric: tabular-nums; }
 .best-seller-badge{ position:absolute; top:14px; left:14px; z-index:3; background: linear-gradient(135deg, var(--red-bright), var(--red-deep)); color:#FFFFFF; font-size:0.7rem; letter-spacing:0.06em; font-weight:600; padding:0.35rem 0.75rem; border-radius:50px; display:inline-flex; align-items:center; gap:0.35rem; box-shadow:0 8px 18px -8px rgba(224,72,59,0.7); pointer-events:none; }
 .best-seller-badge i{ font-size:0.8rem; }
-.trip-thumb-track{ display:flex; height:100%; transition: transform 0.45s var(--ease); will-change: transform; touch-action: pan-y; }
+.trip-thumb-track{ display:flex; height:100%; transition: transform 0.3s var(--ease); will-change: transform; touch-action: pan-y; }
 .trip-thumb-track img{ -webkit-user-drag: none; user-select: none; }
 .trip-thumb-slide{ position:relative; flex: 0 0 100%; width:100%; height:100%; }
 .trip-thumb-nav{ position:absolute; top:50%; transform: translateY(-50%); z-index:3; width:34px; height:34px; border:none; border-radius:50%; background: rgba(255,255,255,0.85); color: var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
@@ -337,7 +337,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 .tv-trip-detail-close:hover{ background: var(--red-deep); transform: rotate(90deg); }
 .tv-td-hero{ position: relative; height: 280px; overflow: hidden; border-radius: var(--radius-card) var(--radius-card) 0 0; background:#000; }
-.tv-td-hero-track{ display:flex; height:100%; transition: transform 0.45s var(--ease); will-change: transform; touch-action: pan-y; }
+.tv-td-hero-track{ display:flex; height:100%; transition: transform 0.3s var(--ease); will-change: transform; touch-action: pan-y; }
 .tv-td-hero-track img{ -webkit-user-drag: none; user-select: none; }
 .tv-td-hero-slide{ flex: 0 0 100%; width:100%; height:100%; }
 .tv-td-hero img{ width:100%; height:100%; object-fit: cover; }
@@ -1566,14 +1566,23 @@ function bindSlider(track, prev, next, dotsWrap){
   if (next) next.addEventListener("click", () => goTo(idx+1));
   dots.forEach(d => d.addEventListener("click", () => goTo(parseInt(d.dataset.i,10))));
 
-  /* Touch swipe (mobile) — uses native touch events for reliable behavior across real devices.
+  /* Touch swipe (mobile) — native touch events for reliable cross-device behavior.
      Mouse/trackpad never fires touch events, so desktop stays click-only. */
-  let startX = null, startY = null, dragging = false, axisLocked = null;
-  const SWIPE_THRESHOLD = 40;
+  let startX = null, startY = null, dragging = false, axisLocked = null, rafId = 0, lastDx = 0;
+  const SWIPE_THRESHOLD = 30, RESISTANCE = 0.35;
+  function applyDrag(dx){
+    let offset = dx;
+    /* Rubber-band resistance at the ends so it never feels stuck or overshoots */
+    if ((idx === 0 && dx > 0) || (idx === slides - 1 && dx < 0)) {
+      offset = dx * RESISTANCE;
+    }
+    track.style.transform = `translateX(calc(-${idx*100}% + ${offset}px))`;
+  }
   track.addEventListener("touchstart", (e) => {
     if (!e.touches || !e.touches.length) return;
     startX = e.touches[0].clientX; startY = e.touches[0].clientY;
-    dragging = true; axisLocked = null;
+    dragging = true; axisLocked = null; lastDx = 0;
+    track.style.transition = "none";   /* kill transition immediately so the first move tracks the finger 1:1 */
   }, { passive: true });
   track.addEventListener("touchmove", (e) => {
     if (!dragging || startX === null || !e.touches || !e.touches.length) return;
@@ -1581,25 +1590,26 @@ function bindSlider(track, prev, next, dotsWrap){
     if (axisLocked === null) {
       if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
       axisLocked = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-      if (axisLocked === "x") track.style.transition = "none";
     }
-    if (axisLocked === "x") {
-      /* Prevent the page from scrolling horizontally while swiping the slider */
-      if (e.cancelable) e.preventDefault();
-      track.style.transform = `translateX(calc(-${idx*100}% + ${dx}px))`;
-    }
+    if (axisLocked !== "x") return;
+    /* Swallow horizontal scroll only while the gesture is clearly horizontal */
+    if (e.cancelable) e.preventDefault();
+    lastDx = dx;
+    if (!rafId) rafId = requestAnimationFrame(() => { rafId = 0; applyDrag(lastDx); });
   }, { passive: false });
   function endTouch(e){
+    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
     if (!dragging || startX === null) return;
     const t = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : null;
-    const dx = t ? (t.clientX - startX) : 0;
-    track.style.transition = "";
-    if (axisLocked === "x" && Math.abs(dx) > SWIPE_THRESHOLD) {
+    const dx = t ? (t.clientX - startX) : lastDx;
+    dragging = false; axisLocked = null;
+    track.style.transition = "";   /* re-enable the smooth 0.45s snap */
+    if (Math.abs(dx) > SWIPE_THRESHOLD) {
       goTo(idx + (dx < 0 ? 1 : -1));
     } else {
-      goTo(idx);
+      goTo(idx);   /* snap back cleanly to the current slide */
     }
-    startX = null; startY = null; dragging = false; axisLocked = null;
+    startX = null; startY = null; lastDx = 0;
   }
   track.addEventListener("touchend", endTouch);
   track.addEventListener("touchcancel", endTouch);
