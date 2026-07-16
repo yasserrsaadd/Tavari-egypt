@@ -21,8 +21,8 @@ Retrieved 2026-07-09, License - CC BY-SA 3.0
 
 <style>
 :root{
-  --ivory: #FFF6F5;
-  --ivory-deep: #FBE9E7;
+  --ivory: #F8ECEA;
+  --ivory-deep: #F1D9D4;
   --ink: #3A1714;
   --ink-soft: rgba(58,23,20,0.68);
   --ink-faint: rgba(58,23,20,0.42);
@@ -47,9 +47,9 @@ Retrieved 2026-07-09, License - CC BY-SA 3.0
 *{ box-sizing: border-box; }
 html{ scroll-behavior: smooth; }
 body{ background:
-    radial-gradient(1100px 700px at 12% -8%, rgba(244,113,94,0.16), transparent 60%),
-    radial-gradient(1000px 680px at 100% 4%, rgba(224,72,59,0.10), transparent 55%),
-    radial-gradient(900px 700px at 50% 120%, rgba(231,196,188,0.22), transparent 60%),
+    radial-gradient(1100px 700px at 12% -8%, rgba(244,113,94,0.11), transparent 60%),
+    radial-gradient(1000px 680px at 100% 4%, rgba(224,72,59,0.07), transparent 55%),
+    radial-gradient(900px 700px at 50% 120%, rgba(231,196,188,0.15), transparent 60%),
     var(--ivory);
   background-attachment: fixed;
   color: var(--ink); font-family: 'Inter', sans-serif; font-weight: 400; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
@@ -166,12 +166,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .title-line{ position: relative; display:inline-block; overflow:hidden; }
 .title-line::after{ content:""; position:absolute; left:0; bottom:-6px; width:100%; height:1px; background: var(--red-deep); transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease); }
 .reveal.in .title-line::after{ transform: scaleX(1); }
-.section{ padding: 6.5rem 0; position: relative; scroll-margin-top: 90px; }
+.section{ padding: 4.25rem 0; position: relative; scroll-margin-top: 90px; }
 .section-tight{ padding: 4rem 0; }
 .section-title{ font-size: clamp(2rem, 3.6vw, 2.9rem); margin: 0.4rem 0 0; }
-.section-title--rabbit{ position: relative; display: inline-block; padding-left: clamp(1.6rem, 5vw, 2.8rem); }
-.section-title--rabbit .section-title-icon{ position:absolute; top:0.1rem; left:0.1rem; height: clamp(2.2rem, 9vw, 4rem); width:auto; object-fit:contain; }
-.section-head{ max-width: 640px; margin-bottom: 3rem; }
+.section-title--rabbit{ position: relative; display: inline-flex; align-items: center; gap: clamp(0.05rem, 0.8vw, 0.35rem); }
+.section-title--rabbit .section-title-icon{ position: static; height: clamp(2.4rem, 9vw, 4.2rem); width: auto; object-fit: contain; margin-right: -1.5rem; transform: translateY(0.06em); }
+.section-head{ max-width: 760px; margin-left:auto; margin-right:auto; margin-bottom: 3rem; text-align: center; }
 @media (min-width: 992px){
   .section > .container{ padding-left: 3vw; }
 }
@@ -466,7 +466,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 /* Tablets & small laptops */
 @media (max-width: 991px){
-  .section{ padding: 4.5rem 0; }
+  .section{ padding: 3.25rem 0; }
   .about-photo-wrap img{ min-height: 340px; }
   .hero-insight{ padding: 0 1rem; }
   .hero-insight:first-child{ padding-left: 0; }
@@ -474,8 +474,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 /* Large phones */
 @media (max-width: 767px){
-  .section{ padding: 3.6rem 0; }
-  .section-head{ margin-bottom: 2rem; }
+  .section{ padding: 2.6rem 0; }
+  .section-head{ margin-bottom: 1.4rem; }
+
+  /* Consistent left alignment on mobile */
+  .section-head.text-center{ text-align: center !important; }
+  .tv-customize-cta{ justify-content: center; }
+  .contact-submit-foot{ text-align: left !important; }
+  .row.g-5{ --bs-gutter-y: 2rem; }
 
   /* Nav */
   .tv-nav{ padding: 16px 0; }
@@ -523,7 +529,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 /* Small phones */
 @media (max-width: 480px){
   body{ font-size: 15px; }
-  .section{ padding: 3rem 0; }
+  .section{ padding: 1.9rem 0; }
   .container{ padding-left: 1.1rem; padding-right: 1.1rem; }
 
   .hero h1{ font-size: clamp(1.9rem, 10vw, 2.5rem); }
@@ -534,8 +540,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .hero-insight-label{ max-width: 76px; }
 
   /* Full-width primary buttons inside forms */
-  .btn-tv-gold.w-100,
-  .contact-submit-foot{ text-align: center; }
+  .btn-tv-gold.w-100{ text-align: center; }
+  .contact-submit-foot{ text-align: left; }
   .tv-stage-actions{ flex-direction: column; }
   .tv-stage-actions .btn-tv-outline{ width: 100%; }
   .trip-actions{ flex-direction: column; }
@@ -687,9 +693,29 @@ img, video, .container, .row{ max-width: 100%; }
  
 </header>
 
+<div class="container"><div class="horizon"></div></div>
+
+<section class="section" id="community">
+  <div class="container">
+    <div class="section-head reveal text-center" style="max-width:760px; margin-left:auto; margin-right:auto;">
+      <p class="eyebrow">Our Community</p>
+      <h2 class="section-title"><span class="title-line">Travel is always better when shared.</span></h2>
+      <p class="mt-3" style="color: var(--ink-soft); font-size: 1.04rem; line-height: 1.75;">
+        More than 70% of our travelers join solo—and leave with lifelong friendships. Whether you're traveling alone or with friends, Tavari brings together people who share the same passion for adventure, exploration, and unforgettable experiences.
+      </p>
+      <div class="mt-4">
+        <a href="#trips" class="btn-tv-gold"><i class="bi bi-people-fill"></i> Become Part of Our Community</a>
+      </div>
+    </div>
+    <div class="mixed-marquee reveal" id="galleryGrid">
+      <div class="mixed-marquee-track" id="galleryTrack"></div>
+    </div>
+  </div>
+</section>
+
 <section class="section bg-ivory-deep" id="trips">
   <div class="container">
-    <div class="section-head reveal">
+    <div class="section-head reveal tv-rabbit-head text-center">
       <p class="eyebrow">Active Trips</p>
       <h2 class="section-title section-title--rabbit"><img src="images/character Icon.png" alt="" class="section-title-icon" aria-hidden="true"><span class="title-line">Choose your Trip.</span></h2>
     </div>
@@ -700,6 +726,8 @@ img, video, .container, .row{ max-width: 100%; }
     </div>
   </div>
 </section>
+
+<div class="container"><div class="horizon"></div></div>
 
 <section class="section" id="about">
   <div class="container">
@@ -717,26 +745,6 @@ img, video, .container, .row{ max-width: 100%; }
           island-hopping experiences, every itinerary is carefully designed with a strong focus on quality,
           comfort, safety, and unforgettable memories.&rdquo;</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<div class="container"><div class="horizon"></div></div>
-
-<section class="section" id="community">
-  <div class="container">
-    <div class="section-head reveal text-center" style="max-width:760px; margin-left:auto; margin-right:auto;">
-      <p class="eyebrow">Our Community</p>
-      <h2 class="section-title"><span class="title-line">Travel is always better when shared.</span></h2>
-      <p class="mt-3" style="color: var(--ink-soft); font-size: 1.04rem; line-height: 1.75;">
-        More than 70% of our travelers join solo—and leave with lifelong friendships. Whether you're traveling alone or with friends, Tavari brings together people who share the same passion for adventure, exploration, and unforgettable experiences.
-      </p>
-      <div class="mt-4">
-        <a href="#trips" class="btn-tv-gold"><i class="bi bi-people-fill"></i> Become Part of Our Community</a>
-      </div>
-    </div>
-    <div class="mixed-marquee reveal" id="galleryGrid">
-      <div class="mixed-marquee-track" id="galleryTrack"></div>
     </div>
   </div>
 </section>
