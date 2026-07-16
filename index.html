@@ -1566,29 +1566,33 @@ function bindSlider(track, prev, next, dotsWrap){
   if (next) next.addEventListener("click", () => goTo(idx+1));
   dots.forEach(d => d.addEventListener("click", () => goTo(parseInt(d.dataset.i,10))));
 
-  /* Touch/pen swipe (mobile only — mouse stays click-only) */
+  /* Touch swipe (mobile) — uses native touch events for reliable behavior across real devices.
+     Mouse/trackpad never fires touch events, so desktop stays click-only. */
   let startX = null, startY = null, dragging = false, axisLocked = null;
   const SWIPE_THRESHOLD = 40;
-  track.addEventListener("pointerdown", (e) => {
-    if (e.pointerType === "mouse") return;
-    startX = e.clientX; startY = e.clientY; dragging = true; axisLocked = null;
-    try { track.setPointerCapture(e.pointerId); } catch (_) {}
-  });
-  track.addEventListener("pointermove", (e) => {
-    if (!dragging || startX === null) return;
-    const dx = e.clientX - startX, dy = e.clientY - startY;
+  track.addEventListener("touchstart", (e) => {
+    if (!e.touches || !e.touches.length) return;
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+    dragging = true; axisLocked = null;
+  }, { passive: true });
+  track.addEventListener("touchmove", (e) => {
+    if (!dragging || startX === null || !e.touches || !e.touches.length) return;
+    const dx = e.touches[0].clientX - startX, dy = e.touches[0].clientY - startY;
     if (axisLocked === null) {
       if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
       axisLocked = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
       if (axisLocked === "x") track.style.transition = "none";
     }
     if (axisLocked === "x") {
+      /* Prevent the page from scrolling horizontally while swiping the slider */
+      if (e.cancelable) e.preventDefault();
       track.style.transform = `translateX(calc(-${idx*100}% + ${dx}px))`;
     }
-  });
-  function endDrag(e){
+  }, { passive: false });
+  function endTouch(e){
     if (!dragging || startX === null) return;
-    const dx = (e && typeof e.clientX === "number") ? (e.clientX - startX) : 0;
+    const t = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : null;
+    const dx = t ? (t.clientX - startX) : 0;
     track.style.transition = "";
     if (axisLocked === "x" && Math.abs(dx) > SWIPE_THRESHOLD) {
       goTo(idx + (dx < 0 ? 1 : -1));
@@ -1597,8 +1601,8 @@ function bindSlider(track, prev, next, dotsWrap){
     }
     startX = null; startY = null; dragging = false; axisLocked = null;
   }
-  track.addEventListener("pointerup", endDrag);
-  track.addEventListener("pointercancel", endDrag);
+  track.addEventListener("touchend", endTouch);
+  track.addEventListener("touchcancel", endTouch);
   return goTo;
 }
 
