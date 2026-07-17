@@ -79,7 +79,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 991px){
   .tv-logo{ height: 96px; padding-left: clamp(6px, 2.5vw, 14px); }
   .tv-nav.scrolled .tv-logo{ height: 81px; }
-  .tv-brand::after{ display: none; }
 }
 .tv-logo-footer{ height: 80px; mix-blend-mode: normal; filter: brightness(0) invert(1); opacity: 0.92; }
 .tv-links{ display:flex; align-items:center; gap: 2.1rem; }
@@ -92,7 +91,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-links a::after{ content:""; position:absolute; left:0; bottom:0; width:0; height:2px; background: var(--red); transition: width 0.5s var(--ease); border-radius: 2px; }
 .tv-links a:hover{ color: var(--red-deep); }
 .tv-links a:hover::after{ width:100%; }
-.btn-tv-gold{ background: linear-gradient(135deg, var(--red-bright) 0%, var(--red-deep) 100%); color: #FFFFFF; border: none; padding: 0.62rem 1.5rem; font-size: 0.82rem; letter-spacing: 0.05em; font-weight: 600; border-radius: var(--radius-btn); transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), letter-spacing 0.45s var(--ease); box-shadow: 0 10px 26px -10px rgba(224,72,59,0.6); min-height: 44px; display:inline-flex; align-items:center; justify-content:center; transform: translateX(-13px);}
+.btn-tv-gold{ background: linear-gradient(135deg, var(--red-bright) 0%, var(--red-deep) 100%); color: #FFFFFF; border: none; padding: 0.62rem 1.5rem; font-size: 0.82rem; letter-spacing: 0.05em; font-weight: 600; border-radius: var(--radius-btn); transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), letter-spacing 0.45s var(--ease); box-shadow: 0 10px 26px -10px rgba(224,72,59,0.6); min-height: 44px; display:inline-flex; align-items:center; justify-content:center;}
 .btn-tv-gold:hover{ transform: translateY(-2px); box-shadow: 0 16px 34px -10px rgba(224,72,59,0.75); letter-spacing: 0.08em; color: #FFFFFF; }
 .btn-tv-outline{ background: transparent; border: 1.5px solid var(--red); color: var(--red-deep); padding: 0.62rem 1.5rem; font-size: 0.82rem; letter-spacing: 0.05em; font-weight: 500; border-radius: var(--radius-btn); transition: background 0.45s var(--ease), color 0.45s var(--ease), border-color .45s var(--ease), transform 0.45s var(--ease); min-height: 44px; display:inline-flex; align-items:center; justify-content:center; }
 .btn-tv-outline:hover{ background: var(--red); color: #FFFFFF; transform: translateY(-2px); }
@@ -104,7 +103,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .tv-links a{ font-size: 1.05rem; }
   .tv-burger{ display:flex; }
   .tv-nav:not(.scrolled) .tv-burger{ color: #FFFFFF; border-color: rgba(255,255,255,0.55); background: rgba(250,248,245,0.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-  .tv-nav-cta-desktop{ display:none; padding-right: clamp(8px, 1.5vw, 24px); }
+  .tv-nav-cta-desktop{ display:none; }
   .tv-mobile-cta{ display:inline-flex; margin-top: 0.4rem; }
 }
 .tv-scrim{ position:fixed; inset:0; background: rgba(16,30,48,0.35); z-index: 1050; opacity:0; pointer-events:none; transition: opacity 0.5s var(--ease); }
@@ -136,6 +135,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (min-width: 992px){
   .hero-content .row{ margin-left: 0; }
   .tv-nav .container{ padding-left: 0; padding-right: 0; }
+  .tv-nav-cta-desktop{ margin-right: clamp(8px, 1.5vw, 24px); }
 }
 .hero .eyebrow{ color: #3E7FCB; font-weight: 600; letter-spacing: 0.24em; opacity:0; animation: heroFadeUp 1s var(--ease) 0.2s forwards; }
 .hero h1{ font-size: clamp(2.6rem, 6vw, 5.1rem); line-height: 1.04; margin: 0.6rem 0 1.3rem; max-width: 780px; overflow: hidden; color: var(--ink); text-shadow: 0 2px 28px rgba(251,253,255,0.45); }
@@ -515,7 +515,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   /* Nav */
   .tv-nav{ padding: 16px 0; }
   .tv-nav.scrolled{ padding: 10px 0; }
-  .tv-nav-cta-desktop{ padding-right: clamp(6px, 2.5vw, 14px); }
 
   /* Hero */
   .hero{ min-height: 600px; }
