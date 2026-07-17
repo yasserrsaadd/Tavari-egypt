@@ -74,10 +74,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-nav.scrolled .tv-brand{ font-size: 1.3rem; }
 .tv-brand::after{ display: none; }
 .tv-brand span{ color: var(--red-deep); font-style: italic; }
-.tv-logo{ height: 150px; width: auto; display: block; mix-blend-mode: normal; transition: height 0.5s var(--ease), opacity 0.4s var(--ease), filter 0.5s var(--ease); object-fit: contain; filter: drop-shadow(0 0 14px rgba(244,113,94,0.35)) drop-shadow(0 2px 6px rgba(200,70,55,0.22)); }
+.tv-logo{ height: 150px; width: auto; display: block; mix-blend-mode: normal; transition: height 0.5s var(--ease), opacity 0.4s var(--ease), filter 0.5s var(--ease); object-fit: contain; filter: drop-shadow(0 0 14px rgba(244,113,94,0.35)) drop-shadow(0 2px 6px rgba(200,70,55,0.22)); padding-left: clamp(8px, 1.5vw, 24px); }
 .tv-nav.scrolled .tv-logo{ height: 93px; mix-blend-mode: multiply; filter: drop-shadow(0 2px 8px rgba(200,70,55,0.16)); }
 @media (max-width: 991px){
-  .tv-logo{ height: 96px; }
+  .tv-logo{ height: 96px; padding-left: clamp(6px, 2.5vw, 14px); }
   .tv-nav.scrolled .tv-logo{ height: 81px; }
   .tv-brand::after{ display: none; }
 }
@@ -92,7 +92,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-links a::after{ content:""; position:absolute; left:0; bottom:0; width:0; height:2px; background: var(--red); transition: width 0.5s var(--ease); border-radius: 2px; }
 .tv-links a:hover{ color: var(--red-deep); }
 .tv-links a:hover::after{ width:100%; }
-.btn-tv-gold{ background: linear-gradient(135deg, var(--red-bright) 0%, var(--red-deep) 100%); color: #FFFFFF; border: none; padding: 0.62rem 1.5rem; font-size: 0.82rem; letter-spacing: 0.05em; font-weight: 600; border-radius: var(--radius-btn); transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), letter-spacing 0.45s var(--ease); box-shadow: 0 10px 26px -10px rgba(224,72,59,0.6); min-height: 44px; display:inline-flex; align-items:center; justify-content:center; }
+.btn-tv-gold{ background: linear-gradient(135deg, var(--red-bright) 0%, var(--red-deep) 100%); color: #FFFFFF; border: none; padding: 0.62rem 1.5rem; font-size: 0.82rem; letter-spacing: 0.05em; font-weight: 600; border-radius: var(--radius-btn); transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), letter-spacing 0.45s var(--ease); box-shadow: 0 10px 26px -10px rgba(224,72,59,0.6); min-height: 44px; display:inline-flex; align-items:center; justify-content:center; transform: translateX(-13px);}
 .btn-tv-gold:hover{ transform: translateY(-2px); box-shadow: 0 16px 34px -10px rgba(224,72,59,0.75); letter-spacing: 0.08em; color: #FFFFFF; }
 .btn-tv-outline{ background: transparent; border: 1.5px solid var(--red); color: var(--red-deep); padding: 0.62rem 1.5rem; font-size: 0.82rem; letter-spacing: 0.05em; font-weight: 500; border-radius: var(--radius-btn); transition: background 0.45s var(--ease), color 0.45s var(--ease), border-color .45s var(--ease), transform 0.45s var(--ease); min-height: 44px; display:inline-flex; align-items:center; justify-content:center; }
 .btn-tv-outline:hover{ background: var(--red); color: #FFFFFF; transform: translateY(-2px); }
@@ -104,7 +104,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .tv-links a{ font-size: 1.05rem; }
   .tv-burger{ display:flex; }
   .tv-nav:not(.scrolled) .tv-burger{ color: #FFFFFF; border-color: rgba(255,255,255,0.55); background: rgba(250,248,245,0.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-  .tv-nav-cta-desktop{ display:none; }
+  .tv-nav-cta-desktop{ display:none; padding-right: clamp(8px, 1.5vw, 24px); }
   .tv-mobile-cta{ display:inline-flex; margin-top: 0.4rem; }
 }
 .tv-scrim{ position:fixed; inset:0; background: rgba(16,30,48,0.35); z-index: 1050; opacity:0; pointer-events:none; transition: opacity 0.5s var(--ease); }
@@ -515,6 +515,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   /* Nav */
   .tv-nav{ padding: 16px 0; }
   .tv-nav.scrolled{ padding: 10px 0; }
+  .tv-nav-cta-desktop{ padding-right: clamp(6px, 2.5vw, 14px); }
 
   /* Hero */
   .hero{ min-height: 600px; }
@@ -531,6 +532,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .hero-insight-num{ font-size: 1.45rem; }
   .hero-insight-label{ font-size: 9.5px; letter-spacing: 0.06em; white-space: normal; line-height: 1.25; max-width: 92px; }
   .hero-insight:not(:last-child)::after{ height: 22px; }
+  .tv-logo{
+    transform: translateX(-10px);  }
 
   /* About */
   .about-photo-wrap img{ min-height: 260px; }
