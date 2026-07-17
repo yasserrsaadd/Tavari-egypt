@@ -72,13 +72,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-nav .container{ display:flex; align-items:center; justify-content: space-between; }
 .tv-brand{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 1.5rem; letter-spacing: 0.04em; display:flex; align-items:center; gap: 10px; transition: font-size 0.5s var(--ease); text-decoration: none; position: relative; }
 .tv-nav.scrolled .tv-brand{ font-size: 1.3rem; }
-.tv-brand::after{ content:""; position:absolute; left:0; right:0; bottom:-7px; height:2px; border-radius:2px; background: linear-gradient(90deg, var(--terracotta-brand) 0%, var(--red) 100%); opacity:0.85; }
+.tv-brand::after{ display: none; }
 .tv-brand span{ color: var(--red-deep); font-style: italic; }
-.tv-logo{ height: 110px; width: auto; display: block; mix-blend-mode: normal; transition: height 0.5s var(--ease), opacity 0.4s var(--ease), filter 0.5s var(--ease); object-fit: contain; filter: drop-shadow(0 0 14px rgba(244,113,94,0.35)) drop-shadow(0 2px 6px rgba(200,70,55,0.22)); }
-.tv-nav.scrolled .tv-logo{ height: 70px; mix-blend-mode: multiply; filter: drop-shadow(0 2px 8px rgba(200,70,55,0.16)); }
+.tv-logo{ height: 150px; width: auto; display: block; mix-blend-mode: normal; transition: height 0.5s var(--ease), opacity 0.4s var(--ease), filter 0.5s var(--ease); object-fit: contain; filter: drop-shadow(0 0 14px rgba(244,113,94,0.35)) drop-shadow(0 2px 6px rgba(200,70,55,0.22)); }
+.tv-nav.scrolled .tv-logo{ height: 93px; mix-blend-mode: multiply; filter: drop-shadow(0 2px 8px rgba(200,70,55,0.16)); }
 @media (max-width: 991px){
-  .tv-logo{ height: 64px; }
-  .tv-nav.scrolled .tv-logo{ height: 52px; }
+  .tv-logo{ height: 96px; }
+  .tv-nav.scrolled .tv-logo{ height: 81px; }
   .tv-brand::after{ display: none; }
 }
 .tv-logo-footer{ height: 80px; mix-blend-mode: normal; filter: brightness(0) invert(1); opacity: 0.92; }
@@ -134,8 +134,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hero-glow{ position:absolute; inset:0; z-index:1; pointer-events:none; background: radial-gradient(480px circle at var(--mx,50%) var(--my,40%), rgba(244,113,94,0.18), transparent 60%); transition: background 0.3s ease-out; }
 .hero-content{ position: relative; z-index: 2; width: 100%; padding-top: 1.5rem; }
 @media (min-width: 992px){
-  .hero-content .row{ margin-left: 3vw; }
-  .tv-nav .container{ padding-left: 3vw; padding-right: 3vw; }
+  .hero-content .row{ margin-left: 0; }
+  .tv-nav .container{ padding-left: 0; padding-right: 0; }
 }
 .hero .eyebrow{ color: #3E7FCB; font-weight: 600; letter-spacing: 0.24em; opacity:0; animation: heroFadeUp 1s var(--ease) 0.2s forwards; }
 .hero h1{ font-size: clamp(2.6rem, 6vw, 5.1rem); line-height: 1.04; margin: 0.6rem 0 1.3rem; max-width: 780px; overflow: hidden; color: var(--ink); text-shadow: 0 2px 28px rgba(251,253,255,0.45); }
@@ -172,9 +172,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .section-title--rabbit{ position: relative;  display: inline-flex; align-items: center; gap: clamp(0.05rem, 0.8vw, 0.35rem); }
 .section-title--rabbit .section-title-icon{ position: static; height: clamp(2.4rem, 9vw, 4.2rem); width: auto; object-fit: contain; margin-right: -1.6rem; transform: translateY(0.06em); }
 .section-head{ max-width: 760px; margin-left:auto; margin-right:auto; margin-bottom: 3rem; text-align: center; }
-@media (min-width: 992px){
-  .section > .container{ padding-left: 3vw; }
-}
 .about-photo-wrap{ position: relative; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-soft); }
 .about-photo-wrap img{ width:100%; height: 100%; object-fit: cover; display:block; min-height: 460px; transition: transform 1.2s var(--ease); }
 .about-photo-wrap:hover img{ transform: scale(1.045); }
@@ -244,6 +241,25 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .review-quote{ font-family:'Cormorant Garamond', serif; font-style: italic; font-size: 1.12rem; line-height: 1.6; color: var(--ink); flex:1; margin-bottom: 1.3rem; }
 .review-name{ font-size: 0.9rem; font-weight:600; }
 .review-trip{ font-size: 0.78rem; color: var(--ink-soft); }
+/* ─── Reviews horizontal slider ─────────────────────── */
+.tv-reviews{ position: relative; }
+.tv-reviews-viewport{ overflow: hidden; padding: 6px 0; }
+.tv-reviews-track{ display:flex; gap: 1.4rem; width:max-content; transition: transform 0.6s var(--ease); will-change: transform; }
+.tv-review-slide{ flex: 0 0 auto; width: 360px; max-width: 82vw; }
+.tv-review-slide .review-card{ height: 100%; }
+.tv-reviews-nav{ width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--red-line-strong); background: var(--glass); color: var(--ink); display:flex; align-items:center; justify-content:center; font-size: 1.15rem; cursor: pointer; transition: background 0.4s var(--ease), color 0.4s var(--ease), transform 0.4s var(--ease), border-color 0.4s var(--ease); box-shadow: var(--shadow-soft); flex-shrink: 0; }
+.tv-reviews-nav:hover{ background: var(--red); color: #FFFFFF; border-color: var(--red); transform: scale(1.06); }
+.tv-reviews-nav:active{ transform: scale(0.95); }
+.tv-reviews-nav[disabled]{ opacity: 0.35; pointer-events: none; }
+.tv-reviews-controls{ display:flex; align-items:center; justify-content:center; gap: 1rem; margin-top: 2rem; }
+.tv-reviews-dots{ display:flex; align-items:center; gap: 0.5rem; }
+.tv-reviews-dot{ width: 9px; height: 9px; padding: 0; border: none; border-radius: 50%; background: var(--red-line-strong); cursor: pointer; transition: width 0.5s var(--ease), background 0.4s var(--ease), transform 0.4s var(--ease); }
+.tv-reviews-dot.active{ width: 26px; border-radius: 6px; background: var(--red); }
+.tv-reviews-dot:hover{ transform: scale(1.15); }
+@media (max-width: 575px){
+  .tv-review-slide{ width: 280px; }
+  .tv-reviews-controls{ margin-top: 1.4rem; }
+}
 .contact-wrap{ background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-soft); }
 .contact-info{ background: var(--red-deep); color: #FFFFFF; padding: 3rem 2.4rem; height: 100%; }
 .contact-info h3{ color: #FFFFFF; }
@@ -472,6 +488,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .about-photo-wrap img{ min-height: 340px; }
   .hero-insight{ padding: 0 1rem; }
   .hero-insight:first-child{ padding-left: 0; }
+    .row.g-5{ 
+    --bs-gutter-y: 2rem; 
+    position: relative;
+    left: 22px;
+  }
 }
 
 /* Large phones */
@@ -483,7 +504,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .section-head.text-center{ text-align: center !important; }
   .tv-customize-cta{ justify-content: center; }
   .contact-submit-foot{ text-align: left !important; }
-  .row.g-5{ --bs-gutter-y: 2rem; }
+  .row.g-5{ 
+    --bs-gutter-y: 2rem; 
+    position: relative;
+    left: 22px;
+  }
+ 
+  
 
   /* Nav */
   .tv-nav{ padding: 16px 0; }
@@ -511,16 +538,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   #about .about-quote{ text-align: center; }
   #about .about-quote::before{ margin-left: auto; margin-right: auto; }
   #about .eyebrow, #about .section-title{ text-align: center; }
-  /* On mobile the columns stack, so the horizontal reveal shoves (-48px/+48px) push the photo left and text right. Neutralize them so the block stays centered. */
-  #about .reveal-left, #about .reveal-left.in{ transform: translateX(0); }
+  /* Neutralize horizontal reveal shoves (-48px/+48px) at every breakpoint so the block stays centered. */
+  #about .reveal-left, #about .reveal-left.in,
   #about .reveal-right, #about .reveal-right.in{ transform: translateX(0); }
-  /* Nudge the whole About block slightly to the right without consuming extra layout space (transform doesn't affect width; body has overflow-x:hidden). */
-  #about .row{ transform: translateX(26px); }
 
   /* Reviews */
   #reviews .section-head{ text-align: center; }
-  /* Same slight rightward nudge as the About block, without consuming extra layout space. */
-  #reviewsGrid{ transform: translateX(12px); }
+  #reviewsGrid .reveal-left, #reviewsGrid .reveal-left.in,
+  #reviewsGrid .reveal-right, #reviewsGrid .reveal-right.in{ transform: translateX(0); }
 
   /* Trips — center card internals on mobile */
   #trips .trip-body{ text-align: center; }
@@ -776,7 +801,16 @@ img, video, .container, .row{ max-width: 100%; }
       <p class="eyebrow">Traveler Reviews</p>
       <h2 class="section-title"><span class="title-line">Carried home in their words.</span></h2>
     </div>
-    <div class="row g-4" id="reviewsGrid"></div>
+    <div class="tv-reviews reveal reveal-d2">
+      <div class="tv-reviews-viewport">
+        <div class="tv-reviews-track" id="reviewsGrid"></div>
+      </div>
+      <div class="tv-reviews-controls">
+        <button class="tv-reviews-nav" id="reviewsPrev" aria-label="Previous reviews">&#10094;</button>
+        <div class="tv-reviews-dots" id="reviewsDots"></div>
+        <button class="tv-reviews-nav" id="reviewsNext" aria-label="Next reviews">&#10095;</button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1525,8 +1559,8 @@ async function loadReviews() {
     } catch(e) { console.warn("Reviews fallback:", e); }
   }
   const grid = document.getElementById("reviewsGrid");
-  grid.innerHTML = reviews.slice(0,5).map((r,i) => `
-    <div class="col-md-6 col-lg-4 reveal reveal-d${Math.min(i+1,5)}">
+  grid.innerHTML = reviews.slice(0,5).map((r) => `
+    <div class="tv-review-slide">
       <div class="review-card">
         <div class="review-mono">${monogram(r.customer_name)}</div>
         <div class="review-stars">${starString(r.rating)}</div>
@@ -1535,7 +1569,12 @@ async function loadReviews() {
         <div class="review-trip">${r.trip_title}</div>
       </div>
     </div>`).join("");
-  grid.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+
+  const dotsWrap = document.getElementById("reviewsDots");
+  if (dotsWrap) {
+    dotsWrap.innerHTML = reviews.slice(0,5).map((_,i) => `<button class="tv-reviews-dot${i===0?" active":""}" data-i="${i}" aria-label="Go to review ${i+1}"></button>`).join("");
+  }
+  bindReviewsSlider();
 }
 
 loadTrips();
@@ -1550,6 +1589,73 @@ function closeTripDetails(){ tripDetailScrim.classList.remove("show"); document.
 document.getElementById("tripDetailClose").addEventListener("click", closeTripDetails);
 tripDetailScrim.addEventListener("click", (e) => { if (e.target===tripDetailScrim) closeTripDetails(); });
 document.addEventListener("keydown", (e) => { if (e.key==="Escape" && tripDetailScrim.classList.contains("show")) closeTripDetails(); });
+
+function bindReviewsSlider(){
+  const track = document.getElementById("reviewsGrid");
+  const prev = document.getElementById("reviewsPrev");
+  const next = document.getElementById("reviewsNext");
+  const dotsWrap = document.getElementById("reviewsDots");
+  if (!track || !track.children.length) return;
+
+  const slides = Array.from(track.children);
+  const dots = dotsWrap ? Array.from(dotsWrap.children) : [];
+  const viewport = track.parentElement;
+  let idx = 0;
+
+  function slideStep(){
+    if (slides.length < 2) return slides[0] ? slides[0].offsetWidth : 0;
+    return slides[1].offsetLeft - slides[0].offsetLeft;
+  }
+  function maxIdx(){
+    const step = slideStep();
+    if (step <= 0) return 0;
+    const overflow = track.scrollWidth - viewport.clientWidth;
+    return Math.max(0, Math.round(overflow / step));
+  }
+  function goTo(i){
+    idx = Math.max(0, Math.min(i, maxIdx()));
+    const step = slideStep();
+    track.style.transform = `translateX(-${idx*step}px)`;
+    dots.forEach((d,k) => d.classList.toggle("active", k===idx));
+    if (prev) prev.disabled = (idx === 0);
+    if (next) next.disabled = (idx === maxIdx());
+  }
+  if (prev) prev.addEventListener("click", () => goTo(idx-1));
+  if (next) next.addEventListener("click", () => goTo(idx+1));
+  dots.forEach(d => d.addEventListener("click", () => goTo(parseInt(d.dataset.i,10))));
+
+  let startX=null, startY=null, dragging=false, axisLocked=null, startT=0;
+  const SWIPE=25, FLICK=0.25;
+  track.addEventListener("touchstart", (e)=>{
+    if(!e.touches||!e.touches.length) return;
+    startX=e.touches[0].clientX; startY=e.touches[0].clientY; startT=e.timeStamp||Date.now();
+    dragging=true; axisLocked=null;
+  }, {passive:true});
+  track.addEventListener("touchmove",(e)=>{
+    if(!dragging||startX===null||!e.touches||!e.touches.length) return;
+    const dx=e.touches[0].clientX-startX, dy=e.touches[0].clientY-startY;
+    if(axisLocked===null){
+      if(Math.abs(dx)<6&&Math.abs(dy)<6) return;
+      axisLocked = Math.abs(dy) > Math.abs(dx)*1.6 ? "y" : "x";
+    }
+    if(axisLocked!=="x") return;
+    if(e.cancelable) e.preventDefault();
+  }, {passive:false});
+  function endTouch(e){
+    if(!dragging||startX===null) return;
+    const t=(e.changedTouches&&e.changedTouches[0])?e.changedTouches[0]:null;
+    const endX=t?t.clientX:startX;
+    const dx=endX-startX; const dt=((e.timeStamp||Date.now())-startT)||1;
+    const velocity=Math.abs(dx)/dt;
+    dragging=false; axisLocked=null; startX=null; startY=null;
+    if(axisLocked===null && Math.abs(dx)<6) return;
+    if(Math.abs(dx)>SWIPE || velocity>FLICK){ goTo(idx + (dx<0?1:-1)); }
+  }
+  track.addEventListener("touchend", endTouch);
+  track.addEventListener("touchcancel", endTouch);
+  window.addEventListener("resize", () => goTo(idx));
+  goTo(0);
+}
 
 function bindSlider(track, prev, next, dotsWrap){
   if (!track) return null;
