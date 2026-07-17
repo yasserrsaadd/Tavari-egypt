@@ -23,7 +23,7 @@ async function sendBookingEmails(d) {
     trip: d.trip,
     trip_type: "",
     persons: d.persons,
-    total: d.total ? "$" + d.total : "",
+    total: d.total ? "EGP" + d.total : "",
     notes: "",
     request_type: "Booking",
     submitted_at: tvStamp()
