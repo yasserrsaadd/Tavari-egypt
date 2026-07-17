@@ -1104,23 +1104,17 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="email.js"></script>
 
 <script>
 const useLiveBackend = true;
 const SUPABASE_URL = "https://hpwgnmtlfbmaisdxezrc.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwd2dubXRsZmJtYWlzZHhlenJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NjU1MTYsImV4cCI6MjA5OTM0MTUxNn0.0k6lSxDX4J2Qz-163fDnRsTQieQ-H2i5IFfeKx-59hY";
-const EMAILJS_PUBLIC_KEY = "YOUR-EMAILJS-PUBLIC-KEY";
-const EMAILJS_SERVICE_ID = "YOUR-EMAILJS-SERVICE-ID";
-const EMAILJS_TEMPLATE_ID = "YOUR-EMAILJS-TEMPLATE-ID";
-const useEmailJS = false;
 const RECEIPTS_BUCKET = "payment-receipts";
 
 let supabaseClient = null;
 if (typeof supabase !== "undefined" && SUPABASE_URL.indexOf("YOUR-PROJECT-REF") === -1) {
   try { supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) { console.warn("Supabase init failed:", e); }
-}
-if (useEmailJS && typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY.indexOf("YOUR-EMAILJS") === -1) {
-  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 }
 
 const toastStack = document.getElementById("toastStack");
@@ -1907,6 +1901,8 @@ document.getElementById("completeBookingBtn").addEventListener("click", async ()
       bookings.push({ id:"local-"+Date.now(), trip_id:currentTrip.id, trip_title:currentTrip.title, customer_name:name, customer_phone:phone, customer_email:email, num_persons:persons, total_price:total, receipt_url:receiptUrl, status:"pending_verification", created_at:new Date().toISOString() });
       localStorage.setItem("tavari_bookings",JSON.stringify(bookings));
     }
+    try { await sendBookingEmails({ name, phone, email, trip: currentTrip.title, persons, total }); }
+    catch (mailErr) { console.warn("Booking email failed:", mailErr); }
     closeBookingDrawer();
     showSuccessModal(`Thank you, ${name}.`, `Your receipt for the <strong>${currentTrip.title}</strong> has been received. Our payment desk will reach out on <strong>${phone}</strong> via WhatsApp shortly to deliver your tickets.`);
     resetReceiptZone();
@@ -1949,9 +1945,8 @@ document.getElementById("inquiryForm").addEventListener("submit", async (e) => {
       inquiries.push({ id:"local-"+Date.now(), customer_name:name, customer_phone:phone, customer_email:email, interested_trip:trip, trip_type:tripType, num_persons:persons, notes, status:"pending_contact", created_at:new Date().toISOString() });
       localStorage.setItem("tavari_inquiries",JSON.stringify(inquiries));
     }
-    if (useEmailJS&&typeof emailjs!=="undefined"&&EMAILJS_SERVICE_ID.indexOf("YOUR-EMAILJS")===-1) {
-      try { await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{from_name:name,from_phone:phone,from_email:email,trip,persons,notes}); } catch(mailErr) { console.warn("EmailJS failed:",mailErr); }
-    }
+    try { await sendInquiryEmails({ name, phone, email, trip, tripType, persons, notes }); }
+    catch (mailErr) { console.warn("Inquiry email failed:", mailErr); }
     document.getElementById("inquiryForm").reset();
     inqTravelersInput.value=2;
     showSuccessModal(`Thank you, ${name}.`, `Your custom inquiry has been received. A booking manager will reply by WhatsApp or call within a few hours.`);
