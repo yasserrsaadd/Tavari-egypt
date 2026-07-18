@@ -64,12 +64,16 @@ create table if not exists public.reviews (
 create table if not exists public.gallery (
   id bigint generated always as identity primary key,
   image_url text,
+  media_url text,
   caption text,
+  is_video boolean not null default false,
   position integer default 0
 );
 
 -- 1b) ADD COLUMNS (idempotent, re-runnable on existing DBs)
 alter table public.trips add column if not exists price_options text[] not null default '{}';
+alter table public.gallery add column if not exists media_url text;
+alter table public.gallery add column if not exists is_video boolean not null default false;
 
 -- 2) ROW LEVEL SECURITY
 alter table public.trips enable row level security;
@@ -115,3 +119,11 @@ on conflict (id) do nothing;
 drop policy if exists "trip-media public read" on storage.objects;
 create policy "trip-media public read"
   on storage.objects for select using (bucket_id='trip-media');
+
+insert into storage.buckets (id, name, public)
+values ('gallery-media','gallery-media', true)
+on conflict (id) do nothing;
+
+drop policy if exists "gallery-media public read" on storage.objects;
+create policy "gallery-media public read"
+  on storage.objects for select using (bucket_id='gallery-media');
