@@ -205,6 +205,44 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .gal-caption{ opacity:1; transform:none; }
 }
 
+/* ─── Gallery lightbox (mobile + tablet only) ───────── */
+@media (max-width: 991px){
+  .gal-frame{ cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .gal-lightbox{
+    position: fixed; inset: 0; z-index: 1400;
+    background: rgba(16,30,48,0.92);
+    display: flex; align-items: center; justify-content: center;
+    padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s var(--ease);
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  }
+  .gal-lightbox.show{ opacity: 1; pointer-events: auto; }
+  .gal-lightbox-media{ max-width: 100%; max-height: 86vh; display:flex; align-items:center; justify-content:center; }
+  .gal-lightbox-media img,
+  .gal-lightbox-media video{
+    max-width: 100%; max-height: 86vh; width: auto; height: auto;
+    border-radius: 10px; box-shadow: 0 30px 80px -20px rgba(0,0,0,0.6);
+    object-fit: contain; background: #000; display: block;
+  }
+  .gal-lightbox-close{
+    position: absolute; top: max(0.9rem, env(safe-area-inset-top)); right: 0.9rem; z-index: 2;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.4);
+    color: #fff; font-size: 1.6rem; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    transition: background 0.3s var(--ease), transform 0.35s var(--ease);
+  }
+  .gal-lightbox-close:hover{ background: var(--red); border-color: var(--red); transform: rotate(90deg); }
+  .gal-lightbox-cap{
+    position: absolute; left: 0; right: 0; bottom: max(1.1rem, env(safe-area-inset-bottom));
+    text-align: center; color: var(--ivory); font-family: 'Cormorant Garamond', serif;
+    font-weight: 600; font-size: 1.4rem; padding: 0 1.5rem; pointer-events: none;
+    text-shadow: 0 2px 14px rgba(0,0,0,0.5);
+  }
+}
+body.gal-lb-open{ overflow: hidden; }
+
 .trip-card{ border-radius: var(--radius-card); position: relative; left: 10px; overflow:hidden; background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); height: 100%; display:flex; flex-direction: column; transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease); }
 .trip-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow-lift); }
 .trip-thumb-wrap{ position:relative; height: 230px; overflow:hidden; }
@@ -762,6 +800,11 @@ img, video, .container, .row{ max-width: 100%; }
       <div class="mixed-marquee-track" id="galleryTrack"></div>
     </div>
   </div>
+  <div class="gal-lightbox" id="galLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Media preview">
+    <button class="gal-lightbox-close" id="galLightboxClose" type="button" aria-label="Close preview"><i class="bi bi-x-lg"></i></button>
+    <div class="gal-lightbox-media" id="galLightboxMedia"></div>
+    <div class="gal-lightbox-cap" id="galLightboxCap"></div>
+  </div>
 </section>
 
 <section class="section bg-ivory-deep" id="trips">
@@ -976,7 +1019,7 @@ img, video, .container, .row{ max-width: 100%; }
   <div class="container">
     <div class="row g-4">
       <div class="col-lg-4">
-        <a href="#" class="tv-brand mb-3 d-inline-block" aria-label="Tavari Egypt — Home"><img src="images/FooterLogo.png" alt="Tavari Egypt logo" class="tv-logo tv-logo-footer"></a>
+        <a href="#" class="tv-brand mb-3 d-inline-block" aria-label="Tavari Egypt — Home"><img src="images/logo-01.png" alt="Tavari Egypt logo" class="tv-logo tv-logo-footer"></a>
         <p style="font-size:0.85rem; color:rgba(250,248,245,0.5); max-width:280px;">Bespoke desert and Red Sea trips, guided by native hands.</p>
         <div class="d-flex gap-2 mt-3">
           <a href="https://www.instagram.com/tavariegypt?igsh=MjY0bTQybjZ4bmk3" target="_blank" rel="noopener" class="social-btn" aria-label="Follow us on Instagram" style="width:42px;height:42px;"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
@@ -1553,6 +1596,70 @@ function startGalleryMarquee(wrap, track){
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+  const ctrl = { pause(){ paused = true; }, resume(){ paused = false; last = performance.now(); } };
+  wrap._marqueeCtrl = ctrl;
+  return ctrl;
+}
+
+/* ─── Gallery lightbox (mobile + tablet only) ───────── */
+function bindGalleryLightbox(){
+  const grid = document.getElementById("galleryGrid");
+  const lb = document.getElementById("galLightbox");
+  const lbMedia = document.getElementById("galLightboxMedia");
+  const lbCap = document.getElementById("galLightboxCap");
+  const lbClose = document.getElementById("galLightboxClose");
+  if (!grid || !lb) return;
+
+  const isMobile = () => window.matchMedia("(max-width: 991px)").matches;
+
+  function open(mediaEl, caption){
+    const ctrl = grid._marqueeCtrl;
+    if (ctrl) ctrl.pause();
+    lbMedia.innerHTML = "";
+    if (mediaEl.tagName === "VIDEO"){
+      const v = document.createElement("video");
+      v.src = mediaEl.currentSrc || mediaEl.src;
+      v.controls = true; v.autoplay = true; v.playsInline = true; v.loop = true;
+      v.setAttribute("playsinline", "");
+      lbMedia.appendChild(v);
+    } else {
+      const img = document.createElement("img");
+      img.src = mediaEl.currentSrc || mediaEl.src;
+      img.alt = mediaEl.alt || "";
+      lbMedia.appendChild(img);
+    }
+    lbCap.textContent = caption || "";
+    lb.classList.add("show");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.classList.add("gal-lb-open");
+  }
+
+  function close(){
+    lb.classList.remove("show");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("gal-lb-open");
+    const v = lbMedia.querySelector("video");
+    if (v) { try { v.pause(); } catch(e){} }
+    lbMedia.innerHTML = "";
+    const ctrl = grid._marqueeCtrl;
+    if (ctrl) ctrl.resume();
+  }
+
+  grid.addEventListener("click", (e) => {
+    if (!isMobile()) return;
+    const frame = e.target.closest(".gal-frame");
+    if (!frame) return;
+    const mediaEl = frame.querySelector("img, video");
+    if (!mediaEl) return;
+    const cap = frame.querySelector(".gal-title");
+    open(mediaEl, cap ? cap.textContent : "");
+  });
+
+  lbClose.addEventListener("click", close);
+  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && lb.classList.contains("show")) close();
+  });
 }
 
 async function loadReviews() {
@@ -1586,6 +1693,7 @@ async function loadReviews() {
 loadTrips();
 loadGalleryStrip();
 loadReviews();
+bindGalleryLightbox();
 
 /* TRIP DETAIL MODAL */
 const tripDetailScrim = document.getElementById("tripDetailScrim");
