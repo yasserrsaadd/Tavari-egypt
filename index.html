@@ -321,6 +321,8 @@ body.gal-lb-open{ overflow: hidden; }
 .tv-num-stepper input{ border:none; background:transparent; text-align:center; width: 100%; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
 .tv-num-stepper input:focus{ outline:none; }
 .contact-submit-foot{ font-size: 0.76rem; color: var(--ink-faint); margin-top: 0.8rem; }
+.tv-consent{ display:flex; align-items:flex-start; gap:0.6rem; font-size:0.84rem; color:var(--ink-soft); line-height:1.5; cursor:pointer; margin-bottom:0.9rem; }
+.tv-consent input{ width:18px; height:18px; margin-top:2px; flex-shrink:0; accent-color:var(--red-deep); cursor:pointer; }
 .tv-drawer-scrim{ position: fixed; inset:0; z-index: 1290; background: rgba(16,30,48,0.45); opacity:0; pointer-events:none; transition: opacity 0.55s var(--ease); }
 .tv-drawer-scrim.show{ opacity:1; pointer-events:auto; }
 .tv-drawer{ position: fixed; top:0; right:0; bottom:0; width: min(460px, 100vw); background: var(--ivory); z-index: 1300; box-shadow: -40px 0 80px -20px rgba(22,38,59,0.35); transform: translateX(100%); transition: transform 0.6s var(--ease); display:flex; flex-direction:column; }
@@ -960,6 +962,12 @@ img, video, .container, .row{ max-width: 100%; }
                   <label class="tv-field-label" for="inqNotes">Anything we should know?</label>
                   <textarea class="tv-textarea" id="inqNotes" placeholder="Dates you're thinking of, special requests, etc."></textarea>
                 </div>
+                <div class="col-12">
+                  <label class="tv-consent" for="inqConsent">
+                    <input type="checkbox" id="inqConsent">
+                    <span>I consent to Tavari storing and processing the information above so my request can be handled.</span>
+                  </label>
+                </div>
                 <div class="col-12 pt-2">
                   <button type="submit" class="btn-tv-gold w-100 w-md-auto" id="inquirySubmitBtn">
                     <span class="btn-label">Send Request</span>&nbsp; <i class="bi bi-send-fill ms-1"></i>
@@ -1123,8 +1131,12 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
         <div class="filename" id="dropzoneFilename"></div>
         <img id="dropzonePreview" class="tv-dropzone-preview" alt="Receipt preview">
       </div>
-      <input type="file" id="receiptInput" accept="image/*" class="d-none">
-      <div class="tv-stage-actions">
+        <input type="file" id="receiptInput" accept="image/*" class="d-none">
+        <label class="tv-consent" for="bkConsent">
+          <input type="checkbox" id="bkConsent">
+          <span>I consent to Tavari storing the details and receipt above to process my booking.</span>
+        </label>
+        <div class="tv-stage-actions">
         <button class="btn-tv-outline" id="backToStage1Btn" style="flex:0 0 auto;">Back</button>
         <button class="btn-tv-gold flex-fill btn-tv-disabled" id="completeBookingBtn" disabled>
           <span class="btn-label">Complete My Booking</span>
@@ -1933,6 +1945,7 @@ function openBookingDrawer(tripId) {
   document.getElementById("drawerTripDates").textContent = fmtTripDateRange(trip);
   goToStage(1);
   ["bkName","bkPhone","bkEmail"].forEach(id => document.getElementById(id).value="");
+  const bkConsent = document.getElementById("bkConsent"); if (bkConsent) bkConsent.checked = false;
   document.getElementById("bkPersons").value = 1;
   resetReceiptZone(); updatePriceEngine();
   drawer.classList.add("show"); drawerScrim.classList.add("show");
@@ -1999,6 +2012,7 @@ function handleReceiptFile(file) {
 }
 document.getElementById("completeBookingBtn").addEventListener("click", async () => {
   if (!receiptFile||!currentTrip) return;
+  if (!document.getElementById("bkConsent").checked) { showToast("Please accept the data consent to continue.","error"); return; }
   const name=document.getElementById("bkName").value.trim();
   const phone=document.getElementById("bkPhone").value.trim();
   const email=document.getElementById("bkEmail").value.trim();
@@ -2055,6 +2069,7 @@ document.getElementById("inquiryForm").addEventListener("submit", async (e) => {
   const notes=document.getElementById("inqNotes").value.trim();
   if (!name||!phone||!email) { showToast("Please fill in your name, phone, and email.","error"); return; }
   if (!/^\S+@\S+\.\S+$/.test(email)) { showToast("That email address doesn't look quite right.","error"); return; }
+  if (!document.getElementById("inqConsent").checked) { showToast("Please accept the data consent to continue.","error"); return; }
   const btn=document.getElementById("inquirySubmitBtn");
   setButtonLoading(btn,true,"Sending…");
   try {
