@@ -16,7 +16,7 @@ Retrieved 2026-07-09, License - CC BY-SA 3.0
 <link rel="shortcut icon" href="http://sstatic.net/stackoverflow/img/favicon.ico">
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <style>
@@ -163,12 +163,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .reveal-blur{ filter: blur(8px); transform: translateY(18px); } .reveal-blur.in{ filter: blur(0); transform: translateY(0); }
 .parallax{ will-change: transform; }
 .tilt-card{ transform-style: preserve-3d; transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease); }
-.title-line{ position: relative; display:inline-block; overflow:hidden; }
+.title-line{ position: relative; display:inline-block; overflow:hidden; font-family:'Changa One', sans-serif; }
 .title-line::after{ content:""; position:absolute; left:0; bottom:-6px; width:100%; height:1px; background: var(--red-deep); transform: scaleX(0); transform-origin: left; transition: transform 1s var(--ease); }
 .reveal.in .title-line::after{ transform: scaleX(1); }
 .section{ padding: 4.25rem 0; position: relative; scroll-margin-top: 90px; }
 .section-tight{ padding: 4rem 0; }
-.section-title{ font-size: clamp(2rem, 3.6vw, 2.9rem); margin: 0.4rem 0 0; }
+.section-title{color: rgb(201, 54, 0); font-size: clamp(2rem, 3.6vw, 2.9rem); margin: 0.4rem 0 0; }
 .section-title--rabbit{ position: relative;  display: inline-flex; align-items: center; gap: clamp(0.05rem, 0.8vw, 0.35rem); }
 .section-title--rabbit .section-title-icon{ position: static; height: clamp(2.4rem, 9vw, 4.2rem); width: auto; object-fit: contain; margin-right: -1.6rem; transform: translateY(0.06em); }
 .section-head{ max-width: 760px; margin-left:auto; margin-right:auto; margin-bottom: 3rem; text-align: center; }
@@ -205,6 +205,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .gal-caption{ opacity:1; transform:none; }
 }
 
+/* Lightbox is desktop-hidden (no trigger); only shown within the mobile/tablet query below */
+.gal-lightbox{ display: none; }
+
 /* ─── Gallery lightbox (mobile + tablet only) ───────── */
 @media (max-width: 991px){
   .gal-frame{ cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -217,7 +220,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     transition: opacity 0.4s var(--ease);
     -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
   }
-  .gal-lightbox.show{ opacity: 1; pointer-events: auto; }
+  .gal-lightbox.show{ display: flex; opacity: 1; pointer-events: auto; }
   .gal-lightbox-media{ max-width: 100%; max-height: 86vh; display:flex; align-items:center; justify-content:center; }
   .gal-lightbox-media img,
   .gal-lightbox-media video{
