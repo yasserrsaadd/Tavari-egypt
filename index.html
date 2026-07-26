@@ -59,7 +59,7 @@ body{ background:
 ::-webkit-scrollbar-thumb { background: var(--red-deep); border-radius: 5px; border: 2.5px solid var(--ivory-deep); }
 ::-webkit-scrollbar-thumb:hover { background: var(--red); }
 h1,h2,h3,h4,.font-display{ font-family: 'Cormorant Garamond', serif; font-weight: 600; letter-spacing: 0.01em; color: var(--ink); }
-#heroHeadline{ font-family: 'Changa One', sans-serif; font-size: 70px }
+#heroHeadline{ font-family: 'Changa One', sans-serif; font-size: clamp(2.2rem, 5vw, 4.5rem); line-height: 1.1; }
 .eyebrow{ font-family: 'Inter', sans-serif; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red-deep); font-weight: 600; }
 a{ text-decoration:none; color: inherit; }
 ::selection{ background: var(--red-line-strong); color: var(--ink); }
@@ -569,6 +569,7 @@ body.gal-lb-open{ overflow: hidden; }
   .hero-content{ padding-top: 0.5rem; }
   .hero-scroll-cue{ display: none; }
   .hero h1{ font-size: clamp(2.1rem, 9vw, 3rem); line-height: 1.08; margin: 0.5rem 0 1rem; }
+  #heroHeadline{ font-size: clamp(2rem, 9vw, 3rem); line-height: 1.08; }
   .hero p.lede{ font-size: 1rem; line-height: 1.65; margin-bottom: 1.5rem; }
   .hero-cta-row{ gap: 0.7rem; }
   .hero-cta-row .btn-tv-gold,
@@ -629,6 +630,7 @@ body.gal-lb-open{ overflow: hidden; }
   .container{ padding-left: 1.1rem; padding-right: 1.1rem; }
 
   .hero h1{ font-size: clamp(1.9rem, 10vw, 2.5rem); }
+  #heroHeadline{ font-size: clamp(1.8rem, 10vw, 2.5rem); }
   .hero p.lede{ font-size: 0.95rem; }
 
   /* Stack insight labels cleanly */
@@ -653,6 +655,7 @@ body.gal-lb-open{ overflow: hidden; }
 /* Very small phones */
 @media (max-width: 360px){
   .hero h1{ font-size: 1.75rem; }
+  #heroHeadline{ font-size: 1.75rem; }
   .hero-insight-label{ font-size: 8.5px; max-width: 64px; }
   .tv-logo{ height: 54px; }
   .tv-nav.scrolled .tv-logo{ height: 46px; }
