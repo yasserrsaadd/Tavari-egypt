@@ -416,6 +416,42 @@ body.gal-lb-open{ overflow: hidden; }
 .tv-td-hero-dot{ width:9px; height:9px; padding:0; border:none; border-radius:50%; background: rgba(255,255,255,0.5); cursor:pointer; transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
 .tv-td-hero-dot.active{ background:#fff; transform: scale(1.35); }
 .tv-td-hero--single .tv-td-hero-nav, .tv-td-hero--single .tv-td-hero-dots{ display:none; }
+
+/* ─── Accommodation photo slider ───────────────────── */
+.tv-td-acc-photos{ margin-top: 1rem; }
+.tv-td-acc-slider{ position: relative; height: 380px; overflow: hidden; border-radius: var(--radius-card); background:#000; }
+.tv-td-acc-track{ display:flex; height:100%; transition: transform 0.28s var(--ease); will-change: transform; touch-action: pan-y; }
+.tv-td-acc-slide{ flex: 0 0 100%; width:100%; height:100%; }
+.tv-td-acc-slide img{ width:100%; height:100%; object-fit: contain; cursor: zoom-in; -webkit-user-drag: none; user-select: none; }
+.tv-td-acc-nav{ position:absolute; top:50%; transform: translateY(-50%); z-index:3; width:36px; height:36px; border:none; border-radius:50%; background: rgba(255,255,255,0.85); color: var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
+.tv-td-acc-nav:hover{ background:#fff; }
+.tv-td-acc-nav:active{ transform: translateY(-50%) scale(0.94); }
+.tv-td-acc-prev{ left: 0.7rem; }
+.tv-td-acc-next{ right: 0.7rem; }
+.tv-td-acc-nav i{ font-size: 1.1rem; line-height:1; }
+.tv-td-acc-dots{ position:absolute; left:0; right:0; bottom: 0.7rem; z-index:3; display:flex; gap:0.4rem; justify-content:center; align-items:center; }
+.tv-td-acc-dot{ width:8px; height:8px; padding:0; border:none; border-radius:50%; background: rgba(255,255,255,0.5); cursor:pointer; transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
+.tv-td-acc-dot.active{ background:#fff; transform: scale(1.35); }
+.tv-td-acc-slider--single .tv-td-acc-nav, .tv-td-acc-slider--single .tv-td-acc-dots{ display:none; }
+@media (max-width: 600px){
+  .tv-td-acc-slider{ height: 280px; }
+  .tv-td-acc-nav{ width:32px; height:32px; }
+}
+
+/* ─── Accommodation photo lightbox ─────────────────── */
+.tv-td-acc-lightbox{ display:none; }
+@media (max-width: 991px){
+  .tv-td-acc-lightbox{ position:fixed; inset:0; z-index:9999; background: rgba(0,0,0,0.92); display:none; align-items:center; justify-content:center; opacity:0; transition: opacity 0.2s ease; }
+  .tv-td-acc-lightbox.show{ display:flex; opacity:1; }
+  .tv-td-acc-lb-close{ position:absolute; top:1rem; right:1rem; z-index:3; width:44px; height:44px; border:none; border-radius:50%; background: rgba(255,255,255,0.15); color:#fff; font-size:1.3rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition: background 0.2s ease; }
+  .tv-td-acc-lb-close:hover{ background: var(--red); }
+  .tv-td-acc-lb-nav{ position:absolute; top:50%; transform:translateY(-50%); z-index:3; width:48px; height:48px; border:none; border-radius:50%; background: rgba(255,255,255,0.15); color:#fff; font-size:1.4rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition: background 0.2s ease; }
+  .tv-td-acc-lb-nav:hover{ background: rgba(255,255,255,0.3); }
+  .tv-td-acc-lb-prev{ left:1rem; }
+  .tv-td-acc-lb-next{ right:1rem; }
+  .tv-td-acc-lb-img{ max-width:100%; max-height:86vh; object-fit:contain; border-radius: 8px; }
+  .tv-td-acc-lb-counter{ position:absolute; bottom:1.2rem; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.7); font-size:0.85rem; }
+}
 .tv-td-hero-text{ position:absolute; left: 2rem; right: 2rem; bottom: 1.4rem; z-index: 2; color:#fff; pointer-events:none; }
 .tv-td-hero-text h2{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 2.4rem; line-height:1.05; margin:0; text-shadow: 0 2px 18px rgba(0,0,0,0.35); }
 .tv-td-hero-text .tv-td-dates{ font-size: 0.85rem; letter-spacing:0.05em; opacity:0.92; margin-top:0.4rem; }
@@ -1162,6 +1198,14 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
   </div>
 </div>
 
+<div class="tv-td-acc-lightbox" id="tdAccLightbox">
+  <button class="tv-td-acc-lb-close" id="tdAccLbClose" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+  <button class="tv-td-acc-lb-nav tv-td-acc-lb-prev" id="tdAccLbPrev" aria-label="Previous"><i class="bi bi-chevron-left"></i></button>
+  <img class="tv-td-acc-lb-img" id="tdAccLbImg" src="" alt="Accommodation photo">
+  <button class="tv-td-acc-lb-nav tv-td-acc-lb-next" id="tdAccLbNext" aria-label="Next"><i class="bi bi-chevron-right"></i></button>
+  <div class="tv-td-acc-lb-counter" id="tdAccLbCounter"></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -1415,6 +1459,7 @@ const FALLBACK_TRIPS = [
       { day:3, title:"Mountain of the Dead", details:"We climb to the Mountain of the Dead to explore Pharaonic and Greco-Roman tombs carved into the cliffs, then wander the crumbling mud-brick lanes of Shali Fortress. As night falls we gather around the campfire for mint tea, music, and a final stargazing session before your transfer back." }
     ],
     accommodation:"Boutique eco-lodge with private desert-view rooms, a palm-shaded pool, and half-board meals of local Siwi cuisine.",
+    accommodation_photos:["https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=800&auto=format&fit=crop","https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=800&auto=format&fit=crop","https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=800&auto=format&fit=crop"],
     solo_message:"Traveling solo? No problem — over 80% of our Siwa travellers journey on their own and leave with lifelong friends.",
     included:["Private 4x4 desert tours","All breakfasts & dinners","Boutique eco-lodge stay","Expert local guide","Airport transfers"],
     excluded:["Flights to Marsa Matruh","Personal expenses","Travel insurance","Optional spa treatments"],
@@ -1432,6 +1477,7 @@ const FALLBACK_TRIPS = [
       { day:3, title:"Sinai Highlands", details:"A Bedouin-led hike into the coloured canyons with shaded breaks and sweet tea, ending in a starlit beach barbecue. We roll back into town under the stars, with transfers arranged the next morning." }
     ],
     accommodation:"Sea-view boutique hotel with daily breakfast, a rooftop lounge, and secure dive lockers.",
+    accommodation_photos:["https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&w=800&auto=format&fit=crop","https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=800&auto=format&fit=crop","https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=800&auto=format&fit=crop"],
     solo_message:"Traveling solo? No problem — over 80% of our Dahab travellers come alone and pair up with buddies on day one.",
     included:["Daily guided dives/snorkelling","Sea-view hotel stay","Bedouin canyon hike","All breakfasts","Equipment rental"],
     excluded:["Flights to Sharm El Sheikh","Personal diving certification fees","Lunches & dinners","Tips"],
@@ -1714,7 +1760,7 @@ bindGalleryLightbox();
 const tripDetailScrim = document.getElementById("tripDetailScrim");
 const tripDetailModal = tripDetailScrim.querySelector(".tv-trip-detail-modal");
 function tvEsc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-function closeTripDetails(){ tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
+function closeTripDetails(){ closeAccLightbox(); tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
 document.getElementById("tripDetailClose").addEventListener("click", closeTripDetails);
 tripDetailScrim.addEventListener("click", (e) => { if (e.target===tripDetailScrim) closeTripDetails(); });
 document.addEventListener("keydown", (e) => { if (e.key==="Escape" && tripDetailScrim.classList.contains("show")) closeTripDetails(); });
@@ -1854,7 +1900,69 @@ function initTripHeroSlider(){
   window.__heroSliderGo = bindSlider(track, prev, next, dots);
 }
 
+/* ─── Accommodation slider + lightbox ──────────────── */
+let __accLbImgs = [], __accLbIdx = 0;
+
+function initAccSlider(){
+  const track = document.getElementById("tdAccTrack");
+  if (!track) return;
+  const prev = document.getElementById("tdAccPrev");
+  const next = document.getElementById("tdAccNext");
+  const dots = document.getElementById("tdAccDots");
+  bindSlider(track, prev, next, dots);
+
+  /* Collect photo URLs for lightbox */
+  __accLbImgs = Array.from(track.querySelectorAll("img"))?.map(img => img.dataset.full || img.src) || [];
+
+  track.addEventListener("click", (e) => {
+    const img = e.target.closest("img");
+    if (!img) return;
+    const idx = __accLbImgs.indexOf(img.dataset.full || img.src);
+    openAccLightbox(idx >= 0 ? idx : 0);
+  });
+}
+
+function openAccLightbox(idx){
+  if (!__accLbImgs.length) return;
+  __accLbIdx = idx;
+  const lb = document.getElementById("tdAccLightbox");
+  const lbImg = document.getElementById("tdAccLbImg");
+  const lbCounter = document.getElementById("tdAccLbCounter");
+  lbImg.src = __accLbImgs[__accLbIdx];
+  lbCounter.textContent = `${__accLbIdx+1} / ${__accLbImgs.length}`;
+  lb.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function closeAccLightbox(){
+  const lb = document.getElementById("tdAccLightbox");
+  lb.classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+function stepAccLbRb(dir){
+  if (!__accLbImgs.length) return;
+  __accLbIdx = (__accLbIdx + dir + __accLbImgs.length) % __accLbImgs.length;
+  const lbImg = document.getElementById("tdAccLbImg");
+  const lbCounter = document.getElementById("tdAccLbCounter");
+  lbImg.src = __accLbImgs[__accLbIdx];
+  lbCounter.textContent = `${__accLbIdx+1} / ${__accLbImgs.length}`;
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest("#tdAccLbClose")) closeAccLightbox();
+  if (e.target.closest("#tdAccLbPrev")) stepAccLbRb(-1);
+  if (e.target.closest("#tdAccLbNext")) stepAccLbRb(1);
+});
+
 document.addEventListener("keydown", (e) => {
+  const lb = document.getElementById("tdAccLightbox");
+  if (lb && lb.classList.contains("show")){
+    if (e.key === "Escape") closeAccLightbox();
+    if (e.key === "ArrowLeft") stepAccLbRb(-1);
+    if (e.key === "ArrowRight") stepAccLbRb(1);
+    return;
+  }
   if (!tripDetailScrim.classList.contains("show")) return;
   if (e.key==="ArrowLeft" && window.__heroSliderGo) window.__heroSliderGo(-1);
   if (e.key==="ArrowRight" && window.__heroSliderGo) window.__heroSliderGo(1);
@@ -1909,7 +2017,7 @@ function openTripDetails(tripId){
     <div class="tv-td-body">
       ${t.description?`<div class="tv-td-section"><h3><i class="bi bi-info-circle"></i> About this trip</h3><p>${tvEsc(t.description)}</p></div>`:""}
       ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> Day by day</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
-      ${t.accommodation?`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p></div>`:""}
+      ${t.accommodation?(()=>{const accImgs=(t.accommodation_photos&&t.accommodation_photos.length)?t.accommodation_photos:[];return`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p>${accImgs.length?`<div class="tv-td-acc-photos"><div class="tv-td-acc-slider${accImgs.length<=1?' tv-td-acc-slider--single':''}" id="tdAccSlider"><div class="tv-td-acc-track" id="tdAccTrack">${accImgs.map((src,i)=>`<div class="tv-td-acc-slide"><img src="${src}" alt="Accommodation photo ${i+1}" ${i?'loading="lazy"':''} data-full="${src}"></div>`).join("")}</div><button class="tv-td-acc-nav tv-td-acc-prev" id="tdAccPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button><button class="tv-td-acc-nav tv-td-acc-next" id="tdAccNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button><div class="tv-td-acc-dots" id="tdAccDots">${accImgs.map((_,i)=>`<button class="tv-td-acc-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div></div></div>`:""}</div>`;})():""}
        <div class="tv-td-section"><h3><i class="bi bi-clipboard-check"></i> What's included &amp; excluded</h3>
         <div class="tv-td-cols">
           <div><div class="eyebrow mb-2">Included</div>${bullets(included,"included")}</div>
@@ -1930,6 +2038,7 @@ function openTripDetails(tripId){
   document.body.style.overflow = "hidden";
   tripDetailModal.scrollTop = 0;
   initTripHeroSlider();
+  initAccSlider();
 }
 
 /* BOOKING DRAWER */
