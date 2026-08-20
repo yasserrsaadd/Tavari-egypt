@@ -1,0 +1,9 @@
+# Raw source media (keep locally, don't commit)
+Videos/Hero section.mov
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.log
+.vscode/*
+!.vscode/extensions.json

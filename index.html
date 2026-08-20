@@ -7,13 +7,7 @@
 <meta name="description" content="Tavari Egypt is a premier luxury travel atelier crafting bespoke trips across the Sahara and the Red Sea.">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="icon" type="image/png" href="images/logo-01.png"><!--
-Source - https://stackoverflow.com/a/4888458
-Posted by Gustavo Costa De Oliveira, modified by community. See post 'Timeline' for change history
-Retrieved 2026-07-09, License - CC BY-SA 3.0
--->
-
-<link rel="shortcut icon" href="http://sstatic.net/stackoverflow/img/favicon.ico">
+<link rel="icon" type="image/png" href="images/logo-01.png">
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Changa+One&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -68,8 +62,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .glass-strong{ background: var(--glass-strong); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--glass-border); border-radius: var(--radius-card); }
 .horizon{ position: relative; height: 1px; background: linear-gradient(90deg, transparent, var(--red-line-strong) 50%, transparent); }
 .horizon::before{ content:""; position:absolute; top:-1.5px; left:50%; width:6px; height:4px; background: var(--red); border-radius: 2px; transform: translateX(-50%); box-shadow: 0 0 12px 2px rgba(224,72,59,0.45); }
-.tv-nav{ position: fixed; top: 0; left: 0; right: 0; z-index: 1101; padding: 26px 0; transition: padding 0.5s var(--ease), background 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.5s var(--ease); background: transparent; border-bottom: 1px solid transparent; }
+.tv-nav{ position: fixed; top: 0; left: 0; right: 0; z-index: 1101; padding: 26px 0; transition: top 0.55s var(--ease), padding 0.5s var(--ease), background 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.5s var(--ease); background: transparent; border-bottom: 1px solid transparent; }
 .tv-nav.scrolled{ padding: 14px 0; background: rgba(251,253,255,0.78); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--red-line-strong); box-shadow: 0 8px 30px -16px rgba(22,38,59,0.15); }
+@media (min-width: 992px){
+  .tv-nav{ top: 0; padding: 9px 0; }
+  .tv-nav.scrolled{ top: 0; padding: 14px 0; }
+}
 .tv-nav .container{ display:flex; align-items:center; justify-content: space-between; }
 .tv-brand{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 1.5rem; letter-spacing: 0.04em; display:flex; align-items:center; gap: 10px; transition: font-size 0.5s var(--ease); text-decoration: none; position: relative; }
 .tv-nav.scrolled .tv-brand{ font-size: 1.3rem; }
@@ -112,6 +110,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .tv-scrim.show{ opacity:1; pointer-events:auto; }
 .hero{ position: relative; height: 100vh; min-height: 640px; display:flex; align-items:center; overflow:hidden; background: #3A1410; }
 .hero-video-layer{ position:absolute; inset:-10%; z-index: 0; will-change: transform; transition: transform 0.15s linear; }
+.hero-bg-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index: 0; background: #3A1410; }
+.hero-video-controls{ position:absolute; bottom: 34px; right: 34px; z-index: 3; display:flex; gap: 0.6rem; }
+.hero-video-controls.is-hidden{ display:none; }
 .hero-slides{ position:absolute; inset:0; z-index: 0; }
 .hero-slide{ position:absolute; inset:0; opacity:0; transform: scale(1.18); filter: blur(6px); transition: opacity 1.6s var(--ease), transform 9s var(--ease), filter 1.6s var(--ease); will-change: opacity, transform, filter; }
 .hero-slide img{ width:100%; height:100%; object-fit: cover; display:block; }
@@ -788,11 +789,10 @@ img, video, .container, .row{ max-width: 100%; }
 
 <header class="hero" id="tvHero">
   <div class="hero-video-layer" id="heroVideoLayer">
-    <div class="hero-slides" id="heroSlides">
-      <div class="hero-slide is-active"><img src="images/Hero background 3.PNG" alt="Egyptian desert landscape at golden hour" loading="eager"></div>
-      <div class="hero-slide"><img src="images/Hero background 1.PNG" alt="Scenic travel destination" loading="lazy"></div>
-      <div class="hero-slide"><img src="images/Hero background 2.PNG" alt="Tavari travel backdrop" loading="lazy"></div>
-    </div>
+    <video class="hero-bg-video" id="heroBgVideo" autoplay muted loop playsinline preload="auto" poster="images/hero-poster.jpg" aria-hidden="true">
+      <source src="Videos/hero-background.webm" type="video/webm">
+      <source src="Videos/hero-background.mp4" type="video/mp4">
+    </video>
   </div>
   <div class="hero-glow" id="heroGlow"></div>
   <div class="container hero-content">
@@ -817,10 +817,8 @@ img, video, .container, .row{ max-width: 100%; }
       </div>
     </div>
   </div>
-  <div class="hero-dots" id="heroDots"></div>
   <div class="hero-video-controls">
-    <button class="hero-vctrl" id="heroPrev" aria-label="Previous slide">&#10094;</button>
-    <button class="hero-vctrl" id="heroNext" aria-label="Next slide">&#10095;</button>
+    <button class="hero-vctrl" id="heroMuteBtn" type="button" aria-label="Unmute video" aria-pressed="false"><i class="bi bi-volume-mute-fill" aria-hidden="true"></i></button>
   </div>
  
 </header>
@@ -854,7 +852,7 @@ img, video, .container, .row{ max-width: 100%; }
   <div class="container">
     <div class="section-head reveal tv-rabbit-head text-center">
       <p class="eyebrow">Active Trips</p>
-      <h2 class="section-title section-title--rabbit"><img src="images/character Icon.png" alt="" class="section-title-icon" aria-hidden="true"><span class="title-line">Choose your Trip.</span></h2>
+      <h2 class="section-title section-title--rabbit"><img src="images/character-icon.png" alt="" class="section-title-icon" aria-hidden="true"><span class="title-line">Choose your Trip.</span></h2>
     </div>
     <div class="row g-4" id="tripsGrid">
       <div class="col-md-6 col-lg-4"><div class="trips-skeleton"></div></div>
@@ -871,7 +869,7 @@ img, video, .container, .row{ max-width: 100%; }
     <div class="row align-items-center g-5">
       <div class="col-lg-5 reveal reveal-left">
         <div class="about-photo-wrap parallax" data-parallax-speed="0.08">
-          <img src="images/Hero background 1.PNG" alt="Editorial photograph of the Egyptian desert landscape at golden hour">
+          <img src="images/hero-background-1.png" alt="Editorial photograph of the Egyptian desert landscape at golden hour">
         </div>
       </div>
       <div class="col-lg-7 reveal reveal-right reveal-d2 text-center">
@@ -1389,6 +1387,34 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
   if (nextBtn) nextBtn.addEventListener("click", () => goTo(current + 1, true));
   if (slides.length > 1) restart();
 
+  /* Hero background video: mute/unmute + reduced-motion / data-saver handling */
+  const bgVideo = document.getElementById("heroBgVideo");
+  const muteBtn = document.getElementById("heroMuteBtn");
+  const controlsWrap = document.querySelector(".hero-video-controls");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const saveData = !!(navigator.connection && navigator.connection.saveData);
+  if (bgVideo) {
+    if (reduceMotion || saveData) {
+      bgVideo.removeAttribute("autoplay");
+      bgVideo.pause();
+      if (controlsWrap) controlsWrap.classList.add("is-hidden");
+    } else {
+      const tryPlay = () => bgVideo.play().catch(() => {});
+      tryPlay();
+      if (muteBtn) {
+        muteBtn.addEventListener("click", () => {
+          bgVideo.muted = !bgVideo.muted;
+          muteBtn.setAttribute("aria-pressed", String(!bgVideo.muted));
+          muteBtn.setAttribute("aria-label", bgVideo.muted ? "Unmute video" : "Mute video");
+          muteBtn.innerHTML = bgVideo.muted
+            ? '<i class="bi bi-volume-mute-fill" aria-hidden="true"></i>'
+            : '<i class="bi bi-volume-up-fill" aria-hidden="true"></i>';
+          if (!bgVideo.muted) tryPlay();
+        });
+      }
+    }
+  }
+
   const isTouch = window.matchMedia("(pointer: coarse)").matches;
   if (!isTouch) {
     hero.addEventListener("mousemove", (e) => {
@@ -1504,7 +1530,7 @@ const FALLBACK_TRIPS = [
 ];
 const FALLBACK_GALLERY = [
   { media_url:"https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1200&auto=format&fit=crop", destination:"Hurghada", title:"Red Sea Escape" },
-  { media_url:"Videos/Hero Background Video.mp4", is_video:true, destination:"Tavari", title:"On The Road" },
+  { media_url:"Videos/hero-background-video.mp4", is_video:true, destination:"Tavari", title:"On The Road" },
   { media_url:"https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop", destination:"Siwa", title:"Oasis of Silence" },
   { media_url:"https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop", destination:"Sinai", title:"Mountain & Reef" },
   { media_url:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop", destination:"Desert", title:"Desert Dunes" },
@@ -1620,7 +1646,7 @@ async function loadGalleryStrip() {
   }
   const norm = (p) => ({
     url: p.media_url || p.image_url || (p.image_urls && p.image_urls[0]) || "",
-    cap: p.destination || p.title || "",
+      cap: p.caption || p.destination || p.title || "",
     isVideo: !!(p.is_video)
   });
   const photos = items.map(norm).filter(p => p.url);
@@ -2238,7 +2264,7 @@ successScrim.addEventListener("click", (e) => { if(e.target===successScrim){succ
 <div class="tv-road" aria-hidden="true" id="tvRoad">
   <div class="tv-road-fill" id="tvRoadFill"></div>
   <div class="tv-road-car" id="tvRoadCar">
-    <img src="images/Car%20(1).png" alt="" class="tv-road-car-img" width="48" height="26" decoding="async">
+    <img src="images/car-1.png" alt="" class="tv-road-car-img" width="48" height="26" decoding="async">
   </div>
 </div>
 
