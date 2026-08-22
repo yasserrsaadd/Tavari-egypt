@@ -55,6 +55,12 @@ body{ background:
 ::-webkit-scrollbar-thumb:hover { background: var(--red); }
 h1,h2,h3,h4,.font-display{ font-family: 'Cormorant Garamond', serif; font-weight: 600; letter-spacing: 0.01em; color: var(--ink); }
 #heroHeadline{ font-family: 'Changa One', sans-serif; font-size: 29px; line-height: 1.1; }
+@media (max-width: 991px){
+  #heroHeadline{ font-size: 23px; }
+}
+@media (max-width: 575px){
+  #heroHeadline{ font-size: 23px; }
+}
 .eyebrow{ font-family: 'Inter', sans-serif; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red-deep); font-weight: 600; }
 a{ text-decoration:none; color: inherit; }
 ::selection{ background: var(--red-line-strong); color: var(--ink); }
@@ -131,6 +137,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .tv-nav .container{ padding-left: 0; padding-right: 0; }
   .tv-nav-cta-desktop{ margin-right: clamp(8px, 1.5vw, 24px); }
   .hero h1{ white-space: nowrap; max-width: none; font-size: clamp(1.4rem, 2.3vw, 2rem); }
+  .hero p.lede{ max-width: none; width: 100%; font-size: 1.02rem; }
 }
 .hero .eyebrow{ color: #3E7FCB; font-weight: 600; letter-spacing: 0.24em; opacity:0; animation: heroFadeUp 1s var(--ease) 0.2s forwards; }
 .hero h1{ font-size: clamp(2.6rem, 6vw, 5.1rem); line-height: 1.04; margin: 0.6rem 0 1.3rem; overflow: hidden; color: rgb(82, 0, 0); }
@@ -139,6 +146,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @keyframes heroFadeUp{ from{ opacity:0; transform: translateY(16px); } to{ opacity:1; transform: translateY(0); } }
 .hero h1 em{ font-style: italic; color: #B33025; }
 .hero p.lede{ font-size: 1.2rem; color: #fbf9f9; font-weight: 600; max-width: 540px; margin-bottom: 2.1rem; line-height: 1.6; opacity:0; animation: heroFadeUp 1s var(--ease) 0.9s forwards; text-wrap: balance; }
+@media (min-width: 992px){
+  .hero p.lede{ max-width: 620px; width: 100%; font-size: 1.05rem; white-space: normal; text-wrap: balance; }
+}
 .hero .btn-tv-outline{ background: rgba(251,253,255,0.42); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-color: rgba(22,38,59,0.28); box-shadow: 0 8px 24px -16px rgba(22,38,59,0.22); }
 .hero .btn-tv-outline:hover{ background: var(--red); border-color: var(--red); }
 .hero-cta-row{ display:flex; gap: 1rem; flex-wrap:wrap; align-items:center; opacity:0; animation: heroFadeUp 1s var(--ease) 1.15s forwards; }
@@ -584,6 +594,9 @@ body.gal-lb-open{ overflow: hidden; }
 
 /* Large phones */
 @media (max-width: 767px){
+  .mt-3{ font-size: 2rem !important; line-height: 1.6 !important; }
+  p.mt-3{ font-size: 0.5rem !important; line-height: 1.6 !important; }
+  p.about-quote{ font-size: 0.5rem !important; line-height: 1.6 !important; }
   .section{ padding: 4rem 0 1.75rem; }
   .section-head{ margin-bottom: 1.4rem; }
   .section-title{ font-size: 1.7rem; }
@@ -612,7 +625,7 @@ body.gal-lb-open{ overflow: hidden; }
   .hero::after,
   .hero-glow{ display: none; }
   .hero h1{ font-size: clamp(2.1rem, 9vw, 3rem); line-height: 1.08; margin: 0.5rem 0 1rem; }
-  .hero p.lede{ line-height: 1.6; margin-bottom: 1.5rem; }
+  .hero p.lede{ font-size: 1.02rem; line-height: 1.6; margin-bottom: 1.5rem; }
   .hero-cta-row{ gap: 0.7rem; }
   .hero-cta-row .btn-tv-gold,
   .hero-cta-row .btn-tv-outline{ flex: 1 1 auto; min-width: 140px; justify-content: center; }
@@ -680,10 +693,11 @@ body.gal-lb-open{ overflow: hidden; }
   .section{ padding: 3.28rem 0 1.5rem; }
   .section-title{ font-size: 1.4rem; }
   .container{ padding-left: 1.1rem; padding-right: 1.1rem; }
+  .mt-3{ font-size: 0.9rem !important; line-height: 1.55 !important; }
 
   .hero{ padding-top: 12rem; }
   .hero h1{ font-size: clamp(1.5rem, 7.5vw, 1.9rem); }
-  .hero p.lede{ font-size: 1rem; }
+  .hero p.lede{ font-size: 0.8rem; }
   .hero-insights{ margin-top: 3rem; }
 
   /* Stack insight labels cleanly */
@@ -709,7 +723,7 @@ body.gal-lb-open{ overflow: hidden; }
 @media (max-width: 360px){
   .hero{ padding-top: 13rem; }
   .hero h1{ font-size: 1.3rem; line-height: 1.03; margin: 0.3rem 0 0.6rem; }
-  .hero p.lede{ font-size: 0.88rem; margin-bottom: 0.9rem; }
+  .hero p.lede{ font-size: 0.85rem; margin-bottom: 0.9rem; }
   .hero-cta-row{ gap: 0.5rem; }
   .hero-cta-row .btn-tv-gold,
   .hero-cta-row .btn-tv-outline{ padding: 0.6rem 0.9rem; font-size: 0.85rem; }
@@ -724,7 +738,7 @@ body.gal-lb-open{ overflow: hidden; }
 @media (min-width: 400px) and (max-width: 480px){
   .hero{ padding-top: 5rem; }
   .hero h1{ font-size: clamp(2rem, 5.2vw, 2.4rem); }
-  .hero p.lede{ font-size: 1.1rem; }
+  .hero p.lede{ font-size: 1rem; }
   .hero-insights{ margin-top: 4rem; }
 }
 
@@ -847,9 +861,9 @@ img, video, .container, .row{ max-width: 100%; }
   <div class="hero-glow" id="heroGlow"></div>
   <div class="container hero-content">
     <div class="row">
-      <div class="col-lg-10">
+      <div class="col-lg-12">
         <h1 id="heroHeadline" aria-label="More than a trip — every Journey has a story."></h1>
-        <p class="lede">Every Very adventure is thoughtfully designed to combine quality, energy, and a welcoming community where strangers become lifelong friends. You won't just return with photos, you'll return with stories, connections, and great memories.</p>
+        <p class="lede">Discover unforgettable adventures, meet amazing people, and create stories that stay with you long after the journey ends.</p>
         <div class="hero-cta-row">
           <a href="#trips" class="btn-tv-gold">Explore trips</a>
           <a href="#about" class="btn-tv-outline">About us</a>
