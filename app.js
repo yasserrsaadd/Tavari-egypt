@@ -300,6 +300,15 @@ function fmtTripDateRange(t) {
   }
   return t.dates_label||"Dates on request";
 }
+function fmtDuration(t) {
+  if (t.duration && String(t.duration).trim()) return String(t.duration).trim();
+  const sd = parseLocalDate(t.start_date), ed = parseLocalDate(t.end_date);
+  if (sd && ed && !isNaN(ed) && ed >= sd) {
+    const days = Math.round((ed - sd) / 86400000) + 1;
+    return days + (days === 1 ? " day" : " days");
+  }
+  return "";
+}
 function parseLocalDate(s) {
   if (typeof s!=="string"||!s) return null;
   const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -328,6 +337,7 @@ function renderTrips(trips) {
   grid.innerHTML = trips.map((t,i) => {
     const imgs = (t.image_urls && t.image_urls.length) ? t.image_urls : ["https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=1200&auto=format&fit=crop"];
     const dates = fmtTripDateRange(t);
+    const duration = fmtDuration(t);
     return `<div class="col-md-6 col-lg-4 reveal reveal-d${Math.min((i%3)+1,5)}">
       <div class="trip-card">
         <div class="trip-thumb-wrap ${imgs.length<=1?'trip-thumb-wrap--single':''}">
@@ -343,6 +353,7 @@ function renderTrips(trips) {
         <div class="trip-body">
           <h3>${t.title}</h3>
           <div class="trip-dates"><i class="bi bi-calendar3"></i> ${dates}</div>
+          ${duration?`<div class="trip-duration"><i class="bi bi-clock"></i> ${duration}</div>`:""}
           <div class="trip-actions">
             <button class="btn-trip-secondary" type="button" data-action="details" data-trip="${t.id}"><i class="bi bi-info-circle"></i> Show Details</button>
             <button class="btn-trip-primary" type="button" data-action="book" data-trip="${t.id}">Book now</button>
@@ -599,7 +610,7 @@ function bindReviewsSlider(){
   goTo(0);
 }
 
-function bindSlider(track, prev, next, dotsWrap){
+function bindSlider(track, prev, next, dotsWrap, onChange){
   if (!track) return null;
   const slides = track.children.length;
   if (slides <= 1) return null;
@@ -609,6 +620,7 @@ function bindSlider(track, prev, next, dotsWrap){
     idx = (i + slides) % slides;
     track.style.transform = `translateX(-${idx*100}%)`;
     dots.forEach((d,k) => d.classList.toggle("active", k===idx));
+    if (onChange) onChange(idx);
   }
   if (prev) prev.addEventListener("click", () => goTo(idx-1));
   if (next) next.addEventListener("click", () => goTo(idx+1));
@@ -673,10 +685,21 @@ let __accLbImgs = [], __accLbIdx = 0;
 function initAccSlider(){
   const track = document.getElementById("tdAccTrack");
   if (!track) return;
+  const slider = document.getElementById("tdAccSlider");
   const prev = document.getElementById("tdAccPrev");
   const next = document.getElementById("tdAccNext");
   const dots = document.getElementById("tdAccDots");
-  bindSlider(track, prev, next, dots);
+  let accIdx = 0;
+  function syncAccHeight(){
+    const slide = track.children[accIdx];
+    const img = slide && slide.querySelector("img");
+    if (img && slider) slider.style.height = img.clientHeight + "px";
+  }
+  bindSlider(track, prev, next, dots, (i) => { accIdx = i; syncAccHeight(); });
+  Array.from(track.querySelectorAll("img")).forEach(img => {
+    if (!img.complete) img.addEventListener("load", syncAccHeight);
+  });
+  syncAccHeight();
 
   /* Collect photo URLs for lightbox */
   __accLbImgs = Array.from(track.querySelectorAll("img"))?.map(img => img.dataset.full || img.src) || [];
@@ -740,6 +763,7 @@ function openTripDetails(tripId){
   if (!t) { showToast("Trip details are unavailable right now.","error"); return; }
   const imgs = (t.image_urls && t.image_urls.length) ? t.image_urls : [];
   const dates = fmtTripDateRange(t);
+  const duration = fmtDuration(t);
   const price = fmtMoney(t.base_price) + " / person";
   const solo = t.solo_message || "Traveling solo? No problem — over 80% of our travellers journey on their own. You'll be in great company.";
   const itin = (t.itinerary && Array.isArray(t.itinerary)) ? t.itinerary : [];
@@ -750,11 +774,17 @@ function openTripDetails(tripId){
   const refund = t.refund_policy || "";
   const pdf = (t.pdf_url && t.pdf_url!=="#") ? t.pdf_url : null;
 
-  const itinHtml = itin.length ? itin.map(d => `
+  const itinHtml = itin.length ? itin.map(d => {
+    const pts = (d.points && Array.isArray(d.points)) ? d.points.filter(Boolean) : [];
+    const body = pts.length
+      ? `<ul class="tv-td-bullets day-points">` + pts.map(p=>`<li><i class="bi bi-dot"></i><span>${tvEsc(p)}</span></li>`).join("") + `</ul>`
+      : (d.details ? `<div class="d-details">${tvEsc(d.details)}</div>` : "");
+    return `
     <div class="tv-td-day">
-      <div><span class="d-day">Day ${tvEsc(d.day)}</span><span class="d-title">${tvEsc(d.title||"")}</span></div>
-      <div class="d-details">${tvEsc(d.details||"")}</div>
-    </div>`).join("") : `<p>Full day-by-day itinerary coming soon.</p>`;
+      <div class="d-head"><span class="d-day">Day ${tvEsc(d.day)}</span><span class="d-title">${tvEsc(d.title||"")}</span></div>
+      ${body}
+    </div>`;
+  }).join("") : `<p>Full day-by-day itinerary coming soon.</p>`;
 
   const bullets = (arr, cls) => arr.length
     ? `<ul class="tv-td-bullets ${cls}">` + arr.map(x => `<li><i class="bi ${cls==="included"?"bi-check-circle-fill":"bi-x-circle-fill"}"></i><span>${tvEsc(x)}</span></li>`).join("") + `</ul>`
@@ -775,13 +805,16 @@ function openTripDetails(tripId){
       <button class="tv-td-hero-nav tv-td-hero-prev" id="tdHeroPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
       <button class="tv-td-hero-nav tv-td-hero-next" id="tdHeroNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
       <div class="tv-td-hero-dots" id="tdHeroDots">${imgs.map((_,i)=>`<button class="tv-td-hero-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div>
-      <div class="tv-td-hero-text">
-        <h2>${tvEsc(t.title)}</h2>
-        <div class="tv-td-dates"><i class="bi bi-calendar3"></i> ${tvEsc(dates)}</div>
-        <span class="tv-td-price">${tvEsc(price)}</span>
-      </div>
     </div>
     <div class="tv-td-body">
+      <div class="tv-td-head">
+        <h2>${tvEsc(t.title)}</h2>
+        <div class="tv-td-meta">
+          <span class="tv-td-dates"><i class="bi bi-calendar3"></i> ${tvEsc(dates)}</span>
+          ${duration?`<span class="tv-td-duration"><i class="bi bi-clock"></i> ${tvEsc(duration)}</span>`:""}
+        </div>
+        <span class="tv-td-price">${tvEsc(price)}</span>
+      </div>
       ${t.description?`<div class="tv-td-section"><h3><i class="bi bi-info-circle"></i> About this trip</h3><p>${tvEsc(t.description)}</p></div>`:""}
       ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> Day by day</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
       ${t.accommodation?(()=>{const accImgs=(t.accommodation_photos&&t.accommodation_photos.length)?t.accommodation_photos:[];return`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p>${accImgs.length?`<div class="tv-td-acc-photos"><div class="tv-td-acc-slider${accImgs.length<=1?' tv-td-acc-slider--single':''}" id="tdAccSlider"><div class="tv-td-acc-track" id="tdAccTrack">${accImgs.map((src,i)=>`<div class="tv-td-acc-slide"><img src="${src}" alt="Accommodation photo ${i+1}" ${i?'loading="lazy"':''} data-full="${src}"></div>`).join("")}</div><button class="tv-td-acc-nav tv-td-acc-prev" id="tdAccPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button><button class="tv-td-acc-nav tv-td-acc-next" id="tdAccNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button><div class="tv-td-acc-dots" id="tdAccDots">${accImgs.map((_,i)=>`<button class="tv-td-acc-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div></div></div>`:""}</div>`;})():""}
@@ -1086,4 +1119,45 @@ document.addEventListener("click", (e) => {
     /* never let the car logic break the rest of the page */
     if (window.console) console.warn("Scroll car disabled:", err);
   }
+})();
+
+/* ─── Copy payment numbers to clipboard ───────────── */
+(function () {
+  async function copyText(text) {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (e) { /* fall through to legacy path */ }
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      const ok = document.execCommand("copy");
+      ta.remove();
+      return ok;
+    } catch (e) { return false; }
+  }
+
+  document.querySelectorAll(".tv-copy-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const text = btn.getAttribute("data-copy") || "";
+      const ok = await copyText(text);
+      const icon = btn.querySelector("i");
+      if (ok) {
+        const prevClass = icon.className;
+        btn.classList.add("copied");
+        icon.className = "bi bi-check-lg";
+        showToast("Number copied to clipboard", "success", 2000);
+        setTimeout(() => { btn.classList.remove("copied"); icon.className = prevClass; }, 1800);
+      } else {
+        showToast("Could not copy number", "error");
+      }
+    });
+  });
 })();

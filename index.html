@@ -265,7 +265,8 @@ body.gal-lb-open{ overflow: hidden; }
 .trip-thumb-wrap--single .trip-thumb-nav, .trip-thumb-wrap--single .trip-thumb-dots{ display:none; }
 .trip-body{ padding: 1.5rem; flex:1; display:flex; flex-direction:column; }
 .trip-body h3{ font-size: 1.45rem; margin: 0 0 0.3rem; }
-.trip-dates{ font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 1.1rem; display:flex; align-items:center; gap:0.4rem; }
+.trip-dates{ font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 0.35rem; display:flex; align-items:center; gap:0.4rem; }
+.trip-duration{ font-size: 0.8rem; color: var(--ink-soft); margin-bottom: 1.1rem; display:flex; align-items:center; gap:0.4rem; }
 .trip-actions{ margin-top: auto; display:flex; gap:0.7rem; flex-wrap:wrap; }
 .btn-trip-secondary{ flex:1; min-width: 130px; border: 1px solid var(--red-line-strong); color: var(--ink); background: transparent; font-size: 0.78rem; letter-spacing: 0.04em; padding: 0.65rem 0.9rem; border-radius: var(--radius-btn); text-align:center; display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; min-height: 44px; transition: background 0.4s var(--ease), color 0.4s var(--ease), border-color 0.4s var(--ease); }
 .btn-trip-secondary:hover{ background: var(--red-soft); border-color: var(--red); color: var(--red-deep); }
@@ -343,6 +344,11 @@ body.gal-lb-open{ overflow: hidden; }
 .tv-pay-row{ display:flex; align-items:center; gap: 0.9rem; padding: 0.9rem 1rem; border: 1px solid var(--red-line-strong); border-radius: var(--radius-input); margin-bottom: 0.8rem; font-size: 0.9rem; }
 .tv-pay-row .ic{ font-size: 1.25rem; }
 .tv-pay-row code{ background: var(--ivory-deep); padding: 0.15rem 0.5rem; border-radius:8px; color: var(--ink); font-size: 0.86rem; }
+.tv-copy-btn{ margin-left: auto; flex-shrink:0; width: 38px; height: 38px; border: 1px solid var(--red-line-strong); border-radius: 10px; background: transparent; color: var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease); }
+.tv-copy-btn:hover{ background: var(--red-soft); border-color: var(--red); color: var(--red-deep); }
+.tv-copy-btn:active{ transform: scale(0.94); }
+.tv-copy-btn.copied{ background: var(--red); border-color: var(--red); color:#fff; }
+.tv-copy-btn i{ font-size: 1.05rem; line-height:1; }
 .tv-dropzone{ border: 1.5px dashed var(--red-line-strong); border-radius: var(--radius-input); padding: 1.6rem; text-align:center; cursor:pointer; transition: border-color 0.4s var(--ease), background 0.4s var(--ease); background: rgba(255,255,255,0.5); min-height: 120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap: 0.5rem; }
 .tv-dropzone:hover, .tv-dropzone.drag{ border-color: var(--red); background: var(--red-soft); }
 .tv-dropzone i{ font-size: 1.6rem; color: var(--red-deep); }
@@ -394,12 +400,12 @@ body.gal-lb-open{ overflow: hidden; }
   transition: background 0.3s var(--ease), transform 0.35s var(--ease);
 }
 .tv-trip-detail-close:hover{ background: var(--red-deep); transform: rotate(90deg); }
-.tv-td-hero{ position: relative; height: 280px; overflow: hidden; border-radius: var(--radius-card) var(--radius-card) 0 0; background:#000; }
+.tv-td-hero{ position: relative; height: 360px; overflow: hidden; border-radius: var(--radius-card) var(--radius-card) 0 0; background:#000; }
 .tv-td-hero-track{ display:flex; height:100%; transition: transform 0.28s var(--ease); will-change: transform; touch-action: pan-y; }
 .tv-td-hero-track img{ -webkit-user-drag: none; user-select: none; }
 .tv-td-hero-slide{ flex: 0 0 100%; width:100%; height:100%; }
 .tv-td-hero img{ width:100%; height:100%; object-fit: cover; }
-.tv-td-hero::after{ content:""; position:absolute; inset:0; background: linear-gradient(to top, rgba(16,30,48,0.78), rgba(16,30,48,0.04) 62%); pointer-events:none; }
+
 .tv-td-hero-nav{ position:absolute; top:50%; transform: translateY(-50%); z-index:3; width:42px; height:42px; border:none; border-radius:50%; background: rgba(255,255,255,0.85); color: var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
 .tv-td-hero-nav:hover{ background:#fff; }
 .tv-td-hero-nav:active{ transform: translateY(-50%) scale(0.94); }
@@ -413,10 +419,10 @@ body.gal-lb-open{ overflow: hidden; }
 
 /* ─── Accommodation photo slider ───────────────────── */
 .tv-td-acc-photos{ margin-top: 1rem; }
-.tv-td-acc-slider{ position: relative; height: 380px; overflow: hidden; border-radius: var(--radius-card); background:#000; }
-.tv-td-acc-track{ display:flex; height:100%; transition: transform 0.28s var(--ease); will-change: transform; touch-action: pan-y; }
-.tv-td-acc-slide{ flex: 0 0 100%; width:100%; height:100%; }
-.tv-td-acc-slide img{ width:100%; height:100%; object-fit: contain; cursor: zoom-in; -webkit-user-drag: none; user-select: none; }
+.tv-td-acc-slider{ position: relative; height: auto; max-height: min(62vh, 620px); overflow: hidden; border-radius: var(--radius-card); background: transparent; }
+.tv-td-acc-track{ display:flex; height:auto; align-items:flex-start; transition: transform 0.28s var(--ease); will-change: transform; touch-action: pan-y; }
+.tv-td-acc-slide{ flex: 0 0 100%; width:100%; height:auto; }
+.tv-td-acc-slide img{ display:block; margin:0 auto; width:auto; max-width:100%; height:auto; max-height: min(62vh, 620px); cursor: zoom-in; -webkit-user-drag: none; user-select: none; }
 .tv-td-acc-nav{ position:absolute; top:50%; transform: translateY(-50%); z-index:3; width:36px; height:36px; border:none; border-radius:50%; background: rgba(255,255,255,0.85); color: var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transition: background 0.25s var(--ease), transform 0.25s var(--ease); }
 .tv-td-acc-nav:hover{ background:#fff; }
 .tv-td-acc-nav:active{ transform: translateY(-50%) scale(0.94); }
@@ -428,7 +434,7 @@ body.gal-lb-open{ overflow: hidden; }
 .tv-td-acc-dot.active{ background:#fff; transform: scale(1.35); }
 .tv-td-acc-slider--single .tv-td-acc-nav, .tv-td-acc-slider--single .tv-td-acc-dots{ display:none; }
 @media (max-width: 600px){
-  .tv-td-acc-slider{ height: 280px; }
+  .tv-td-acc-slider{ height: auto; }
   .tv-td-acc-nav{ width:32px; height:32px; }
 }
 
@@ -446,10 +452,12 @@ body.gal-lb-open{ overflow: hidden; }
   .tv-td-acc-lb-img{ max-width:100%; max-height:86vh; object-fit:contain; border-radius: 8px; }
   .tv-td-acc-lb-counter{ position:absolute; bottom:1.2rem; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.7); font-size:0.85rem; }
 }
-.tv-td-hero-text{ position:absolute; left: 2rem; right: 2rem; bottom: 1.4rem; z-index: 2; color:#fff; pointer-events:none; }
-.tv-td-hero-text h2{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 2.4rem; line-height:1.05; margin:0; text-shadow: 0 2px 18px rgba(0,0,0,0.35); }
-.tv-td-hero-text .tv-td-dates{ font-size: 0.85rem; letter-spacing:0.05em; opacity:0.92; margin-top:0.4rem; }
-.tv-td-hero-text .tv-td-price{ display:inline-block; margin-top:0.7rem; background: var(--red); color:#fff; padding:0.35rem 0.9rem; border-radius: var(--radius-btn); font-size:0.85rem; font-weight:600; }
+.tv-td-head{ margin-bottom: 1.6rem; }
+.tv-td-head h2{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 2.4rem; line-height:1.05; margin:0; color: var(--ink); }
+.tv-td-head .tv-td-dates{ font-size: 0.85rem; letter-spacing:0.05em; opacity:0.85; margin-top:0.5rem; color: var(--ink); }
+.tv-td-meta{ display:flex; flex-wrap:wrap; gap:0.4rem 1rem; align-items:center; }
+.tv-td-head .tv-td-duration{ font-size: 0.85rem; letter-spacing:0.05em; opacity:0.85; margin-top:0.5rem; color: var(--ink); }
+.tv-td-head .tv-td-price{ display:inline-block; margin-top:0.7rem; background: var(--red); color:#fff; padding:0.35rem 0.9rem; border-radius: var(--radius-btn); font-size:0.85rem; font-weight:600; }
 .tv-td-body{ padding: 1.8rem 2rem 2.4rem; }
 .tv-td-section{ margin-bottom: 1.8rem; }
 .tv-td-section h3{ font-family:'Cormorant Garamond', serif; font-size: 1.7rem; font-weight:600; color: var(--ink); margin-bottom: 0.7rem; display:flex; align-items:center; gap:0.5rem; }
@@ -459,8 +467,10 @@ body.gal-lb-open{ overflow: hidden; }
 .tv-td-timeline::before{ content:""; position:absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--red-line); }
 .tv-td-day{ position: relative; padding: 0 0 1.2rem 0.8rem; }
 .tv-td-day::before{ content:""; position:absolute; left: -1.4rem; top: 6px; width: 14px; height:14px; border-radius:50%; background: var(--red); box-shadow: 0 0 0 4px var(--red-soft); }
+.tv-td-day .d-head{ display:flex; align-items:baseline; gap:0.4rem; flex-wrap:wrap; }
 .tv-td-day .d-day{ font-family:'Cormorant Garamond', serif; font-weight:600; font-size: 1.15rem; color: var(--red-deep); }
-.tv-td-day .d-title{ font-weight:600; color: var(--ink); margin-left:0.4rem; }
+.tv-td-day .d-title{ font-weight:600; color: var(--ink); margin-left:0.1rem; }
+.tv-td-day .day-points{ margin-top:0.35rem; }
 .tv-td-day .d-details{ color: var(--ink-soft); font-size:0.92rem; line-height:1.6; margin-top:0.2rem; }
 .tv-td-cols{ display:grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
 .tv-td-bullets{ list-style:none; padding:0; margin:0; }
@@ -483,9 +493,8 @@ body.gal-lb-open{ overflow: hidden; }
 .tv-td-pdf:hover{ text-decoration: underline; }
 @media (max-width: 640px){
   .tv-td-cols{ grid-template-columns: 1fr; }
-  .tv-td-hero{ height: 220px; }
-  .tv-td-hero-text{ bottom: 3.6rem; }
-  .tv-td-hero-text h2{ font-size: 1.6rem; }
+  .tv-td-hero{ height: 280px; }
+  .tv-td-head h2{ font-size: 1.6rem; }
   .tv-td-hero-nav{ width:38px; height:38px; top:auto; bottom: 1rem; transform:none; }
   .tv-td-hero-nav:active{ transform: scale(0.94); }
   .tv-td-hero-prev{ left: 0.8rem; }
@@ -637,6 +646,7 @@ body.gal-lb-open{ overflow: hidden; }
   /* Trips — center card internals on mobile */
   #trips .trip-body{ text-align: center; }
   #trips .trip-dates{ justify-content: center; }
+  #trips .trip-duration{ justify-content: center; }
   #trips .trip-actions{ justify-content: center; }
   .section-title--rabbit .section-title-icon{ position: relative; right: 0.8rem; }
 
@@ -780,6 +790,23 @@ img, video, .container, .row{ max-width: 100%; }
   .tv-road-car-img{ animation: none; translate: 0 0; }
   .tv-road-car.arrived, .tv-road-car.arrived .tv-road-car-img{ animation: none; }
   .tv-road-fill{ transition: none; }
+}
+
+/* ─── Floating WhatsApp button ───────────────────── */
+.tv-whatsapp-fab{
+  position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 9998;
+  width: 58px; height: 58px; border-radius: 50%;
+  background: #25D366; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 24px rgba(37,211,102,0.42);
+  transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+.tv-whatsapp-fab:hover{ transform: translateY(-3px) scale(1.04); box-shadow: 0 12px 30px rgba(37,211,102,0.55); color:#fff; }
+.tv-whatsapp-fab:active{ transform: scale(0.95); }
+.tv-whatsapp-fab svg{ width: 32px; height: 32px; fill: currentColor; }
+@media (max-width: 640px){
+  .tv-whatsapp-fab{ width: 52px; height: 52px; right: 1rem; bottom: 1rem; }
+  .tv-whatsapp-fab svg{ width: 28px; height: 28px; }
 }
 </style>
 </head>
@@ -1046,7 +1073,7 @@ img, video, .container, .row{ max-width: 100%; }
     </div>
     <div class="faq-list reveal reveal-d2">
       <div class="faq-item">
-        <button class="faq-q" type="button" aria-expanded="false">We Donow do I book a trip with Tavari?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
+        <button class="faq-q" type="button" aria-expanded="false">How do I book a trip with Tavari?<span class="faq-icon"><i class="bi bi-chevron-down"></i></span></button>
         <div class="faq-a"><p>You can book directly through our <em>website</em>, <em>WhatsApp</em>, or by <em>contacting us directly via DM</em>. Once your reservation is confirmed, we'll guide you through the payment process and share all the details you need before departure.</p></div>
       </div>
       <div class="faq-item">
@@ -1177,8 +1204,8 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
           <div class="amount" id="stage2Price">EGP 0</div>
         </div>
       </div>
-      <div class="tv-pay-row"><span class="ic">&#128179;</span><div>Instapay &mdash; <code>01223744537</code></div></div>
-      <div class="tv-pay-row"><span class="ic">&#128241;</span><div>Vodafone Cash &mdash; <code>01061336882</code></div></div>
+      <div class="tv-pay-row"><span class="ic">&#128179;</span><div>Instapay &mdash; <code>01223744537</code></div><button type="button" class="tv-copy-btn" data-copy="01223744537" aria-label="Copy Instapay number"><i class="bi bi-clipboard"></i></button></div>
+      <div class="tv-pay-row"><span class="ic">&#128241;</span><div>Vodafone Cash &mdash; <code>01061336882</code></div><button type="button" class="tv-copy-btn" data-copy="01061336882" aria-label="Copy Vodafone Cash number"><i class="bi bi-clipboard"></i></button></div>
       <label class="tv-field-label mt-3">Transaction Receipt Screenshot</label>
       <div class="tv-dropzone" id="receiptDropzone">
         <i class="bi bi-cloud-arrow-up"></i>
@@ -1231,6 +1258,11 @@ https://www.facebook.com/share/199mpksPCQ/?mibextid=wwXIfr" target="_blank" rel=
 <script src="email.js"></script>
 
 <script src="app.js" defer></script>
+<!-- Floating WhatsApp button -->
+<a class="tv-whatsapp-fab" href="https://wa.me/201061336882" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+</a>
+
 <!-- Scroll-progress road trip car -->
 <div class="tv-road" aria-hidden="true" id="tvRoad">
   <div class="tv-road-fill" id="tvRoadFill"></div>

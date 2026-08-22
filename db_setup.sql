@@ -14,6 +14,7 @@ create table if not exists public.trips (
   start_date date,
   end_date date,
   dates_label text,
+  duration text,
   description text,
   itinerary jsonb,
   accommodation text,
@@ -72,6 +73,7 @@ create table if not exists public.gallery (
 -- 1b) ADD COLUMNS (idempotent; covers DBs created before these columns existed)
 alter table public.trips add column if not exists accommodation_photos text[] not null default '{}';
 alter table public.trips add column if not exists price_options text[] not null default '{}';
+alter table public.trips add column if not exists duration text;
 alter table public.gallery add column if not exists media_url text;
 alter table public.gallery add column if not exists is_video boolean not null default false;
 
