@@ -74,6 +74,7 @@ create table if not exists public.gallery (
 alter table public.trips add column if not exists accommodation_photos text[] not null default '{}';
 alter table public.trips add column if not exists price_options text[] not null default '{}';
 alter table public.trips add column if not exists duration text;
+alter table public.trips add column if not exists guidelines text;
 alter table public.gallery add column if not exists media_url text;
 alter table public.gallery add column if not exists is_video boolean not null default false;
 

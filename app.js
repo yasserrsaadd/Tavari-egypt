@@ -222,6 +222,7 @@ const FALLBACK_TRIPS = [
     solo_message:"Traveling solo? No problem — over 80% of our Siwa travellers journey on their own and leave with lifelong friends.",
     included:["Private 4x4 desert tours","All breakfasts & dinners","Boutique eco-lodge stay","Expert local guide","Airport transfers"],
     excluded:["Flights to Marsa Matruh","Personal expenses","Travel insurance","Optional spa treatments"],
+    guidelines:"Pack light, breathable clothing and a refillable water bottle. Respect local Siwi customs — cover shoulders when visiting the village. Drones are not permitted near the salt lakes.",
     price_options:["Single occupancy — EGP 9,800","Double occupancy (per person) — EGP 7,200","Triple occupancy (per person) — EGP 6,400"],
     payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
@@ -240,6 +241,7 @@ const FALLBACK_TRIPS = [
     solo_message:"Traveling solo? No problem — over 80% of our Dahab travellers come alone and pair up with buddies on day one.",
     included:["Daily guided dives/snorkelling","Sea-view hotel stay","Bedouin canyon hike","All breakfasts","Equipment rental"],
     excluded:["Flights to Sharm El Sheikh","Personal diving certification fees","Lunches & dinners","Tips"],
+    guidelines:"Bring reef-safe sunscreen only — regular sunscreen damages the coral. Beginners must complete a short briefing before any dive. Alcohol is not served in the Old Town; purchase responsibly outside.",
     price_options:["Single occupancy — EGP 7,400","Double occupancy (per person) — EGP 5,900","Triple occupancy (per person) — EGP 5,200"],
     payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
@@ -257,6 +259,7 @@ const FALLBACK_TRIPS = [
     solo_message:"Traveling solo? No problem — over 80% of our desert travellers go solo and love the communal campfire nights.",
     included:["Private 4x4 transfers","Full-board desert camping","Professional guide","All camping gear","National park fees"],
     excluded:["Flights to Cairo","Personal expenses","Travel insurance","Alcoholic drinks"],
+    guidelines:"No smoking inside the tents or near the chalk formations. Stay on marked paths to protect the fragile desert ecosystem. Warm layers are essential — desert nights drop near freezing.",
     price_options:["Single occupancy — EGP 8,100","Double occupancy (per person) — EGP 6,500","Triple occupancy (per person) — EGP 5,900"],
     payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
@@ -538,7 +541,7 @@ bindGalleryLightbox();
 const tripDetailScrim = document.getElementById("tripDetailScrim");
 const tripDetailModal = tripDetailScrim.querySelector(".tv-trip-detail-modal");
 function tvEsc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-function closeTripDetails(){ closeAccLightbox(); tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
+function closeTripDetails(){ closeAccLightbox(); closeHeroLightbox(); tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
 document.getElementById("tripDetailClose").addEventListener("click", closeTripDetails);
 tripDetailScrim.addEventListener("click", (e) => { if (e.target===tripDetailScrim) closeTripDetails(); });
 document.addEventListener("keydown", (e) => { if (e.key==="Escape" && tripDetailScrim.classList.contains("show")) closeTripDetails(); });
@@ -673,14 +676,65 @@ function bindSlider(track, prev, next, dotsWrap, onChange){
 function initTripHeroSlider(){
   const track = document.getElementById("tdHeroTrack");
   if (!track) return;
+  const slider = document.querySelector(".tv-td-hero");
   const prev = document.getElementById("tdHeroPrev");
   const next = document.getElementById("tdHeroNext");
   const dots = document.getElementById("tdHeroDots");
-  window.__heroSliderGo = bindSlider(track, prev, next, dots);
+  let heroIdx = 0;
+  function syncHeroHeight(){
+    const slide = track.children[heroIdx];
+    const img = slide && slide.querySelector("img");
+    if (img && slider) {
+      slider.style.height = img.clientHeight + "px";
+    } else if (slider) {
+      slider.style.height = "";
+    }
+  }
+  window.__heroSliderGo = bindSlider(track, prev, next, dots, (i) => { heroIdx = i; syncHeroHeight(); });
+  Array.from(track.querySelectorAll("img")).forEach(img => { if (!img.complete) img.addEventListener("load", syncHeroHeight); });
+  syncHeroHeight();
+
+  /* Collect hero photo URLs for the full-view lightbox */
+  __heroLbImgs = Array.from(track.querySelectorAll("img")).map(img => img.src);
+
+  track.addEventListener("click", (e) => {
+    const img = e.target.closest("img");
+    if (!img) return;
+    const idx = __heroLbImgs.indexOf(img.src || img.dataset.full || "");
+    openHeroLightbox(idx >= 0 ? idx : 0);
+  });
 }
 
 /* ─── Accommodation slider + lightbox ──────────────── */
 let __accLbImgs = [], __accLbIdx = 0;
+let __heroLbImgs = [], __heroLbIdx = 0;
+
+function openHeroLightbox(idx){
+  if (!__heroLbImgs.length) return;
+  __heroLbIdx = idx;
+  const lb = document.getElementById("tdHeroLightbox");
+  const lbImg = document.getElementById("tdHeroLbImg");
+  const lbCounter = document.getElementById("tdHeroLbCounter");
+  lbImg.src = __heroLbImgs[__heroLbIdx];
+  lbCounter.textContent = `${__heroLbIdx+1} / ${__heroLbImgs.length}`;
+  lb.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function closeHeroLightbox(){
+  const lb = document.getElementById("tdHeroLightbox");
+  lb.classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+function stepHeroLb(dir){
+  if (!__heroLbImgs.length) return;
+  __heroLbIdx = (__heroLbIdx + dir + __heroLbImgs.length) % __heroLbImgs.length;
+  const lbImg = document.getElementById("tdHeroLbImg");
+  const lbCounter = document.getElementById("tdHeroLbCounter");
+  lbImg.src = __heroLbImgs[__heroLbIdx];
+  lbCounter.textContent = `${__heroLbIdx+1} / ${__heroLbImgs.length}`;
+}
 
 function initAccSlider(){
   const track = document.getElementById("tdAccTrack");
@@ -743,14 +797,24 @@ document.addEventListener("click", (e) => {
   if (e.target.closest("#tdAccLbClose")) closeAccLightbox();
   if (e.target.closest("#tdAccLbPrev")) stepAccLbRb(-1);
   if (e.target.closest("#tdAccLbNext")) stepAccLbRb(1);
+  if (e.target.closest("#tdHeroLbClose")) closeHeroLightbox();
+  if (e.target.closest("#tdHeroLbPrev")) stepHeroLb(-1);
+  if (e.target.closest("#tdHeroLbNext")) stepHeroLb(1);
 });
 
 document.addEventListener("keydown", (e) => {
-  const lb = document.getElementById("tdAccLightbox");
-  if (lb && lb.classList.contains("show")){
+  const accLb = document.getElementById("tdAccLightbox");
+  if (accLb && accLb.classList.contains("show")){
     if (e.key === "Escape") closeAccLightbox();
     if (e.key === "ArrowLeft") stepAccLbRb(-1);
     if (e.key === "ArrowRight") stepAccLbRb(1);
+    return;
+  }
+  const heroLb = document.getElementById("tdHeroLightbox");
+  if (heroLb && heroLb.classList.contains("show")){
+    if (e.key === "Escape") closeHeroLightbox();
+    if (e.key === "ArrowLeft") stepHeroLb(-1);
+    if (e.key === "ArrowRight") stepHeroLb(1);
     return;
   }
   if (!tripDetailScrim.classList.contains("show")) return;
@@ -770,7 +834,6 @@ function openTripDetails(tripId){
   const included = (t.included && t.included.length) ? t.included : [];
   const excluded = (t.excluded && t.excluded.length) ? t.excluded : [];
   const prices = (t.price_options && t.price_options.length) ? t.price_options : [];
-  const pays = (t.payment_methods && t.payment_methods.length) ? t.payment_methods : [];
   const refund = t.refund_policy || "";
   const pdf = (t.pdf_url && t.pdf_url!=="#") ? t.pdf_url : null;
 
@@ -789,13 +852,6 @@ function openTripDetails(tripId){
   const bullets = (arr, cls) => arr.length
     ? `<ul class="tv-td-bullets ${cls}">` + arr.map(x => `<li><i class="bi ${cls==="included"?"bi-check-circle-fill":"bi-x-circle-fill"}"></i><span>${tvEsc(x)}</span></li>`).join("") + `</ul>`
     : `<p>—</p>`;
-
-  const payHtml = pays.length ? pays.map(p => {
-    const m = p.match(/^(.*?)[\s—-]+(.+)$/);
-    const label = m ? m[1].trim() : p;
-    const code = m ? m[2].trim() : "";
-    return `<div class="pay-row"><span class="ic"><i class="bi bi-wallet2"></i></span><div>${tvEsc(label)}${code?` &mdash; <code>${tvEsc(code)}</code>`:""}</div></div>`;
-  }).join("") : `<p>Contact us for payment options.</p>`;
 
   document.getElementById("tripDetailBody").innerHTML = `
     <div class="tv-td-hero ${imgs.length<=1?'tv-td-hero--single':''}">
@@ -826,9 +882,9 @@ function openTripDetails(tripId){
       </div>
       <div class="tv-td-section"><div class="tv-td-solo"><i class="bi bi-emoji-smile"></i><p>${tvEsc(solo)}</p></div></div>
        ${prices.length?`<div class="tv-td-section"><h3><i class="bi bi-cash-stack"></i> Prices</h3><ul class="tv-td-bullets prices">${prices.map(p=>`<li><i class="bi bi-dot"></i><span>${tvEsc(p)}</span></li>`).join("")}</ul></div>`:""}
-       <div class="tv-td-section"><h3><i class="bi bi-credit-card"></i> Payment methods</h3><div class="tv-td-pay">${payHtml}</div></div>
-      ${refund?`<div class="tv-td-section"><h3><i class="bi bi-shield-check"></i> Refund policy</h3><p>${tvEsc(refund)}</p></div>`:""}
-      <div class="tv-td-cta">
+       ${refund?`<div class="tv-td-section"><h3><i class="bi bi-shield-check"></i> Refund policy</h3><p>${tvEsc(refund)}</p></div>`:""}
+       ${t.guidelines?`<div class="tv-td-section"><h3><i class="bi bi-list-check"></i> Guidelines</h3><p>${tvEsc(t.guidelines)}</p></div>`:""}
+       <div class="tv-td-cta">
         <button class="btn-trip-primary" type="button" data-action="book-close" data-trip="${t.id}"><i class="bi bi-calendar-check"></i> Book now</button>
         ${pdf?`<a class="btn-trip-secondary" href="${pdf}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf"></i> Itinerary PDF</a>`:""}
       </div>
