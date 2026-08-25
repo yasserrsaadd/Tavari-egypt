@@ -74,7 +74,20 @@ create table if not exists public.gallery (
 alter table public.trips add column if not exists accommodation_photos text[] not null default '{}';
 alter table public.trips add column if not exists price_options text[] not null default '{}';
 alter table public.trips add column if not exists duration text;
-alter table public.trips add column if not exists guidelines text;
+do $$
+begin
+  if not exists (
+    select 1 from information_schema.columns
+    where table_schema='public' and table_name='trips' and column_name='guidelines'
+  ) then
+    alter table public.trips add column guidelines text[] not null default '{}';
+  elsif not exists (
+    select 1 from information_schema.columns
+    where table_schema='public' and table_name='trips' and column_name='guidelines' and udt_name='_text'
+  ) then
+    alter table public.trips alter column guidelines type text[] using (string_to_array(coalesce(guidelines,''), chr(10)));
+  end if;
+end $$;
 alter table public.gallery add column if not exists media_url text;
 alter table public.gallery add column if not exists is_video boolean not null default false;
 

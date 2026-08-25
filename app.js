@@ -222,7 +222,7 @@ const FALLBACK_TRIPS = [
     solo_message:"Traveling solo? No problem — over 80% of our Siwa travellers journey on their own and leave with lifelong friends.",
     included:["Private 4x4 desert tours","All breakfasts & dinners","Boutique eco-lodge stay","Expert local guide","Airport transfers"],
     excluded:["Flights to Marsa Matruh","Personal expenses","Travel insurance","Optional spa treatments"],
-    guidelines:"Pack light, breathable clothing and a refillable water bottle. Respect local Siwi customs — cover shoulders when visiting the village. Drones are not permitted near the salt lakes.",
+    guidelines:["Pack light, breathable clothing and a refillable water bottle.","Respect local Siwi customs — cover shoulders when visiting the village.","Drones are not permitted near the salt lakes."],
     price_options:["Single occupancy — EGP 9,800","Double occupancy (per person) — EGP 7,200","Triple occupancy (per person) — EGP 6,400"],
     payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
@@ -241,7 +241,7 @@ const FALLBACK_TRIPS = [
     solo_message:"Traveling solo? No problem — over 80% of our Dahab travellers come alone and pair up with buddies on day one.",
     included:["Daily guided dives/snorkelling","Sea-view hotel stay","Bedouin canyon hike","All breakfasts","Equipment rental"],
     excluded:["Flights to Sharm El Sheikh","Personal diving certification fees","Lunches & dinners","Tips"],
-    guidelines:"Bring reef-safe sunscreen only — regular sunscreen damages the coral. Beginners must complete a short briefing before any dive. Alcohol is not served in the Old Town; purchase responsibly outside.",
+    guidelines:["Bring reef-safe sunscreen only — regular sunscreen damages the coral.","Beginners must complete a short briefing before any dive.","Alcohol is not served in the Old Town; purchase responsibly outside."],
     price_options:["Single occupancy — EGP 7,400","Double occupancy (per person) — EGP 5,900","Triple occupancy (per person) — EGP 5,200"],
     payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
@@ -259,7 +259,7 @@ const FALLBACK_TRIPS = [
     solo_message:"Traveling solo? No problem — over 80% of our desert travellers go solo and love the communal campfire nights.",
     included:["Private 4x4 transfers","Full-board desert camping","Professional guide","All camping gear","National park fees"],
     excluded:["Flights to Cairo","Personal expenses","Travel insurance","Alcoholic drinks"],
-    guidelines:"No smoking inside the tents or near the chalk formations. Stay on marked paths to protect the fragile desert ecosystem. Warm layers are essential — desert nights drop near freezing.",
+    guidelines:["No smoking inside the tents or near the chalk formations.","Stay on marked paths to protect the fragile desert ecosystem.","Warm layers are essential — desert nights drop near freezing."],
     price_options:["Single occupancy — EGP 8,100","Double occupancy (per person) — EGP 6,500","Triple occupancy (per person) — EGP 5,900"],
     payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
@@ -883,7 +883,7 @@ function openTripDetails(tripId){
       <div class="tv-td-section"><div class="tv-td-solo"><i class="bi bi-emoji-smile"></i><p>${tvEsc(solo)}</p></div></div>
        ${prices.length?`<div class="tv-td-section"><h3><i class="bi bi-cash-stack"></i> Prices</h3><ul class="tv-td-bullets prices">${prices.map(p=>`<li><i class="bi bi-dot"></i><span>${tvEsc(p)}</span></li>`).join("")}</ul></div>`:""}
        ${refund?`<div class="tv-td-section"><h3><i class="bi bi-shield-check"></i> Refund policy</h3><p>${tvEsc(refund)}</p></div>`:""}
-       ${t.guidelines?`<div class="tv-td-section"><h3><i class="bi bi-list-check"></i> Guidelines</h3><p>${tvEsc(t.guidelines)}</p></div>`:""}
+        ${(()=>{const g=t.guidelines; const items = Array.isArray(g)?g:(g?String(g).split(/\n|\u2022|\./).map(s=>s.trim()).filter(Boolean):[]); return items.length?`<div class="tv-td-section"><h3><i class="bi bi-list-check"></i> Guidelines</h3><ul class="tv-td-bullets guidelines">${items.map(x=>`<li><i class="bi bi-dot"></i><span>${tvEsc(x)}</span></li>`).join("")}</ul></div>`:"";})()}
        <div class="tv-td-cta">
         <button class="btn-trip-primary" type="button" data-action="book-close" data-trip="${t.id}"><i class="bi bi-calendar-check"></i> Book now</button>
         ${pdf?`<a class="btn-trip-secondary" href="${pdf}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf"></i> Itinerary PDF</a>`:""}
