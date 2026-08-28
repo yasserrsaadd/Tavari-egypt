@@ -153,8 +153,13 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
       const tryPlay = () => { if (heroAutoplay) bgVideo.play().catch(() => {}); };
 
       if (heroAutoplay) {
-        bgVideo.src = "Videos/hero.mp4";
-        bgVideo.load();
+        /* Satisfy mobile autoplay requirements as properties (iOS honours muted/playsInline best when set this way) */
+        bgVideo.muted = true;
+        bgVideo.defaultMuted = true;
+        bgVideo.playsInline = true;
+        /* Do NOT call load() — it would interrupt the native autoplay already started by the autoplay attribute,
+           and the follow-up play() is then blocked on mobile without a user gesture. */
+        if (!bgVideo.src) bgVideo.src = "Videos/hero.mp4";
         tryPlay();
         /* Retry as soon as the video can actually play (a too-early play() is often rejected on mobile) */
         bgVideo.addEventListener("loadeddata", tryPlay, { once: true });
