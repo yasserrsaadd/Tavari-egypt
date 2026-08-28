@@ -31,10 +31,17 @@
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/avif "access plus 1 month"
   ExpiresByType image/svg+xml "access plus 1 month"
   ExpiresByType font/woff2 "access plus 1 year"
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+# Correct MIME types for local optimized images
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType image/avif .avif
 </IfModule>
 
 <IfModule mod_headers.c>

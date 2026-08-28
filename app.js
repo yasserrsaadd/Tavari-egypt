@@ -151,18 +151,7 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
 
     if (bgVideo) {
       if (heroAutoplay) {
-        const isMobile = window.matchMedia("(max-width: 1023px)").matches;
-        const canAV1 = bgVideo.canPlayType('video/mp4; codecs="av01.0.05M.08"');
-        const canVP9 = bgVideo.canPlayType('video/webm; codecs=vp9');
-        let src;
-        if (isMobile) {
-          src = (canVP9 !== "") ? "Videos/hero-mobile.webm" : "Videos/hero-mobile.mp4";
-        } else {
-          src = (canAV1 !== "") ? "Videos/hero-desktop.av1.mp4"
-               : (canVP9 !== "") ? "Videos/hero-desktop.webm"
-               : "Videos/hero-desktop.mp4";
-        }
-        bgVideo.src = src;
+        bgVideo.src = "Videos/hero.mp4";
         bgVideo.load();
         bgVideo.play().catch(() => {});
       } else {
@@ -303,7 +292,7 @@ const FALLBACK_TRIPS = [
 ];
 const FALLBACK_GALLERY = [
   { media_url:"https://images.unsplash.com/photo-1583212292454-1fe6229603b7?q=80&w=1200&auto=format&fit=crop", destination:"Hurghada", title:"Red Sea Escape" },
-  { media_url:"Videos/hero-mobile.mp4", is_video:true, destination:"Tavari", title:"On The Road" },
+  { media_url:"Videos/hero.mp4", is_video:true, destination:"Tavari", title:"On The Road" },
   { media_url:"https://images.unsplash.com/photo-1518002054494-3a6f94352e9d?q=80&w=1200&auto=format&fit=crop", destination:"Siwa", title:"Oasis of Silence" },
   { media_url:"https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?q=80&w=1200&auto=format&fit=crop", destination:"Sinai", title:"Mountain & Reef" },
   { media_url:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop", destination:"Desert", title:"Desert Dunes" },
