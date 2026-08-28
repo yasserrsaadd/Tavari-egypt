@@ -150,10 +150,20 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
     let heroInView = true;
 
     if (bgVideo) {
+      const tryPlay = () => { if (heroAutoplay) bgVideo.play().catch(() => {}); };
+
       if (heroAutoplay) {
         bgVideo.src = "Videos/hero.mp4";
         bgVideo.load();
-        bgVideo.play().catch(() => {});
+        tryPlay();
+        /* Retry as soon as the video can actually play (a too-early play() is often rejected on mobile) */
+        bgVideo.addEventListener("loadeddata", tryPlay, { once: true });
+        bgVideo.addEventListener("canplay", tryPlay, { once: true });
+        /* Mobile browsers may block programmatic autoplay until a user gesture — start on the first interaction */
+        const gestureStart = () => { tryPlay(); window.removeEventListener("pointerdown", gestureStart); window.removeEventListener("touchstart", gestureStart); window.removeEventListener("scroll", gestureStart); };
+        window.addEventListener("pointerdown", gestureStart, { passive: true });
+        window.addEventListener("touchstart", gestureStart, { passive: true });
+        window.addEventListener("scroll", gestureStart, { passive: true });
       } else {
         bgVideo.removeAttribute("autoplay");
         bgVideo.pause();
