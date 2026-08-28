@@ -150,22 +150,42 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
     let heroInView = true;
 
     if (bgVideo) {
-      const tryPlay = () => { if (heroAutoplay) bgVideo.play().catch(() => {}); };
+      /* Seconds of video to buffer before starting, so the first moments don't stutter on a large file */
+      const START_BUFFER = 1.0;
+      const bufferedAhead = () => {
+        try {
+          const t = bgVideo.currentTime || 0;
+          const b = bgVideo.buffered;
+          for (let i = 0; i < b.length; i++) {
+            if (b.start(i) <= t + 0.1 && b.end(i) >= t) return b.end(i) - t;
+          }
+        } catch (e) {}
+        return 0;
+      };
+      /* Start only once we have a small buffer (or the browser already has enough) */
+      const playWhenReady = () => {
+        if (!heroAutoplay) return;
+        if (bgVideo.readyState >= 4 || bufferedAhead() >= START_BUFFER) bgVideo.play().catch(() => {});
+      };
 
       if (heroAutoplay) {
         /* Satisfy mobile autoplay requirements as properties (iOS honours muted/playsInline best when set this way) */
         bgVideo.muted = true;
         bgVideo.defaultMuted = true;
         bgVideo.playsInline = true;
+        bgVideo.preload = "auto";
         /* Do NOT call load() — it would interrupt the native autoplay already started by the autoplay attribute,
            and the follow-up play() is then blocked on mobile without a user gesture. */
         if (!bgVideo.src) bgVideo.src = "Videos/hero.mp4";
-        tryPlay();
-        /* Retry as soon as the video can actually play (a too-early play() is often rejected on mobile) */
-        bgVideo.addEventListener("loadeddata", tryPlay, { once: true });
-        bgVideo.addEventListener("canplay", tryPlay, { once: true });
+        /* preload="auto" (HTML + above) begins downloading immediately; start as soon as enough is buffered */
+        bgVideo.addEventListener("progress", playWhenReady);
+        bgVideo.addEventListener("loadeddata", playWhenReady, { once: true });
+        bgVideo.addEventListener("canplay", playWhenReady, { once: true });
+        playWhenReady();
+        /* Stop retrying once playback has actually begun */
+        bgVideo.addEventListener("playing", () => { bgVideo.removeEventListener("progress", playWhenReady); }, { once: true });
         /* Mobile browsers may block programmatic autoplay until a user gesture — start on the first interaction */
-        const gestureStart = () => { tryPlay(); window.removeEventListener("pointerdown", gestureStart); window.removeEventListener("touchstart", gestureStart); window.removeEventListener("scroll", gestureStart); };
+        const gestureStart = () => { if (heroAutoplay) bgVideo.play().catch(() => {}); window.removeEventListener("pointerdown", gestureStart); window.removeEventListener("touchstart", gestureStart); window.removeEventListener("scroll", gestureStart); };
         window.addEventListener("pointerdown", gestureStart, { passive: true });
         window.addEventListener("touchstart", gestureStart, { passive: true });
         window.addEventListener("scroll", gestureStart, { passive: true });
