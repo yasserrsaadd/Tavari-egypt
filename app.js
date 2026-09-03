@@ -183,6 +183,9 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
         playWhenReady();
         /* Fallback: force play() after a short delay if native autoplay was blocked */
         setTimeout(() => { bgVideo.play().catch(() => {}); }, 1000);
+        /* Mobile: trigger play() on first touch anywhere on the page (user gesture) */
+        const mobilePlay = () => { bgVideo.play().catch(() => {}); document.removeEventListener("touchstart", mobilePlay); };
+        document.addEventListener("touchstart", mobilePlay, { passive: true });
         /* Stop retrying once playback has actually begun */
         bgVideo.addEventListener("playing", () => { bgVideo.removeEventListener("progress", playWhenReady); }, { once: true });
         /* Mobile browsers may block programmatic autoplay until a user gesture — start on the first interaction */
