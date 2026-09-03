@@ -142,31 +142,50 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
 
     /* Hero background video: always autoplay */
     const bgVideo = document.getElementById("heroBgVideo");
-    let heroInView = true;
 
     if (bgVideo) {
+      /* Force muted + inline so every browser permits gesture-free autoplay */
       bgVideo.muted = true;
       bgVideo.defaultMuted = true;
+      bgVideo.setAttribute("muted", "");
       bgVideo.playsInline = true;
+      bgVideo.setAttribute("playsinline", "");
       bgVideo.preload = "auto";
-      bgVideo.play().catch(() => {});
-      setTimeout(() => { bgVideo.play().catch(() => {}); }, 300);
-      setTimeout(() => { bgVideo.play().catch(() => {}); }, 1000);
-      setTimeout(() => { bgVideo.play().catch(() => {}); }, 3000);
 
-      /* Pause when hero scrolls out of view or tab is hidden (saves CPU/GPU/battery) */
+      const tryPlay = () => {
+        const p = bgVideo.play();
+        if (p && typeof p.catch === "function") p.catch(() => {});
+      };
+
+      /* Play the instant the browser is ready, and keep retrying */
+      tryPlay();
+      bgVideo.addEventListener("loadeddata", tryPlay);
+      bgVideo.addEventListener("canplay", tryPlay);
+      bgVideo.addEventListener("playing", () => {});
+      window.addEventListener("load", tryPlay);
+      setTimeout(tryPlay, 300);
+      setTimeout(tryPlay, 1000);
+      setTimeout(tryPlay, 3000);
+
+      /* Pause only on a *confirmed* scroll-out or hidden tab (saves CPU/GPU/battery).
+         Never pause on the observer's first callback, so load-time autoplay is safe. */
+      let confirmedInView = true;
       if ("IntersectionObserver" in window) {
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
-            heroInView = e.isIntersecting;
-            if (heroInView && !document.hidden) bgVideo.play().catch(() => {});
-            else bgVideo.pause();
+            if (e.isIntersecting) {
+              confirmedInView = true;
+              if (!document.hidden) tryPlay();
+            } else {
+              confirmedInView = false;
+              bgVideo.pause();
+            }
           });
         }, { threshold: 0.1 });
         io.observe(hero);
       }
       document.addEventListener("visibilitychange", () => {
-        if (!document.hidden && heroInView) bgVideo.play().catch(() => {});
+        if (!document.hidden && confirmedInView) tryPlay();
         else bgVideo.pause();
       });
     }
