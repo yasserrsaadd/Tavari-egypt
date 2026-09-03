@@ -140,70 +140,24 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
     const glow = document.getElementById("heroGlow");
     if (!hero || !videoLayer) return;
 
-    /* Hero background video: responsive source + reduced-motion / data-saver + off-screen pause */
+    /* Hero background video: always autoplay */
     const bgVideo = document.getElementById("heroBgVideo");
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const conn = navigator.connection || {};
-    const saveData = !!conn.saveData;
-    const slowNet = conn.effectiveType === "slow-2g" || conn.effectiveType === "2g";
-    let heroAutoplay = !(reduceMotion || saveData || slowNet);
     let heroInView = true;
 
     if (bgVideo) {
-      /* Seconds of video to buffer before starting, so the first moments don't stutter on a large file */
-      const START_BUFFER = 1.0;
-      const bufferedAhead = () => {
-        try {
-          const t = bgVideo.currentTime || 0;
-          const b = bgVideo.buffered;
-          for (let i = 0; i < b.length; i++) {
-            if (b.start(i) <= t + 0.1 && b.end(i) >= t) return b.end(i) - t;
-          }
-        } catch (e) {}
-        return 0;
-      };
-      /* Start only once we have a small buffer (or the browser already has enough) */
-      const playWhenReady = () => {
-        if (!heroAutoplay) return;
-        if (bgVideo.readyState >= 4 || bufferedAhead() >= START_BUFFER) bgVideo.play().catch(() => {});
-      };
-
-      if (heroAutoplay) {
-        /* Satisfy mobile autoplay requirements as properties (iOS honours muted/playsInline best when set this way) */
-        bgVideo.muted = true;
-        bgVideo.defaultMuted = true;
-        bgVideo.playsInline = true;
-        bgVideo.preload = "auto";
-        /* Let the native <source> elements drive the src — do NOT override with JS src assignment,
-           which replaces the <source> children and breaks native autoplay. */
-        /* preload="auto" (HTML + above) begins downloading immediately; start as soon as enough is buffered */
-        bgVideo.addEventListener("progress", playWhenReady);
-        bgVideo.addEventListener("loadeddata", playWhenReady, { once: true });
-        bgVideo.addEventListener("canplay", playWhenReady, { once: true });
-        playWhenReady();
-        /* Fallback: force play() after a short delay if native autoplay was blocked */
-        setTimeout(() => { bgVideo.play().catch(() => {}); }, 1000);
-        /* Mobile: trigger play() on first touch anywhere on the page (user gesture) */
-        const mobilePlay = () => { bgVideo.play().catch(() => {}); document.removeEventListener("touchstart", mobilePlay); };
-        document.addEventListener("touchstart", mobilePlay, { passive: true });
-        /* Stop retrying once playback has actually begun */
-        bgVideo.addEventListener("playing", () => { bgVideo.removeEventListener("progress", playWhenReady); }, { once: true });
-        /* Mobile browsers may block programmatic autoplay until a user gesture — start on the first interaction */
-        const gestureStart = () => { if (heroAutoplay) bgVideo.play().catch(() => {}); window.removeEventListener("pointerdown", gestureStart); window.removeEventListener("touchstart", gestureStart); window.removeEventListener("scroll", gestureStart); };
-        window.addEventListener("pointerdown", gestureStart, { passive: true });
-        window.addEventListener("touchstart", gestureStart, { passive: true });
-        window.addEventListener("scroll", gestureStart, { passive: true });
-      } else {
-        bgVideo.removeAttribute("autoplay");
-        bgVideo.pause();
-      }
+      bgVideo.muted = true;
+      bgVideo.defaultMuted = true;
+      bgVideo.playsInline = true;
+      bgVideo.preload = "auto";
+      bgVideo.play().catch(() => {});
+      setTimeout(() => { bgVideo.play().catch(() => {}); }, 500);
+      setTimeout(() => { bgVideo.play().catch(() => {}); }, 2000);
 
       /* Pause when hero scrolls out of view or tab is hidden (saves CPU/GPU/battery) */
       if ("IntersectionObserver" in window) {
         const io = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
             heroInView = e.isIntersecting;
-            if (!heroAutoplay) return;
             if (heroInView && !document.hidden) bgVideo.play().catch(() => {});
             else bgVideo.pause();
           });
@@ -211,7 +165,6 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
         io.observe(hero);
       }
       document.addEventListener("visibilitychange", () => {
-        if (!heroAutoplay) return;
         if (!document.hidden && heroInView) bgVideo.play().catch(() => {});
         else bgVideo.pause();
       });
