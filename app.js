@@ -150,8 +150,9 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
       bgVideo.playsInline = true;
       bgVideo.preload = "auto";
       bgVideo.play().catch(() => {});
-      setTimeout(() => { bgVideo.play().catch(() => {}); }, 500);
-      setTimeout(() => { bgVideo.play().catch(() => {}); }, 2000);
+      setTimeout(() => { bgVideo.play().catch(() => {}); }, 300);
+      setTimeout(() => { bgVideo.play().catch(() => {}); }, 1000);
+      setTimeout(() => { bgVideo.play().catch(() => {}); }, 3000);
 
       /* Pause when hero scrolls out of view or tab is hidden (saves CPU/GPU/battery) */
       if ("IntersectionObserver" in window) {
