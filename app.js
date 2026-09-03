@@ -174,14 +174,15 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
         bgVideo.defaultMuted = true;
         bgVideo.playsInline = true;
         bgVideo.preload = "auto";
-        /* Do NOT call load() — it would interrupt the native autoplay already started by the autoplay attribute,
-           and the follow-up play() is then blocked on mobile without a user gesture. */
-        if (!bgVideo.src) bgVideo.src = "Videos/hero.mp4";
+        /* Let the native <source> elements drive the src — do NOT override with JS src assignment,
+           which replaces the <source> children and breaks native autoplay. */
         /* preload="auto" (HTML + above) begins downloading immediately; start as soon as enough is buffered */
         bgVideo.addEventListener("progress", playWhenReady);
         bgVideo.addEventListener("loadeddata", playWhenReady, { once: true });
         bgVideo.addEventListener("canplay", playWhenReady, { once: true });
         playWhenReady();
+        /* Fallback: force play() after a short delay if native autoplay was blocked */
+        setTimeout(() => { bgVideo.play().catch(() => {}); }, 1000);
         /* Stop retrying once playback has actually begun */
         bgVideo.addEventListener("playing", () => { bgVideo.removeEventListener("progress", playWhenReady); }, { once: true });
         /* Mobile browsers may block programmatic autoplay until a user gesture — start on the first interaction */
