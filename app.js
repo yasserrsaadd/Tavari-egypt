@@ -545,13 +545,13 @@ async function loadReviews() {
   let reviews = FALLBACK_REVIEWS;
   if (useLiveBackend && supabaseClient) {
     try {
-      const { data, error } = await supabaseClient.from("reviews").select("*").order("created_at",{ascending:false}).limit(5);
+      const { data, error } = await supabaseClient.from("reviews").select("*").order("created_at",{ascending:false}).limit(10);
       if (error) throw error;
       if (data&&data.length) reviews = data;
     } catch(e) { console.warn("Reviews fallback:", e); }
   }
   const grid = document.getElementById("reviewsGrid");
-  grid.innerHTML = reviews.slice(0,5).map((r) => `
+  grid.innerHTML = reviews.slice(0,10).map((r) => `
     <div class="tv-review-slide">
       <div class="review-card">
         <div class="review-mono">${monogram(r.customer_name)}</div>
@@ -564,7 +564,7 @@ async function loadReviews() {
 
   const dotsWrap = document.getElementById("reviewsDots");
   if (dotsWrap) {
-    dotsWrap.innerHTML = reviews.slice(0,5).map((_,i) => `<button class="tv-reviews-dot${i===0?" active":""}" data-i="${i}" aria-label="Go to review ${i+1}"></button>`).join("");
+    dotsWrap.innerHTML = reviews.slice(0,10).map((_,i) => `<button class="tv-reviews-dot${i===0?" active":""}" data-i="${i}" aria-label="Go to review ${i+1}"></button>`).join("");
   }
   bindReviewsSlider();
 }
