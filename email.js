@@ -24,6 +24,8 @@ async function sendBookingEmails(d) {
     trip_type: "",
     persons: d.persons,
     total: d.total ? "EGP " + d.total : "",
+    deposit: d.deposit ? "EGP " + d.deposit : "",
+    balance: d.balance ? "EGP " + d.balance : "",
     notes: "",
     request_type: "Booking",
     submitted_at: tvStamp()

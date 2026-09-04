@@ -74,6 +74,7 @@ create table if not exists public.gallery (
 alter table public.trips add column if not exists accommodation_photos text[] not null default '{}';
 alter table public.trips add column if not exists price_options text[] not null default '{}';
 alter table public.trips add column if not exists duration text;
+alter table public.bookings add column if not exists deposit_amount numeric not null default 0;
 do $$
 begin
   if not exists (
@@ -90,6 +91,32 @@ begin
 end $$;
 alter table public.gallery add column if not exists media_url text;
 alter table public.gallery add column if not exists is_video boolean not null default false;
+
+-- 1c) BOOKING STATUS ENUM (gateway dropdown: "not yet" | "done")
+do $$
+begin
+  if not exists (
+    select 1 from pg_type t join pg_namespace n on n.oid = t.typnamespace
+    where t.typname = 'booking_status' and n.nspname = 'public'
+  ) then
+    create type public.booking_status as enum ('not yet', 'done');
+  end if;
+end $$;
+
+-- 1d) MIGRATE EXISTING FREE-TEXT STATUS -> ENUM (only while column is still text)
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema='public' and table_name='bookings' and column_name='status' and data_type='text'
+  ) then
+    update public.bookings set status = 'not yet'
+      where status is null or lower(btrim(status)) not in ('done', 'not yet');
+    alter table public.bookings alter column status drop default;
+    alter table public.bookings alter column status type public.booking_status using status::text::public.booking_status;
+  end if;
+end $$;
+alter table public.bookings alter column status set default 'not yet';
 
 -- 2) ROW LEVEL SECURITY
 alter table public.trips enable row level security;

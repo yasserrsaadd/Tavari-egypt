@@ -577,7 +577,7 @@ bindGalleryLightbox();
 /* TRIP DETAIL MODAL */
 const tripDetailScrim = document.getElementById("tripDetailScrim");
 const tripDetailModal = tripDetailScrim.querySelector(".tv-trip-detail-modal");
-function tvEsc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function tvEsc(s){ return esc(s); }
 function closeTripDetails(){ closeAccLightbox(); closeHeroLightbox(); tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
 document.getElementById("tripDetailClose").addEventListener("click", closeTripDetails);
 tripDetailScrim.addEventListener("click", (e) => { if (e.target===tripDetailScrim) closeTripDetails(); });
@@ -927,7 +927,6 @@ function openTripDetails(tripId){
       </div>
     </div>
   `;
-  document.querySelectorAll("#tripDetailBody p").forEach(p => p.style.fontFamily = "'DM Sans', sans-serif");
   tripDetailScrim.classList.add("show");
     document.body.style.overflow = "hidden";
     tripDetailModal.scrollTop = 0;
@@ -963,16 +962,27 @@ function goToStage(n) {
   document.getElementById("pip1").classList.toggle("active",n===1);
   document.getElementById("pip2").classList.toggle("active",n===2);
 }
+const DEPOSIT_RATE = 0.5;
 const bkPersonsInput = document.getElementById("bkPersons");
 function clampPersons(val) { let n=parseInt(val,10); if(isNaN(n)||n<1)n=1; if(n>20)n=20; return n; }
-function updatePriceEngine() {
-  if (!currentTrip) return;
+function bookingAmounts() {
+  if (!currentTrip) return null;
   const persons = clampPersons(bkPersonsInput.value);
   bkPersonsInput.value = persons;
-  const total = (currentTrip.base_price||0)*persons;
-  document.getElementById("stage1Price").textContent = fmtMoney(total);
-  document.getElementById("stage1PriceBreakdown").textContent = `${fmtMoney(currentTrip.base_price)} × ${persons}`;
-  document.getElementById("stage2Price").textContent = fmtMoney(total);
+  const fullTotal = Math.round((currentTrip.base_price||0)*persons);
+  const deposit = Math.round(fullTotal * DEPOSIT_RATE);
+  return { persons, fullTotal, deposit, balance: fullTotal - deposit };
+}
+function updatePriceEngine() {
+  const a = bookingAmounts();
+  if (!a) return;
+  document.getElementById("stage1Price").textContent = fmtMoney(a.fullTotal);
+  document.getElementById("stage1PriceBreakdown").textContent = `${fmtMoney(currentTrip.base_price)} × ${a.persons}`;
+  const depositEl = document.getElementById("stage1Deposit");
+  if (depositEl) depositEl.textContent = fmtMoney(a.deposit);
+  document.getElementById("stage2Price").textContent = fmtMoney(a.deposit);
+  const stage2Balance = document.getElementById("stage2Balance");
+  if (stage2Balance) stage2Balance.textContent = fmtMoney(a.balance);
 }
 bkPersonsInput.addEventListener("input", updatePriceEngine);
 document.getElementById("bkPersonsMinus").addEventListener("click", () => { bkPersonsInput.value=clampPersons(bkPersonsInput.value)-1; updatePriceEngine(); });
@@ -1019,8 +1029,8 @@ document.getElementById("completeBookingBtn").addEventListener("click", async ()
   const name=document.getElementById("bkName").value.trim();
   const phone=document.getElementById("bkPhone").value.trim();
   const email=document.getElementById("bkEmail").value.trim();
-  const persons=clampPersons(bkPersonsInput.value);
-  const total=(currentTrip.base_price||0)*persons;
+  const a = bookingAmounts();
+  const persons = a.persons, total = a.fullTotal, deposit = a.deposit, balance = a.balance;
   const btn=completeBtn;
   const originalLabel=btn.querySelector(".btn-label").textContent;
   setButtonLoading(btn,true,"Processing…");
@@ -1032,17 +1042,17 @@ document.getElementById("completeBookingBtn").addEventListener("click", async ()
       if (uploadError) throw uploadError;
       const { data:urlData } = supabaseClient.storage.from(RECEIPTS_BUCKET).getPublicUrl(path);
       receiptUrl=urlData.publicUrl;
-      const { error:insertError } = await supabaseClient.from("bookings").insert({ trip_id:currentTrip.id, customer_name:name, customer_phone:phone, customer_email:email, num_persons:persons, total_price:total, receipt_url:receiptUrl, status:"pending_verification" });
+      const { error:insertError } = await supabaseClient.from("bookings").insert({ trip_id:currentTrip.id, customer_name:name, customer_phone:phone, customer_email:email, num_persons:persons, total_price:total, deposit_amount:deposit, receipt_url:receiptUrl, status:"not yet" });
       if (insertError) throw insertError;
     } else {
       const bookings=JSON.parse(localStorage.getItem("tavari_bookings")||"[]");
-      bookings.push({ id:"local-"+Date.now(), trip_id:currentTrip.id, trip_title:currentTrip.title, customer_name:name, customer_phone:phone, customer_email:email, num_persons:persons, total_price:total, receipt_url:receiptUrl, status:"pending_verification", created_at:new Date().toISOString() });
+      bookings.push({ id:"local-"+Date.now(), trip_id:currentTrip.id, trip_title:currentTrip.title, customer_name:name, customer_phone:phone, customer_email:email, num_persons:persons, total_price:total, deposit_amount:deposit, receipt_url:receiptUrl, status:"not yet", created_at:new Date().toISOString() });
       localStorage.setItem("tavari_bookings",JSON.stringify(bookings));
     }
-    try { await sendBookingEmails({ name, phone, email, trip: currentTrip.title, persons, total }); }
+    try { await sendBookingEmails({ name, phone, email, trip: currentTrip.title, persons, total, deposit, balance }); }
     catch (mailErr) { console.warn("Booking email failed:", mailErr); }
     closeBookingDrawer();
-    showSuccessModal(esc(`Thank you, ${name}.`), `Your receipt for the <strong>${esc(currentTrip.title)}</strong> has been received. Our payment desk will reach out on <strong>${esc(phone)}</strong> via WhatsApp shortly to deliver your tickets.`);
+    showSuccessModal(esc(`Thank you, ${name}.`), `Your 50% deposit receipt for the <strong>${esc(currentTrip.title)}</strong> has been received. Our payment desk will reach out on <strong>${esc(phone)}</strong> via WhatsApp shortly to deliver your tickets and arrange the remaining balance.`);
     resetReceiptZone();
   } catch(err) {
     console.error(err); showToast(err.message||"Something went wrong. Please try again.","error");
