@@ -927,11 +927,12 @@ function openTripDetails(tripId){
       </div>
     </div>
   `;
+  document.querySelectorAll("#tripDetailBody p").forEach(p => p.style.fontFamily = "'DM Sans', sans-serif");
   tripDetailScrim.classList.add("show");
-  document.body.style.overflow = "hidden";
-  tripDetailModal.scrollTop = 0;
-  initTripHeroSlider();
-  initAccSlider();
+    document.body.style.overflow = "hidden";
+    tripDetailModal.scrollTop = 0;
+    initTripHeroSlider();
+    initAccSlider();
 }
 
 /* BOOKING DRAWER */
