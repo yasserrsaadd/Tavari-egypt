@@ -208,7 +208,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .about-quote{ font-family: 'Inter', sans-serif; font-style: normal; font-weight: 400; font-size: 1rem; line-height: 1.75; color: var(--ink-soft); }
 #community .mt-3{ text-align: center; }
 #customize .mt-3{ text-align: center; }
-#customize .section-head p.mt-3{ max-width: 38ch; margin-left: auto; margin-right: auto; text-align: center; text-wrap: balance; }
+#customize .section-head p.mt-3{ max-width: 49ch; margin-left: auto; margin-right: auto; text-align: center; text-wrap: balance; }
 .hero-insights{ display:flex; align-items:center; gap: 0; margin-top: 2.6rem; flex-wrap: nowrap; }
 .hero-insight{ text-align:left; padding: 0 1.6rem; position: relative; flex: 1; width: 50px; }
 .hero-insight:first-child{ padding-left: 0; }
@@ -634,11 +634,18 @@ body.gal-lb-open{ overflow: hidden; }
 /* Large phones */
 @media (max-width: 767px){
   .mt-3{ font-size: 2rem !important; line-height: 1.6 !important; }
+   #about p.about-quote{
+    max-width: 80%;
+  }
   p.mt-3{ font-size: 0.8rem !important; line-height: 1.6 !important; }
   p.about-quote{ font-size: 0.7rem !important; line-height: 1.6 !important; font-family: 'DM Sans', sans-serif; }
   .section{ padding: 4rem 0 1.75rem; }
   .section-head{ margin-bottom: 1.4rem; }
   .section-title{ font-size: 1.7rem; }
+  #customize .section-head p.mt-3{
+    max-width: 90%;
+  }
+ 
 
   /* Consistent left alignment on mobile */
   .section-head.text-center{ text-align: center !important; }
@@ -731,6 +738,9 @@ body.gal-lb-open{ overflow: hidden; }
 /* Small phones */
 @media (max-width: 480px){
   body{ font-size: 15px; }
+   #about p.about-quote{
+    max-width: 90%;
+  }
   .section{ padding: 3.28rem 0 1.5rem; }
   .section-title{ font-size: 1.4rem; }
   .container{ padding-left: 1.1rem; padding-right: 1.1rem; }
