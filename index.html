@@ -884,6 +884,7 @@ img, video, .container, .row{ max-width: 100%; }
   .tv-whatsapp-fab svg{ width: 28px; height: 28px; }
 }
   .mt-3, p.mt-3{ font-family: 'DM Sans', sans-serif; }
+  .hp-field{ position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0; overflow:hidden; }
 </style>
 </head>
 <body>
@@ -1120,6 +1121,9 @@ img, video, .container, .row{ max-width: 100%; }
                   <label class="tv-field-label" for="inqNotes">Anything we should know?</label>
                   <textarea class="tv-textarea" id="inqNotes" placeholder="Dates you're thinking of, special requests, etc."></textarea>
                 </div>
+                <div class="hp-field" aria-hidden="true">
+                  <input type="text" id="inqHoney" name="website" tabindex="-1" autocomplete="off">
+                </div>
                 <div class="col-12">
                   <label class="tv-consent" for="inqConsent">
                     <input type="checkbox" id="inqConsent">
@@ -1216,7 +1220,7 @@ img, video, .container, .row{ max-width: 100%; }
       </div>
       <div class="col-lg-4">
         <p class="eyebrow mb-3" style="color:rgba(250,248,245,0.5);">Reach Us</p>
-        <p style="font-size:0.85rem; line-height:1.8;">TavariEgypt@gmail.com<br>WhatsApp +20 100 123 4567</p>
+        <p style="font-size:0.85rem; line-height:1.8;">TavariEgypt@gmail.com<br>WhatsApp +20 1061336882</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1291,6 +1295,9 @@ img, video, .container, .row{ max-width: 100%; }
         <img id="dropzonePreview" class="tv-dropzone-preview" alt="Receipt preview">
       </div>
         <input type="file" id="receiptInput" accept="image/*" class="d-none">
+        <div class="hp-field" aria-hidden="true">
+          <input type="text" id="bkHoney" name="website2" tabindex="-1" autocomplete="off">
+        </div>
         <label class="tv-consent" for="bkConsent">
           <input type="checkbox" id="bkConsent">
           <span>I consent to Tavari storing the details and receipt above to process my booking.</span>

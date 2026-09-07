@@ -1031,6 +1031,11 @@ function handleReceiptFile(file) {
 }
 document.getElementById("completeBookingBtn").addEventListener("click", async () => {
   if (!receiptFile||!currentTrip) return;
+  if (String((document.getElementById("bkHoney")||{}).value||"").trim() !== "") {
+    closeBookingDrawer(); resetReceiptZone();
+    showSuccessModal("Thank you, Traveler.", "Your 50% deposit receipt has been received. Our payment desk will reach out shortly.");
+    return;
+  }
   if (!document.getElementById("bkConsent").checked) { showToast("Please accept the data consent to continue.","error"); return; }
   const name=document.getElementById("bkName").value.trim();
   const phone=document.getElementById("bkPhone").value.trim();
@@ -1086,6 +1091,11 @@ document.getElementById("inquiryForm").addEventListener("submit", async (e) => {
   const tripType=document.getElementById("inqType").value;
   const persons=clampInqTravelers(inqTravelersInput.value);
   const notes=document.getElementById("inqNotes").value.trim();
+  if (String((document.getElementById("inqHoney")||{}).value||"").trim() !== "") {
+    document.getElementById("inquiryForm").reset(); inqTravelersInput.value=2;
+    showSuccessModal("Thank you, Traveler.", "Your custom inquiry has been received. A booking manager will reply by WhatsApp or call within a few hours.");
+    return;
+  }
   if (!name||!phone||!email) { showToast("Please fill in your name, phone, and email.","error"); return; }
   if (!/^\S+@\S+\.\S+$/.test(email)) { showToast("That email address doesn't look quite right.","error"); return; }
   if (!document.getElementById("inqConsent").checked) { showToast("Please accept the data consent to continue.","error"); return; }
