@@ -382,7 +382,7 @@ function renderTrips(trips) {
       <div class="trip-card">
         <div class="trip-thumb-wrap ${imgs.length<=1?'trip-thumb-wrap--single':''}">
           <div class="trip-thumb-track">
-            ${imgs.map((src,k)=>`<div class="trip-thumb-slide"><img src="${src}" alt="${tvEsc(t.title)} photo ${k+1}" ${k?'loading="lazy"':''}></div>`).join("")}
+            ${imgs.map((src,k)=>`<div class="trip-thumb-slide"><img src="${tvThumb(src)}" alt="${tvEsc(t.title)} photo ${k+1}" ${k?'loading="lazy"':''}></div>`).join("")}
           </div>
           <button class="trip-thumb-nav trip-thumb-prev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
           <button class="trip-thumb-nav trip-thumb-next" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
@@ -439,7 +439,7 @@ async function loadGalleryStrip() {
   const tile = (p) => {
     const media = p.isVideo
       ? `<video src="${p.url}" autoplay muted loop playsinline preload="metadata"></video><span class="gal-play-badge" aria-hidden="true"><i class="bi bi-play-fill"></i></span>`
-      : `<img src="${p.url}" alt="${tvEsc(p.cap)}" loading="lazy">`;
+      : `<img src="${tvThumb(p.url)}" alt="${tvEsc(p.cap)}" loading="lazy">`;
     return `<div class="gal-frame"><div class="gal-photo">${media}<div class="gal-caption"><div class="gal-title">${tvEsc(p.cap)}</div></div></div></div>`;
   };
   grid.innerHTML = photos.map(tile).join("");
@@ -578,6 +578,10 @@ bindGalleryLightbox();
 const tripDetailScrim = document.getElementById("tripDetailScrim");
 const tripDetailModal = tripDetailScrim.querySelector(".tv-trip-detail-modal");
 function tvEsc(s){ return esc(s); }
+function tvThumb(url){
+  if (url && url.indexOf("/trip-photos/") !== -1 && /\.webp$/i.test(url)) return url.replace(/\.webp$/i, ".th.webp");
+  return url;
+}
 function closeTripDetails(){ closeAccLightbox(); closeHeroLightbox(); tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
 document.getElementById("tripDetailClose").addEventListener("click", closeTripDetails);
 tripDetailScrim.addEventListener("click", (e) => { if (e.target===tripDetailScrim) closeTripDetails(); });
