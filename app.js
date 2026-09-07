@@ -382,7 +382,7 @@ function renderTrips(trips) {
       <div class="trip-card">
         <div class="trip-thumb-wrap ${imgs.length<=1?'trip-thumb-wrap--single':''}">
           <div class="trip-thumb-track">
-            ${imgs.map((src,k)=>`<div class="trip-thumb-slide"><img src="${tvThumb(src)}" alt="${tvEsc(t.title)} photo ${k+1}" ${k?'loading="lazy"':''}></div>`).join("")}
+            ${imgs.map((src,k)=>{const eager=(i===0&&k===0);return `<div class="trip-thumb-slide"><img src="${tvThumb(src)}" alt="${tvEsc(t.title)} photo ${k+1}" ${eager?'fetchpriority="high" decoding="async"':'loading="lazy" decoding="async"'}></div>`;}).join("")}
           </div>
           <button class="trip-thumb-nav trip-thumb-prev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
           <button class="trip-thumb-nav trip-thumb-next" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
@@ -439,7 +439,7 @@ async function loadGalleryStrip() {
   const tile = (p) => {
     const media = p.isVideo
       ? `<video src="${p.url}" autoplay muted loop playsinline preload="metadata"></video><span class="gal-play-badge" aria-hidden="true"><i class="bi bi-play-fill"></i></span>`
-      : `<img src="${tvThumb(p.url)}" alt="${tvEsc(p.cap)}" loading="lazy">`;
+      : `<img src="${tvThumb(p.url)}" alt="${tvEsc(p.cap)}" loading="lazy" decoding="async">`;
     return `<div class="gal-frame"><div class="gal-photo">${media}<div class="gal-caption"><div class="gal-title">${tvEsc(p.cap)}</div></div></div></div>`;
   };
   grid.innerHTML = photos.map(tile).join("");
@@ -897,7 +897,7 @@ function openTripDetails(tripId){
   document.getElementById("tripDetailBody").innerHTML = `
     <div class="tv-td-hero ${imgs.length<=1?'tv-td-hero--single':''}">
       <div class="tv-td-hero-track" id="tdHeroTrack">
-        ${imgs.map((src,i)=>`<div class="tv-td-hero-slide"><img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" ${i?'loading="lazy"':''}></div>`).join("")}
+        ${imgs.map((src,i)=>`<div class="tv-td-hero-slide"><img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" ${i?'loading="lazy"':''} decoding="async"></div>`).join("")}
       </div>
       <button class="tv-td-hero-nav tv-td-hero-prev" id="tdHeroPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
       <button class="tv-td-hero-nav tv-td-hero-next" id="tdHeroNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
@@ -914,7 +914,7 @@ function openTripDetails(tripId){
       </div>
       ${t.description?`<div class="tv-td-section"><h3><i class="bi bi-info-circle"></i> About this trip</h3><p>${tvEsc(t.description)}</p></div>`:""}
       ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> Day by day</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
-      ${t.accommodation?(()=>{const accImgs=(t.accommodation_photos&&t.accommodation_photos.length)?t.accommodation_photos:[];return`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p>${accImgs.length?`<div class="tv-td-acc-photos"><div class="tv-td-acc-slider${accImgs.length<=1?' tv-td-acc-slider--single':''}" id="tdAccSlider"><div class="tv-td-acc-track" id="tdAccTrack">${accImgs.map((src,i)=>`<div class="tv-td-acc-slide"><img src="${src}" alt="Accommodation photo ${i+1}" ${i?'loading="lazy"':''} data-full="${src}"></div>`).join("")}</div><button class="tv-td-acc-nav tv-td-acc-prev" id="tdAccPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button><button class="tv-td-acc-nav tv-td-acc-next" id="tdAccNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button><div class="tv-td-acc-dots" id="tdAccDots">${accImgs.map((_,i)=>`<button class="tv-td-acc-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div></div></div>`:""}</div>`;})():""}
+      ${t.accommodation?(()=>{const accImgs=(t.accommodation_photos&&t.accommodation_photos.length)?t.accommodation_photos:[];return`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p>${accImgs.length?`<div class="tv-td-acc-photos"><div class="tv-td-acc-slider${accImgs.length<=1?' tv-td-acc-slider--single':''}" id="tdAccSlider"><div class="tv-td-acc-track" id="tdAccTrack">${accImgs.map((src,i)=>`<div class="tv-td-acc-slide"><img src="${src}" alt="Accommodation photo ${i+1}" ${i?'loading="lazy"':''} decoding="async" data-full="${src}"></div>`).join("")}</div><button class="tv-td-acc-nav tv-td-acc-prev" id="tdAccPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button><button class="tv-td-acc-nav tv-td-acc-next" id="tdAccNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button><div class="tv-td-acc-dots" id="tdAccDots">${accImgs.map((_,i)=>`<button class="tv-td-acc-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div></div></div>`:""}</div>`;})():""}
        <div class="tv-td-section"><h3><i class="bi bi-clipboard-check"></i> What's included &amp; excluded</h3>
         <div class="tv-td-cols">
           <div><div class="eyebrow mb-2">Included</div>${bullets(included,"included")}</div>
