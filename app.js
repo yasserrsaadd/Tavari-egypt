@@ -323,6 +323,7 @@ function monogram(name) { return name.split(" ").filter(Boolean).slice(0,2).map(
 function starString(rating) { const r=Math.max(1,Math.min(5,rating||5)); return "★★★★★".slice(0,r)+"☆☆☆☆☆".slice(0,5-r); }
 function fmtMoney(n) { return "EGP "+Number(n||0).toLocaleString(); }
 function fmtTripDateRange(t) {
+  if (t.dates_label && String(t.dates_label).trim()) return String(t.dates_label).trim();
   if (t.start_date) {
     const sd = parseLocalDate(t.start_date);
     if (!sd) return t.dates_label||"Dates on request";
@@ -872,6 +873,7 @@ function openTripDetails(tripId){
   const price = fmtMoney(t.base_price) + " / person";
   const solo = t.solo_message || "Traveling solo? No problem — over 80% of our travellers journey on their own. You'll be in great company.";
   const itin = (t.itinerary && Array.isArray(t.itinerary)) ? t.itinerary : [];
+  const singleDayItin = itin.length === 1;
   const included = (t.included && t.included.length) ? t.included : [];
   const excluded = (t.excluded && t.excluded.length) ? t.excluded : [];
   const prices = (t.price_options && t.price_options.length) ? t.price_options : [];
@@ -913,7 +915,7 @@ function openTripDetails(tripId){
         <span class="tv-td-price">${tvEsc(price)}</span>
       </div>
       ${t.description?`<div class="tv-td-section"><h3><i class="bi bi-info-circle"></i> About this trip</h3><p>${tvEsc(t.description)}</p></div>`:""}
-      ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> Day by day</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
+      ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> ${singleDayItin?"Day itinerary":"Day by day"}</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
       ${t.accommodation?(()=>{const accImgs=(t.accommodation_photos&&t.accommodation_photos.length)?t.accommodation_photos:[];return`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p>${accImgs.length?`<div class="tv-td-acc-photos"><div class="tv-td-acc-slider${accImgs.length<=1?' tv-td-acc-slider--single':''}" id="tdAccSlider"><div class="tv-td-acc-track" id="tdAccTrack">${accImgs.map((src,i)=>`<div class="tv-td-acc-slide"><img src="${src}" alt="Accommodation photo ${i+1}" ${i?'loading="lazy"':''} decoding="async" data-full="${src}"></div>`).join("")}</div><button class="tv-td-acc-nav tv-td-acc-prev" id="tdAccPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button><button class="tv-td-acc-nav tv-td-acc-next" id="tdAccNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button><div class="tv-td-acc-dots" id="tdAccDots">${accImgs.map((_,i)=>`<button class="tv-td-acc-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div></div></div>`:""}</div>`;})():""}
        <div class="tv-td-section"><h3><i class="bi bi-clipboard-check"></i> What's included &amp; excluded</h3>
         <div class="tv-td-cols">
