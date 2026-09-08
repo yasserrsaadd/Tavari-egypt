@@ -171,7 +171,10 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
       const heroMq = window.matchMedia("(min-width: 768px)");
 
       const applyHeroSource = () => {
-        const list = heroMq.matches ? heroSourceSets.desktop : heroSourceSets.mobile;
+        const active = heroMq.matches ? "desktop" : "mobile";
+        if (window.__heroDataSource === active) return;
+        window.__heroDataSource = active;
+        const list = heroSourceSets[active];
         while (bgVideo.firstChild) bgVideo.removeChild(bgVideo.firstChild);
         for (const s of list) {
           const source = document.createElement("source");
