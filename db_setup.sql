@@ -122,10 +122,15 @@ create policy "inquiries anon insert" on public.inquiries for insert with check 
 do $$
 begin
   if not exists (select 1 from storage.buckets where id = 'payment-receipts') then
-    insert into storage.buckets (id, name, public)
-    values ('payment-receipts', 'payment-receipts', true);
+    insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+    values ('payment-receipts', 'payment-receipts', true, 5242880,
+            array['image/png','image/jpeg','image/webp','image/heic','image/heif']);
   else
-    update storage.buckets set public = true where id = 'payment-receipts';
+    update storage.buckets
+    set public = true,
+        file_size_limit = 5242880,
+        allowed_mime_types = array['image/png','image/jpeg','image/webp','image/heic','image/heif']
+    where id = 'payment-receipts';
   end if;
 end $$;
 
