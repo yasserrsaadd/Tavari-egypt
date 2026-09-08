@@ -91,6 +91,7 @@ end $$;
 alter table public.gallery add column if not exists media_url text;
 alter table public.gallery add column if not exists is_video boolean not null default false;
 alter table public.bookings add column if not exists deposit_amount numeric not null default 0;
+alter table public.bookings add column if not exists trip_title text;
 
 -- 2) ROW LEVEL SECURITY
 alter table public.trips enable row level security;
@@ -116,10 +117,17 @@ create policy "bookings anon insert" on public.bookings for insert with check (t
 drop policy if exists "inquiries anon insert" on public.inquiries;
 create policy "inquiries anon insert" on public.inquiries for insert with check (true);
 
--- 5) STORAGE BUCKETS + POLICIES
-insert into storage.buckets (id, name, public)
-values ('payment-receipts','payment-receipts', true)
-on conflict (id) do nothing;
+-- 5) STORAGE BUCKETS + POLICIES (idempotent, re-runnable)
+-- Required for deposit-receipt uploads in the booking form (must be public).
+do $$
+begin
+  if not exists (select 1 from storage.buckets where id = 'payment-receipts') then
+    insert into storage.buckets (id, name, public)
+    values ('payment-receipts', 'payment-receipts', true);
+  else
+    update storage.buckets set public = true where id = 'payment-receipts';
+  end if;
+end $$;
 
 drop policy if exists "receipts anon upload" on storage.objects;
 create policy "receipts anon upload"
@@ -129,18 +137,32 @@ drop policy if exists "receipts public read" on storage.objects;
 create policy "receipts public read"
   on storage.objects for select using (bucket_id='payment-receipts');
 
-insert into storage.buckets (id, name, public)
-values ('trip-media','trip-media', true)
-on conflict (id) do nothing;
+do $$
+begin
+  if not exists (select 1 from storage.buckets where id = 'trip-media') then
+    insert into storage.buckets (id, name, public)
+    values ('trip-media', 'trip-media', true);
+  else
+    update storage.buckets set public = true where id = 'trip-media';
+  end if;
+end $$;
 
 drop policy if exists "trip-media public read" on storage.objects;
 create policy "trip-media public read"
   on storage.objects for select using (bucket_id='trip-media');
 
-insert into storage.buckets (id, name, public)
-values ('gallery-media','gallery-media', true)
-on conflict (id) do nothing;
+do $$
+begin
+  if not exists (select 1 from storage.buckets where id = 'gallery-media') then
+    insert into storage.buckets (id, name, public)
+    values ('gallery-media', 'gallery-media', true);
+  else
+    update storage.buckets set public = true where id = 'gallery-media';
+  end if;
+end $$;
 
 drop policy if exists "gallery-media public read" on storage.objects;
 create policy "gallery-media public read"
   on storage.objects for select using (bucket_id='gallery-media');
+
+-- Verify: select id, name, public from storage.buckets;
