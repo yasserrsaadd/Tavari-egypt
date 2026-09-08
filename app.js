@@ -1083,7 +1083,8 @@ document.getElementById("completeBookingBtn").addEventListener("click", async ()
   try {
     let receiptUrl=receiptDataUrl;
     if (useLiveBackend&&supabaseClient) {
-      const path=`receipts/${currentTrip.id}_${Date.now()}_proof.png`;
+      const uid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : (Date.now().toString(36) + Math.random().toString(36).slice(2));
+      const path=`receipts/${uid}_proof.png`;
       const { error:uploadError } = await supabaseClient.storage.from(RECEIPTS_BUCKET).upload(path,receiptFile);
       if (uploadError) throw uploadError;
       const { data:urlData } = supabaseClient.storage.from(RECEIPTS_BUCKET).getPublicUrl(path);
