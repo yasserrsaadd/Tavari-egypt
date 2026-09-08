@@ -157,15 +157,47 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
         if (p && typeof p.catch === "function") p.catch(() => {});
       };
 
+      /* Serve the right hero video per screen size (desktop landscape vs mobile vertical).
+         Only the matching source set is ever loaded, so the wrong video never flashes on mobile. */
+      const heroSourceSets = {
+        desktop: [
+          { src: "Videos/hero.webm", type: "video/webm" },
+          { src: "Videos/hero.mp4", type: "video/mp4" }
+        ],
+        mobile: [
+          { src: "Videos/mobileHero.mp4", type: "video/mp4" }
+        ]
+      };
+      const heroMq = window.matchMedia("(min-width: 768px)");
+
+      const applyHeroSource = () => {
+        const list = heroMq.matches ? heroSourceSets.desktop : heroSourceSets.mobile;
+        while (bgVideo.firstChild) bgVideo.removeChild(bgVideo.firstChild);
+        for (const s of list) {
+          const source = document.createElement("source");
+          source.src = s.src;
+          if (s.type) source.type = s.type;
+          bgVideo.appendChild(source);
+        }
+        bgVideo.load();
+        tryPlay();
+      };
+
       /* Play the instant the browser is ready, and keep retrying */
-      tryPlay();
+      applyHeroSource();
       bgVideo.addEventListener("loadeddata", tryPlay);
       bgVideo.addEventListener("canplay", tryPlay);
-      bgVideo.addEventListener("playing", () => {});
       window.addEventListener("load", tryPlay);
       setTimeout(tryPlay, 300);
       setTimeout(tryPlay, 1000);
       setTimeout(tryPlay, 3000);
+
+      /* Swap hero video instantly when crossing the desktop/mobile breakpoint */
+      if (typeof heroMq.addEventListener === "function") {
+        heroMq.addEventListener("change", applyHeroSource);
+      } else if (typeof heroMq.addListener === "function") {
+        heroMq.addListener(applyHeroSource);
+      }
 
       /* Pause only on a *confirmed* scroll-out or hidden tab (saves CPU/GPU/battery).
          Never pause on the observer's first callback, so load-time autoplay is safe. */
