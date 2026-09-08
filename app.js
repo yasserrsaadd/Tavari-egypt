@@ -323,6 +323,7 @@ function monogram(name) { return name.split(" ").filter(Boolean).slice(0,2).map(
 function starString(rating) { const r=Math.max(1,Math.min(5,rating||5)); return "★★★★★".slice(0,r)+"☆☆☆☆☆".slice(0,5-r); }
 function fmtMoney(n) { return "EGP "+Number(n||0).toLocaleString(); }
 function fmtTripDateRange(t) {
+  if (t.dates_label && String(t.dates_label).trim()) return String(t.dates_label).trim();
   if (t.start_date) {
     const sd = parseLocalDate(t.start_date);
     if (!sd) return t.dates_label||"Dates on request";
@@ -382,7 +383,7 @@ function renderTrips(trips) {
       <div class="trip-card">
         <div class="trip-thumb-wrap ${imgs.length<=1?'trip-thumb-wrap--single':''}">
           <div class="trip-thumb-track">
-            ${imgs.map((src,k)=>`<div class="trip-thumb-slide"><img src="${src}" alt="${tvEsc(t.title)} photo ${k+1}" ${k?'loading="lazy"':''}></div>`).join("")}
+            ${imgs.map((src,k)=>{const eager=(i===0&&k===0);return `<div class="trip-thumb-slide"><img src="${tvThumb(src)}" alt="${tvEsc(t.title)} photo ${k+1}" ${eager?'fetchpriority="high" decoding="async"':'loading="lazy" decoding="async"'}></div>`;}).join("")}
           </div>
           <button class="trip-thumb-nav trip-thumb-prev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
           <button class="trip-thumb-nav trip-thumb-next" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
@@ -439,7 +440,7 @@ async function loadGalleryStrip() {
   const tile = (p) => {
     const media = p.isVideo
       ? `<video src="${p.url}" autoplay muted loop playsinline preload="metadata"></video><span class="gal-play-badge" aria-hidden="true"><i class="bi bi-play-fill"></i></span>`
-      : `<img src="${p.url}" alt="${tvEsc(p.cap)}" loading="lazy">`;
+      : `<img src="${tvThumb(p.url)}" alt="${tvEsc(p.cap)}" loading="lazy" decoding="async">`;
     return `<div class="gal-frame"><div class="gal-photo">${media}<div class="gal-caption"><div class="gal-title">${tvEsc(p.cap)}</div></div></div></div>`;
   };
   grid.innerHTML = photos.map(tile).join("");
@@ -578,6 +579,10 @@ bindGalleryLightbox();
 const tripDetailScrim = document.getElementById("tripDetailScrim");
 const tripDetailModal = tripDetailScrim.querySelector(".tv-trip-detail-modal");
 function tvEsc(s){ return esc(s); }
+function tvThumb(url){
+  if (url && url.indexOf("/trip-photos/") !== -1 && /\.webp$/i.test(url)) return url.replace(/\.webp$/i, ".th.webp");
+  return url;
+}
 function closeTripDetails(){ closeAccLightbox(); closeHeroLightbox(); tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
 document.getElementById("tripDetailClose").addEventListener("click", closeTripDetails);
 tripDetailScrim.addEventListener("click", (e) => { if (e.target===tripDetailScrim) closeTripDetails(); });
@@ -868,6 +873,7 @@ function openTripDetails(tripId){
   const price = fmtMoney(t.base_price) + " / person";
   const solo = t.solo_message || "Traveling solo? No problem — over 80% of our travellers journey on their own. You'll be in great company.";
   const itin = (t.itinerary && Array.isArray(t.itinerary)) ? t.itinerary : [];
+  const singleDayItin = itin.length === 1;
   const included = (t.included && t.included.length) ? t.included : [];
   const excluded = (t.excluded && t.excluded.length) ? t.excluded : [];
   const prices = (t.price_options && t.price_options.length) ? t.price_options : [];
@@ -893,7 +899,7 @@ function openTripDetails(tripId){
   document.getElementById("tripDetailBody").innerHTML = `
     <div class="tv-td-hero ${imgs.length<=1?'tv-td-hero--single':''}">
       <div class="tv-td-hero-track" id="tdHeroTrack">
-        ${imgs.map((src,i)=>`<div class="tv-td-hero-slide"><img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" ${i?'loading="lazy"':''}></div>`).join("")}
+        ${imgs.map((src,i)=>`<div class="tv-td-hero-slide"><img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" ${i?'loading="lazy"':''} decoding="async"></div>`).join("")}
       </div>
       <button class="tv-td-hero-nav tv-td-hero-prev" id="tdHeroPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
       <button class="tv-td-hero-nav tv-td-hero-next" id="tdHeroNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
@@ -909,8 +915,8 @@ function openTripDetails(tripId){
         <span class="tv-td-price">${tvEsc(price)}</span>
       </div>
       ${t.description?`<div class="tv-td-section"><h3><i class="bi bi-info-circle"></i> About this trip</h3><p>${tvEsc(t.description)}</p></div>`:""}
-      ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> Day by day</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
-      ${t.accommodation?(()=>{const accImgs=(t.accommodation_photos&&t.accommodation_photos.length)?t.accommodation_photos:[];return`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p>${accImgs.length?`<div class="tv-td-acc-photos"><div class="tv-td-acc-slider${accImgs.length<=1?' tv-td-acc-slider--single':''}" id="tdAccSlider"><div class="tv-td-acc-track" id="tdAccTrack">${accImgs.map((src,i)=>`<div class="tv-td-acc-slide"><img src="${src}" alt="Accommodation photo ${i+1}" ${i?'loading="lazy"':''} data-full="${src}"></div>`).join("")}</div><button class="tv-td-acc-nav tv-td-acc-prev" id="tdAccPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button><button class="tv-td-acc-nav tv-td-acc-next" id="tdAccNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button><div class="tv-td-acc-dots" id="tdAccDots">${accImgs.map((_,i)=>`<button class="tv-td-acc-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div></div></div>`:""}</div>`;})():""}
+      ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> ${singleDayItin?"Day itinerary":"Day by day"}</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
+      ${t.accommodation?(()=>{const accImgs=(t.accommodation_photos&&t.accommodation_photos.length)?t.accommodation_photos:[];return`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p>${accImgs.length?`<div class="tv-td-acc-photos"><div class="tv-td-acc-slider${accImgs.length<=1?' tv-td-acc-slider--single':''}" id="tdAccSlider"><div class="tv-td-acc-track" id="tdAccTrack">${accImgs.map((src,i)=>`<div class="tv-td-acc-slide"><img src="${src}" alt="Accommodation photo ${i+1}" ${i?'loading="lazy"':''} decoding="async" data-full="${src}"></div>`).join("")}</div><button class="tv-td-acc-nav tv-td-acc-prev" id="tdAccPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button><button class="tv-td-acc-nav tv-td-acc-next" id="tdAccNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button><div class="tv-td-acc-dots" id="tdAccDots">${accImgs.map((_,i)=>`<button class="tv-td-acc-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div></div></div>`:""}</div>`;})():""}
        <div class="tv-td-section"><h3><i class="bi bi-clipboard-check"></i> What's included &amp; excluded</h3>
         <div class="tv-td-cols">
           <div><div class="eyebrow mb-2">Included</div>${bullets(included,"included")}</div>
@@ -1025,6 +1031,11 @@ function handleReceiptFile(file) {
 }
 document.getElementById("completeBookingBtn").addEventListener("click", async () => {
   if (!receiptFile||!currentTrip) return;
+  if (String((document.getElementById("bkHoney")||{}).value||"").trim() !== "") {
+    closeBookingDrawer(); resetReceiptZone();
+    showSuccessModal("Thank you, Traveler.", "Your 50% deposit receipt has been received. Our payment desk will reach out shortly.");
+    return;
+  }
   if (!document.getElementById("bkConsent").checked) { showToast("Please accept the data consent to continue.","error"); return; }
   const name=document.getElementById("bkName").value.trim();
   const phone=document.getElementById("bkPhone").value.trim();
@@ -1080,6 +1091,11 @@ document.getElementById("inquiryForm").addEventListener("submit", async (e) => {
   const tripType=document.getElementById("inqType").value;
   const persons=clampInqTravelers(inqTravelersInput.value);
   const notes=document.getElementById("inqNotes").value.trim();
+  if (String((document.getElementById("inqHoney")||{}).value||"").trim() !== "") {
+    document.getElementById("inquiryForm").reset(); inqTravelersInput.value=2;
+    showSuccessModal("Thank you, Traveler.", "Your custom inquiry has been received. A booking manager will reply by WhatsApp or call within a few hours.");
+    return;
+  }
   if (!name||!phone||!email) { showToast("Please fill in your name, phone, and email.","error"); return; }
   if (!/^\S+@\S+\.\S+$/.test(email)) { showToast("That email address doesn't look quite right.","error"); return; }
   if (!document.getElementById("inqConsent").checked) { showToast("Please accept the data consent to continue.","error"); return; }

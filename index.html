@@ -79,7 +79,7 @@ body{ background:
 h1,h2,h3,h4,.font-display{ font-family: 'Cormorant Garamond', serif; font-weight: 600; letter-spacing: 0.01em; color: var(--ink); }
 #heroHeadline{ font-family: 'Titan One', sans-serif; font-size: 29px; line-height: 1.1; }
 @media (max-width: 991px){
-  #heroHeadline{ font-size: 23px; }
+  #heroHeadline{ font-size: 18px; }
 }
 .eyebrow{ font-family: 'Inter', sans-serif; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red-deep); font-weight: 600; }
 a{ text-decoration:none; color: inherit; }
@@ -630,6 +630,7 @@ body.gal-lb-open{ overflow: hidden; }
 
 /* Large phones */
 @media (max-width: 767px){
+
   .mt-3{ font-size: 2rem !important; line-height: 1.6 !important; }
    #about p.about-quote{
     max-width: 80%;
@@ -748,7 +749,7 @@ body.gal-lb-open{ overflow: hidden; }
   }
   .section{ padding: 3.28rem 0 1.5rem; }
   .section-title{ font-size: 1.4rem; }
-  #about .section-title .title-line{ font-size: inherit; }
+  #about .section-title .title-line{ font-size: 16px; }
   .container{ padding-left: 1.1rem; padding-right: 1.1rem; }
   .mt-3{ font-size: 0.9rem !important; line-height: 1.55 !important; }
   p.mt-3{ font-size: 0.8rem; }
@@ -883,6 +884,7 @@ img, video, .container, .row{ max-width: 100%; }
   .tv-whatsapp-fab svg{ width: 28px; height: 28px; }
 }
   .mt-3, p.mt-3{ font-family: 'DM Sans', sans-serif; }
+  .hp-field{ position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; opacity:0; overflow:hidden; }
 </style>
 </head>
 <body>
@@ -993,7 +995,7 @@ img, video, .container, .row{ max-width: 100%; }
       <div class="col-lg-7 reveal reveal-right reveal-d2 text-center">
         <p class="eyebrow">About Us</p>
         <h2 class="section-title mb-4"><span class="title-line">We don't Sell Trips. <br> We Create Stories Worth Living.</span></h2>
-        <p class="about-quote">At Tavari, we understand that every traveler trusts us with their journey. That’s why we carefully choose every destination, partner, and experience to make sure you get great quality, stay safe, and create memories that last a lifetime. That’s also why more than 70% of our clients choose to travel solo with us.</p>
+        <p class="about-quote">At Tavari, travel is about more than reaching a destination. It's about discovering places, building genuine connections, stepping outside your comfort zone, and returning home with unforgettable memories—and a new perspective on life. Every experience is crafted with uncompromising quality, unmatched energy, and a passionate community that makes every journey feel extraordinary.</p>
       </div>
 
       <div class="col-lg-5 reveal reveal-left">
@@ -1119,6 +1121,9 @@ img, video, .container, .row{ max-width: 100%; }
                   <label class="tv-field-label" for="inqNotes">Anything we should know?</label>
                   <textarea class="tv-textarea" id="inqNotes" placeholder="Dates you're thinking of, special requests, etc."></textarea>
                 </div>
+                <div class="hp-field" aria-hidden="true">
+                  <input type="text" id="inqHoney" name="website" tabindex="-1" autocomplete="off">
+                </div>
                 <div class="col-12">
                   <label class="tv-consent" for="inqConsent">
                     <input type="checkbox" id="inqConsent">
@@ -1215,7 +1220,7 @@ img, video, .container, .row{ max-width: 100%; }
       </div>
       <div class="col-lg-4">
         <p class="eyebrow mb-3" style="color:rgba(250,248,245,0.5);">Reach Us</p>
-        <p style="font-size:0.85rem; line-height:1.8;">TavariEgypt@gmail.com<br>WhatsApp +20 100 123 4567</p>
+        <p style="font-size:0.85rem; line-height:1.8;">TavariEgypt@gmail.com<br>WhatsApp +20 1061336882</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1290,6 +1295,9 @@ img, video, .container, .row{ max-width: 100%; }
         <img id="dropzonePreview" class="tv-dropzone-preview" alt="Receipt preview">
       </div>
         <input type="file" id="receiptInput" accept="image/*" class="d-none">
+        <div class="hp-field" aria-hidden="true">
+          <input type="text" id="bkHoney" name="website2" tabindex="-1" autocomplete="off">
+        </div>
         <label class="tv-consent" for="bkConsent">
           <input type="checkbox" id="bkConsent">
           <span>I consent to Tavari storing the details and receipt above to process my booking.</span>
