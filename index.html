@@ -911,8 +911,18 @@ img, video, .container, .row{ max-width: 100%; }
         setPoster();
         window.__heroDataSource = mq.matches ? "desktop" : "mobile";
         playNow();
+        var tries = 0;
+        var timer = setInterval(function () {
+          if (!v.paused) { clearInterval(timer); return; }
+          playNow();
+          if (++tries > 60) clearInterval(timer);
+        }, 500);
         v.addEventListener("loadeddata", playNow);
         v.addEventListener("canplay", playNow);
+        v.addEventListener("playing", function () { clearInterval(timer); });
+        ["touchstart", "pointerdown", "scroll", "keydown"].forEach(function (ev) {
+          document.addEventListener(ev, playNow, { passive: true });
+        });
         if (mq.addEventListener) mq.addEventListener("change", function () { setPoster(); window.__heroDataSource = mq.matches ? "desktop" : "mobile"; playNow(); });
         else if (mq.addListener) mq.addListener(function () { setPoster(); window.__heroDataSource = mq.matches ? "desktop" : "mobile"; playNow(); });
       })();

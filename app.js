@@ -174,10 +174,20 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
       /* Play the instant the browser is ready, and keep retrying */
       bgVideo.addEventListener("loadeddata", tryPlay);
       bgVideo.addEventListener("canplay", tryPlay);
+      bgVideo.addEventListener("playing", () => clearInterval(heroPlayTimer));
       window.addEventListener("load", tryPlay);
-      setTimeout(tryPlay, 300);
-      setTimeout(tryPlay, 1000);
-      setTimeout(tryPlay, 3000);
+      let heroPlayTries = 0;
+      const heroPlayTimer = setInterval(() => {
+        if (!bgVideo.paused) { clearInterval(heroPlayTimer); return; }
+        tryPlay();
+        if (++heroPlayTries > 60) clearInterval(heroPlayTimer);
+      }, 500);
+
+      /* iOS Safari often only starts a muted video after the first gesture —
+         retry play on any touch/scroll/click too. */
+      ["touchstart", "pointerdown", "scroll", "keydown"].forEach((ev) =>
+        document.addEventListener(ev, tryPlay, { passive: true })
+      );
 
       /* Native <source media> re-evaluates on breakpoint change; just resync + retry */
       if (typeof heroMq.addEventListener === "function") {
