@@ -7,3 +7,8 @@ Thumbs.db
 *.log
 .vscode/*
 !.vscode/extensions.json
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
