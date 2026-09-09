@@ -894,6 +894,7 @@ img, video, .container, .row{ max-width: 100%; }
 <header class="hero" id="tvHero">
   <div class="hero-video-layer" id="heroVideoLayer">
 <video class="hero-bg-video" id="heroBgVideo" autoplay muted loop playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" preload="auto" fetchpriority="high" aria-hidden="true">
+  <source src="Videos/mobileHero.hevc.mp4#t=0.1" type='video/mp4; codecs="hvc1.1.6.L90.B0"' media="(max-width: 767px)">
   <source src="Videos/mobileHero.mp4#t=0.1" type="video/mp4" media="(max-width: 767px)">
   <source src="Videos/hero.webm" type="video/webm" media="(min-width: 768px)">
   <source src="Videos/hero.mp4" type="video/mp4" media="(min-width: 768px)">
@@ -1390,5 +1391,6 @@ img, video, .container, .row{ max-width: 100%; }
   </div>
 </div>
 
+<script>if ("serviceWorker" in navigator) { window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); }); }</script>
 </body>
 </html>
