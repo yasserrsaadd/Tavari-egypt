@@ -917,36 +917,27 @@ img, video, .container, .row{ max-width: 100%; }
 
 <header class="hero" id="tvHero">
   <div class="hero-video-layer" id="heroVideoLayer">
-<video class="hero-bg-video" id="heroBgVideo" autoplay muted loop playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" preload="auto" poster="images/hero-poster.webp" aria-hidden="true"></video>
+<video class="hero-bg-video" id="heroBgVideo" autoplay muted loop playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" preload="auto" poster="images/hero-poster.webp" aria-hidden="true">
+  <source src="Videos/mobileHero.mp4" type="video/mp4" media="(max-width: 767px)">
+  <source src="Videos/hero.webm" type="video/webm" media="(min-width: 768px)">
+  <source src="Videos/hero.mp4" type="video/mp4" media="(min-width: 768px)">
+</video>
     <script>
       (function () {
         var v = document.getElementById("heroBgVideo");
         if (!v) return;
-        v.muted = true; v.defaultMuted = true; v.setAttribute("muted", "");
-        v.playsInline = true; v.setAttribute("playsinline", "");
-        v.preload = "auto";
-        var srcs = {
-          desktop: [["Videos/hero.webm", "video/webm"], ["Videos/hero.mp4", "video/mp4"]],
-          mobile: [["Videos/mobileHero.mp4", "video/mp4"]]
-        };
-        var mq = (window.matchMedia && window.matchMedia("(min-width: 768px)")) || { matches: true };
-        function playNow() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-        function apply() {
-          window.__heroDataSource = mq.matches ? "desktop" : "mobile";
-          while (v.firstChild) v.removeChild(v.firstChild);
-          (mq.matches ? srcs.desktop : srcs.mobile).forEach(function (s) {
-            var src = document.createElement("source");
-            src.src = s[0]; if (s[1]) src.type = s[1];
-            v.appendChild(src);
-          });
-          v.load();
-          playNow();
+        var mq = window.matchMedia("(min-width: 768px)");
+        function setPoster() {
+          v.poster = mq.matches ? "images/hero-poster.webp" : "images/hero-poster-mobile.webp";
         }
-        apply();
+        function playNow() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        setPoster();
+        window.__heroDataSource = mq.matches ? "desktop" : "mobile";
+        playNow();
         v.addEventListener("loadeddata", playNow);
         v.addEventListener("canplay", playNow);
-        if (mq.addEventListener) mq.addEventListener("change", apply);
-        else if (mq.addListener) mq.addListener(apply);
+        if (mq.addEventListener) mq.addEventListener("change", function () { setPoster(); window.__heroDataSource = mq.matches ? "desktop" : "mobile"; playNow(); });
+        else if (mq.addListener) mq.addListener(function () { setPoster(); window.__heroDataSource = mq.matches ? "desktop" : "mobile"; playNow(); });
       })();
     </script>
     </div>
