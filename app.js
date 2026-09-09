@@ -159,14 +159,10 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
         if (p && typeof p.catch === "function") p.catch(() => {});
       };
 
-      /* Keep the poster + data-source label in sync with the active breakpoint */
+      /* Keep the data-source label in sync with the active breakpoint */
       const heroMq = window.matchMedia("(min-width: 768px)");
       const syncHero = () => {
-        const active = heroMq.matches ? "desktop" : "mobile";
-        window.__heroDataSource = active;
-        bgVideo.poster = active === "desktop"
-          ? "images/hero-poster.webp"
-          : "images/hero-poster-mobile.webp";
+        window.__heroDataSource = heroMq.matches ? "desktop" : "mobile";
         tryPlay();
       };
       syncHero();
