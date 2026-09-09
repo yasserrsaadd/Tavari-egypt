@@ -118,16 +118,16 @@ drop policy if exists "inquiries anon insert" on public.inquiries;
 create policy "inquiries anon insert" on public.inquiries for insert with check (true);
 
 -- 5) STORAGE BUCKETS + POLICIES (idempotent, re-runnable)
--- Used for deposit-receipt uploads in the booking form (private; read via dashboard).
+-- Required for deposit-receipt uploads in the booking form (must be public).
 do $$
 begin
   if not exists (select 1 from storage.buckets where id = 'payment-receipts') then
     insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-    values ('payment-receipts', 'payment-receipts', false, 5242880,
+    values ('payment-receipts', 'payment-receipts', true, 5242880,
             array['image/png','image/jpeg','image/webp','image/heic','image/heif']);
   else
     update storage.buckets
-    set public = false,
+    set public = true,
         file_size_limit = 5242880,
         allowed_mime_types = array['image/png','image/jpeg','image/webp','image/heic','image/heif']
     where id = 'payment-receipts';
@@ -137,6 +137,10 @@ end $$;
 drop policy if exists "receipts anon upload" on storage.objects;
 create policy "receipts anon upload"
   on storage.objects for insert with check (bucket_id='payment-receipts');
+
+drop policy if exists "receipts public read" on storage.objects;
+create policy "receipts public read"
+  on storage.objects for select using (bucket_id='payment-receipts');
 
 do $$
 begin

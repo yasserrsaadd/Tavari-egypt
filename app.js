@@ -1087,7 +1087,9 @@ document.getElementById("completeBookingBtn").addEventListener("click", async ()
       const path=`receipts/${uid}_proof.png`;
       const { error:uploadError } = await supabaseClient.storage.from(RECEIPTS_BUCKET).upload(path,receiptFile);
       if (uploadError) throw uploadError;
-      const { data:insertError } = await supabaseClient.from("bookings").insert({ trip_id:currentTrip.id, trip_title:currentTrip.title, customer_name:name, customer_phone:phone, customer_email:email, num_persons:persons, total_price:total, deposit_amount:deposit, receipt_url:path, status:"not yet" });
+      const { data:urlData } = supabaseClient.storage.from(RECEIPTS_BUCKET).getPublicUrl(path);
+      receiptUrl=urlData.publicUrl;
+      const { error:insertError } = await supabaseClient.from("bookings").insert({ trip_id:currentTrip.id, trip_title:currentTrip.title, customer_name:name, customer_phone:phone, customer_email:email, num_persons:persons, total_price:total, deposit_amount:deposit, receipt_url:receiptUrl, status:"not yet" });
       if (insertError) throw insertError;
     } else {
       const bookings=JSON.parse(localStorage.getItem("tavari_bookings")||"[]");
