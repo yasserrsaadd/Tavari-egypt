@@ -1,4 +1,4 @@
-var CACHE_NAME = "tavari-hero-v2";
+var CACHE_NAME = "tavari-hero-v3";
 var HERO_URLS = [
   "/Videos/mobileHero.mp4",
   "/Videos/mobileHero.hevc.mp4"
