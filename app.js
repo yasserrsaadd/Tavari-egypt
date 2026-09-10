@@ -144,7 +144,9 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
     const bgVideo = document.getElementById("heroBgVideo");
 
     if (bgVideo) {
-      /* Force muted + inline so every browser permits gesture-free autoplay */
+      /* Force muted + inline so every browser permits gesture-free autoplay.
+         Sources are declared inline in the markup (with media queries) so the
+         correct video starts downloading during HTML parse — no JS round-trip. */
       bgVideo.muted = true;
       bgVideo.defaultMuted = true;
       bgVideo.setAttribute("muted", "");
@@ -157,49 +159,37 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
         if (p && typeof p.catch === "function") p.catch(() => {});
       };
 
-      /* Serve the right hero video per screen size (desktop landscape vs mobile vertical).
-         Only the matching source set is ever loaded, so the wrong video never flashes on mobile. */
-      const heroSourceSets = {
-        desktop: [
-          { src: "Videos/hero.webm", type: "video/webm" },
-          { src: "Videos/hero.mp4", type: "video/mp4" }
-        ],
-        mobile: [
-          { src: "Videos/mobileHero.mp4", type: "video/mp4" }
-        ]
-      };
+      /* Keep the data-source label in sync with the active breakpoint */
       const heroMq = window.matchMedia("(min-width: 768px)");
-
-      const applyHeroSource = () => {
-        const active = heroMq.matches ? "desktop" : "mobile";
-        if (window.__heroDataSource === active) return;
-        window.__heroDataSource = active;
-        const list = heroSourceSets[active];
-        while (bgVideo.firstChild) bgVideo.removeChild(bgVideo.firstChild);
-        for (const s of list) {
-          const source = document.createElement("source");
-          source.src = s.src;
-          if (s.type) source.type = s.type;
-          bgVideo.appendChild(source);
-        }
-        bgVideo.load();
+      const syncHero = () => {
+        window.__heroDataSource = heroMq.matches ? "desktop" : "mobile";
         tryPlay();
       };
+      syncHero();
 
       /* Play the instant the browser is ready, and keep retrying */
-      applyHeroSource();
       bgVideo.addEventListener("loadeddata", tryPlay);
       bgVideo.addEventListener("canplay", tryPlay);
+      bgVideo.addEventListener("playing", () => clearInterval(heroPlayTimer));
       window.addEventListener("load", tryPlay);
-      setTimeout(tryPlay, 300);
-      setTimeout(tryPlay, 1000);
-      setTimeout(tryPlay, 3000);
+      let heroPlayTries = 0;
+      const heroPlayTimer = setInterval(() => {
+        if (!bgVideo.paused) { clearInterval(heroPlayTimer); return; }
+        tryPlay();
+        if (++heroPlayTries > 60) clearInterval(heroPlayTimer);
+      }, 500);
 
-      /* Swap hero video instantly when crossing the desktop/mobile breakpoint */
+      /* iOS Safari often only starts a muted video after the first gesture —
+         retry play on any touch/scroll/click too. */
+      ["touchstart", "pointerdown", "scroll", "keydown"].forEach((ev) =>
+        document.addEventListener(ev, tryPlay, { passive: true })
+      );
+
+      /* Native <source media> re-evaluates on breakpoint change; just resync + retry */
       if (typeof heroMq.addEventListener === "function") {
-        heroMq.addEventListener("change", applyHeroSource);
+        heroMq.addEventListener("change", syncHero);
       } else if (typeof heroMq.addListener === "function") {
-        heroMq.addListener(applyHeroSource);
+        heroMq.addListener(syncHero);
       }
 
       /* Pause only on a *confirmed* scroll-out or hidden tab (saves CPU/GPU/battery).
