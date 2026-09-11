@@ -1,7 +1,6 @@
-var CACHE_NAME = "tavari-hero-v6";
+var CACHE_NAME = "tavari-hero-v7";
 var HERO_URLS = [
-  "/Videos/mobileHero.mp4",
-  "/Videos/mobileHero.hevc.mp4"
+  "/Videos/mobileHero.mp4"
 ];
 
 self.addEventListener("install", function (event) {
