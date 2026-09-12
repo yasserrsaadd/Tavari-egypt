@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preload" as="fetch" fetchpriority="high" type="application/vnd.apple.mpegurl" media="(max-width: 767px)" href="Videos/heroMobile-hls/master.m3u8">
 <link rel="preload" as="image" fetchpriority="high" media="(max-width: 767px)" href="images/hero-poster-mobile.webp">
 <link rel="preload" as="video" fetchpriority="high" type="video/webm" media="(min-width: 768px)" href="Videos/hero.webm">
 <meta name="theme-color" content="#F8ECEA">
@@ -895,7 +894,6 @@ img, video, .container, .row{ max-width: 100%; }
 <header class="hero" id="tvHero">
   <div class="hero-video-layer" id="heroVideoLayer">
 <video class="hero-bg-video" id="heroBgVideo" autoplay muted loop playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" preload="auto" fetchpriority="high" poster="images/hero-poster-mobile.webp" aria-hidden="true">
-  <source src="Videos/heroMobile-hls/master.m3u8" type="application/vnd.apple.mpegurl" media="(max-width: 767px)">
   <source src="Videos/heroMobile.MP4" type="video/mp4" media="(max-width: 767px)">
   <source src="Videos/hero.webm" type="video/webm" media="(min-width: 768px)">
   <source src="Videos/hero.mp4" type="video/mp4" media="(min-width: 768px)">
@@ -906,11 +904,16 @@ img, video, .container, .row{ max-width: 100%; }
         if (!v) return;
         var mq = window.matchMedia("(min-width: 768px)");
         function playNow() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        v.muted = true;
+        v.setAttribute("muted", "");
+        v.playsInline = true;
+        v.setAttribute("playsinline", "");
         window.__heroDataSource = mq.matches ? "desktop" : "mobile";
         playNow();
         var tries = 0;
         var timer = setInterval(function () {
           if (!v.paused) { clearInterval(timer); return; }
+          if (v.networkState === 3) v.load();
           playNow();
           if (++tries > 60) clearInterval(timer);
         }, 500);
@@ -1377,36 +1380,6 @@ img, video, .container, .row{ max-width: 100%; }
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 <script src="email.js" defer></script>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1/dist/hls.min.js"></script>
-<script>
-(function () {
-  var v = document.getElementById("heroBgVideo");
-  if (!v || typeof window.matchMedia === "undefined") return;
-  var mq = window.matchMedia("(max-width: 767px)");
-  if (!mq.matches) return; /* desktop keeps the existing webm/mp4 sources */
-  if (!window.Hls || !Hls.isSupported()) return; /* Safari/old → native HLS or MP4 source already handle it */
-  try {
-    var hls = new Hls({
-      startLevel: 0,
-      bandwidthUpFactor: 0.9,
-      bandwidthFactor: 1.0,
-      maxBufferLength: 12
-    });
-    for (var i = v.children.length - 1; i >= 0; i--) {
-      if (v.children[i].tagName === "SOURCE") v.removeChild(v.children[i]);
-    }
-    v.removeAttribute("src");
-    hls.loadSource("Videos/heroMobile-hls/master.m3u8");
-    hls.attachMedia(v);
-    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-      window.__heroDataSource = "mobile-hls";
-      var p = v.play();
-      if (p && p.catch) p.catch(function () {});
-    });
-  } catch (err) {}
-})();
-</script>
-
 <script src="app.js" defer></script>
 <!-- Floating WhatsApp button -->
 <a class="tv-whatsapp-fab" href="https://wa.me/201061336882" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
@@ -1421,6 +1394,17 @@ img, video, .container, .row{ max-width: 100%; }
   </div>
 </div>
 
-<script>if ("serviceWorker" in navigator) { window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); }); }</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.addEventListener("controllerchange", function () {
+        if (navigator.serviceWorker.controller) window.location.reload();
+      });
+    }
+  });
+}
+</script>
 </body>
 </html>

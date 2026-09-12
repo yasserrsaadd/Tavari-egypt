@@ -103,7 +103,20 @@ function animateMetric(el) {
     if (step >= totalSteps) { clearInterval(timer); el.textContent = target.toLocaleString() + suffix; }
   }, stepMs);
 }
-setTimeout(() => { aboveFoldMetrics.forEach(animateMetric); }, 1300);
+let heroCountersStarted = false;
+let heroCounterTimer = null;
+function startHeroMetrics() {
+  if (heroCountersStarted) return;
+  heroCountersStarted = true;
+  if (heroCounterTimer) { clearTimeout(heroCounterTimer); heroCounterTimer = null; }
+  aboveFoldMetrics.forEach(animateMetric);
+}
+heroCounterTimer = setTimeout(startHeroMetrics, 1600);
+const heroBgVideoProbe = document.getElementById("heroBgVideo");
+if (heroBgVideoProbe) {
+  if (!heroBgVideoProbe.paused) startHeroMetrics();
+  heroBgVideoProbe.addEventListener("playing", startHeroMetrics);
+}
 if (belowFoldMetrics.length) {
   const metricsObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => { if (!entry.isIntersecting) return; animateMetric(entry.target); metricsObserver.unobserve(entry.target); });
@@ -170,14 +183,35 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
       /* Play the instant the browser is ready, and keep retrying */
       bgVideo.addEventListener("loadeddata", tryPlay);
       bgVideo.addEventListener("canplay", tryPlay);
+      bgVideo.addEventListener("canplaythrough", tryPlay);
       bgVideo.addEventListener("playing", () => clearInterval(heroPlayTimer));
       window.addEventListener("load", tryPlay);
+      document.addEventListener("DOMContentLoaded", tryPlay);
       let heroPlayTries = 0;
       const heroPlayTimer = setInterval(() => {
         if (!bgVideo.paused) { clearInterval(heroPlayTimer); return; }
+        if (bgVideo.networkState === 3) bgVideo.load();
         tryPlay();
         if (++heroPlayTries > 60) clearInterval(heroPlayTimer);
       }, 500);
+
+      /* Soft-re-seek right before the loop point so the browser never hits the
+         end-of-file stall that causes the periodic playback hitch. */
+      let loopGuard = false;
+      bgVideo.addEventListener("timeupdate", () => {
+        if (loopGuard) return;
+        const d = bgVideo.duration;
+        if (!isFinite(d) || d <= 0) return;
+        const buf = bgVideo.buffered;
+        let bufEnd = 0;
+        if (buf && buf.length) bufEnd = buf.end(buf.length - 1);
+        if (bufEnd < d - 0.4) return;
+        if (bgVideo.currentTime >= d - 0.3 && !bgVideo.ended) {
+          loopGuard = true;
+          bgVideo.currentTime = 0.05;
+          setTimeout(() => { loopGuard = false; }, 600);
+        }
+      });
 
       /* iOS Safari often only starts a muted video after the first gesture —
          retry play on any touch/scroll/click too. */
