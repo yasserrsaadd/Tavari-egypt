@@ -139,6 +139,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .hero{ position: relative; height: 100vh; min-height: 640px; display:flex; align-items:center; overflow:hidden; background: #3A1410; }
 .hero-video-layer{ position:absolute; inset:-10%; z-index: 0; transition: transform 0.15s linear; }
  .hero-bg-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index: 0; background: #3A1410; }
+.hero-video-layer.is-playing{ animation: heroVideoFadeIn 0.6s var(--ease) both; }
+@keyframes heroVideoFadeIn{ from{ opacity:0; } to{ opacity:1; } }
 .hero-video-controls{ position:absolute; bottom: 34px; right: 34px; z-index: 3; display:flex; gap: 0.6rem; }
 .hero-video-controls.is-hidden{ display:none; }
 .hero-vctrl{ width: 46px; height: 46px; border-radius: 50%; background: rgba(250,248,245,0.16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(250,248,245,0.4); color: var(--ivory); display:flex; align-items:center; justify-content:center; font-size: 1rem; cursor: pointer; transition: background 0.4s var(--ease), transform 0.4s var(--ease), border-color 0.4s var(--ease); }
@@ -903,28 +905,63 @@ img, video, .container, .row{ max-width: 100%; }
         var v = document.getElementById("heroBgVideo");
         if (!v) return;
         var mq = window.matchMedia("(min-width: 768px)");
-        function playNow() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+
         v.muted = true;
         v.setAttribute("muted", "");
+        v.defaultMuted = true;
         v.playsInline = true;
         v.setAttribute("playsinline", "");
+
+        /* iOS honours preload/autoplay reliably when the source is a direct
+           src on the element rather than <source> children. */
+        if (!mq.matches && /iP(hone|ad|od)/.test(navigator.userAgent)) {
+          v.src = "Videos/heroMobile.MP4";
+        }
+
+        function setPlayingClass() {
+          if (v.parentNode && v.parentNode.classList) v.parentNode.classList.add("is-playing");
+        }
+
+        function forcePlay() {
+          v.muted = true;
+          v.setAttribute("muted", "");
+          if (v.networkState === 3) v.load();
+          try {
+            var p = v.play();
+            if (p && p.catch) p.catch(function () {});
+          } catch (err) {}
+        }
+
         window.__heroDataSource = mq.matches ? "desktop" : "mobile";
-        playNow();
+        forcePlay();
+
         var tries = 0;
         var timer = setInterval(function () {
           if (!v.paused) { clearInterval(timer); return; }
-          if (v.networkState === 3) v.load();
-          playNow();
-          if (++tries > 60) clearInterval(timer);
+          forcePlay();
+          if (++tries > 240) clearInterval(timer);
         }, 500);
-        v.addEventListener("loadeddata", playNow);
-        v.addEventListener("canplay", playNow);
-        v.addEventListener("playing", function () { clearInterval(timer); });
-        ["touchstart", "pointerdown", "scroll", "keydown"].forEach(function (ev) {
-          document.addEventListener(ev, playNow, { passive: true });
+
+        v.addEventListener("loadeddata", function () {
+          v.removeAttribute("poster");
+          setPlayingClass();
+          forcePlay();
         });
-        if (mq.addEventListener) mq.addEventListener("change", function () { window.__heroDataSource = mq.matches ? "desktop" : "mobile"; playNow(); });
-        else if (mq.addListener) mq.addListener(function () { window.__heroDataSource = mq.matches ? "desktop" : "mobile"; playNow(); });
+        v.addEventListener("canplay", function () { setPlayingClass(); forcePlay(); });
+        v.addEventListener("playing", function () { setPlayingClass(); clearInterval(timer); });
+        v.addEventListener("error", function () { if (v.networkState === 3) v.load(); });
+
+        ["touchstart", "touchmove", "touchend", "pointerdown", "pointermove", "click", "scroll", "wheel", "keydown"].forEach(function (ev) {
+          document.addEventListener(ev, forcePlay, { passive: true });
+        });
+
+        document.addEventListener("visibilitychange", function () {
+          if (!document.hidden) forcePlay();
+        }, true);
+        window.addEventListener("pageshow", function () { forcePlay(); });
+
+        if (mq.addEventListener) mq.addEventListener("change", function () { window.__heroDataSource = mq.matches ? "desktop" : "mobile"; forcePlay(); });
+        else if (mq.addListener) mq.addListener(function () { window.__heroDataSource = mq.matches ? "desktop" : "mobile"; forcePlay(); });
       })();
     </script>
     </div>

@@ -168,6 +168,9 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
       bgVideo.preload = "auto";
 
       const tryPlay = () => {
+        bgVideo.muted = true;
+        bgVideo.setAttribute("muted", "");
+        if (bgVideo.networkState === 3) bgVideo.load();
         const p = bgVideo.play();
         if (p && typeof p.catch === "function") p.catch(() => {});
       };
@@ -181,18 +184,25 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
       syncHero();
 
       /* Play the instant the browser is ready, and keep retrying */
-      bgVideo.addEventListener("loadeddata", tryPlay);
-      bgVideo.addEventListener("canplay", tryPlay);
+      let heroHasPlayed = false;
+      const markPlaying = () => {
+        heroHasPlayed = true;
+        videoLayer.classList.add("is-playing");
+        clearInterval(heroPlayTimer);
+      };
+      bgVideo.addEventListener("loadeddata", () => { bgVideo.removeAttribute("poster"); tryPlay(); });
+      bgVideo.addEventListener("canplay", () => { videoLayer.classList.add("is-playing"); tryPlay(); });
       bgVideo.addEventListener("canplaythrough", tryPlay);
-      bgVideo.addEventListener("playing", () => clearInterval(heroPlayTimer));
+      bgVideo.addEventListener("playing", markPlaying);
       window.addEventListener("load", tryPlay);
       document.addEventListener("DOMContentLoaded", tryPlay);
+      window.addEventListener("pageshow", tryPlay);
       let heroPlayTries = 0;
       const heroPlayTimer = setInterval(() => {
         if (!bgVideo.paused) { clearInterval(heroPlayTimer); return; }
         if (bgVideo.networkState === 3) bgVideo.load();
         tryPlay();
-        if (++heroPlayTries > 60) clearInterval(heroPlayTimer);
+        if (++heroPlayTries > 240) clearInterval(heroPlayTimer);
       }, 500);
 
       /* Soft-re-seek right before the loop point so the browser never hits the
@@ -213,9 +223,9 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
         }
       });
 
-      /* iOS Safari often only starts a muted video after the first gesture —
-         retry play on any touch/scroll/click too. */
-      ["touchstart", "pointerdown", "scroll", "keydown"].forEach((ev) =>
+      /* iOS Safari and embedded WebViews often only start a muted video after
+         the first gesture — force-play on any touch/scroll/click/key. */
+      ["touchstart", "touchmove", "touchend", "pointerdown", "pointermove", "click", "scroll", "wheel", "keydown"].forEach((ev) =>
         document.addEventListener(ev, tryPlay, { passive: true })
       );
 
@@ -226,8 +236,9 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
         heroMq.addListener(syncHero);
       }
 
-      /* Pause only on a *confirmed* scroll-out or hidden tab (saves CPU/GPU/battery).
-         Never pause on the observer's first callback, so load-time autoplay is safe. */
+      /* Pause only on a *confirmed* scroll-out or hidden tab, and only AFTER the
+         video has actually started once (never during the startup window, so the
+         auto-play retries are never interrupted before first frame). */
       let confirmedInView = true;
       if ("IntersectionObserver" in window) {
         const io = new IntersectionObserver((entries) => {
@@ -237,7 +248,7 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
               if (!document.hidden) tryPlay();
             } else {
               confirmedInView = false;
-              bgVideo.pause();
+              if (heroHasPlayed) bgVideo.pause();
             }
           });
         }, { threshold: 0.1 });
@@ -245,7 +256,7 @@ document.getElementById("yearNow").textContent = new Date().getFullYear();
       }
       document.addEventListener("visibilitychange", () => {
         if (!document.hidden && confirmedInView) tryPlay();
-        else bgVideo.pause();
+        else if (heroHasPlayed) bgVideo.pause();
       });
     }
 
