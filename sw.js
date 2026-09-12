@@ -1,14 +1,7 @@
-var CACHE_NAME = "tavari-hero-v7";
-var HERO_URLS = [
-  "/Videos/mobileHero.mp4"
-];
+var CACHE_NAME = "tavari-hero-v13";
 
 self.addEventListener("install", function (event) {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(function (cache) { return cache.addAll(HERO_URLS); })
-      .then(function () { return self.skipWaiting(); })
-  );
+  event.waitUntil(self.skipWaiting());
 });
 
 self.addEventListener("activate", function (event) {
@@ -25,7 +18,7 @@ self.addEventListener("fetch", function (event) {
   var request = event.request;
   if (request.method !== "GET") return;
   var path = new URL(request.url).pathname;
-  if (path.indexOf("/Videos/mobileHero.") !== 0) return;
+  if (path.indexOf("/Videos/heroMobile") !== 0) return;
   var cacheKey = request.url.split("#")[0];
   var cacheRequest = new Request(cacheKey, { method: "GET" });
   event.respondWith(
