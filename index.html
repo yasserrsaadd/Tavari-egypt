@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preload" as="image" fetchpriority="high" media="(max-width: 767px)" href="images/hero-poster-mobile.webp">
+<link rel="preload" as="image" fetchpriority="high" media="(max-width: 767px)" href="images/mobileHero-poster.webp">
 <link rel="preload" as="video" fetchpriority="high" type="video/webm" media="(min-width: 768px)" href="Videos/hero.webm">
 <meta name="theme-color" content="#F8ECEA">
 <meta name="robots" content="index, follow">
@@ -895,8 +895,8 @@ img, video, .container, .row{ max-width: 100%; }
 <!-- Hero is the first element so background video begins downloading/playing immediately. -->
 <header class="hero" id="tvHero">
   <div class="hero-video-layer" id="heroVideoLayer">
-<video class="hero-bg-video" id="heroBgVideo" autoplay muted loop playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" preload="auto" fetchpriority="high" poster="images/hero-poster-mobile.webp" aria-hidden="true">
-  <source src="Videos/heroMobile.MP4" type="video/mp4" media="(max-width: 767px)">
+<video class="hero-bg-video" id="heroBgVideo" autoplay muted loop playsinline webkit-playsinline x5-playsinline x5-video-player-type="h5" x5-video-player-fullscreen="false" preload="auto" fetchpriority="high" poster="images/mobileHero-poster.webp" aria-hidden="true">
+  <source src="Videos/mobileHero.mp4" type="video/mp4" media="(max-width: 767px)">
   <source src="Videos/hero.webm" type="video/webm" media="(min-width: 768px)">
   <source src="Videos/hero.mp4" type="video/mp4" media="(min-width: 768px)">
 </video>
@@ -915,7 +915,7 @@ img, video, .container, .row{ max-width: 100%; }
         /* iOS honours preload/autoplay reliably when the source is a direct
            src on the element rather than <source> children. */
         if (!mq.matches && /iP(hone|ad|od)/.test(navigator.userAgent)) {
-          v.src = "Videos/heroMobile.MP4";
+          v.src = "Videos/mobileHero.mp4";
         }
 
         function setPlayingClass() {
