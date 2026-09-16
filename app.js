@@ -497,7 +497,7 @@ async function loadGalleryStrip() {
     try {
       const { data, error } = await supabaseClient.from("gallery").select("*").order("position", { ascending: true });
       if (error) throw error;
-      if (data && data.length) items = data;
+      if (data && data.length && data.some(p => /^https?:\/\//i.test(p.media_url || ""))) items = data;
     } catch(e) { console.warn("Gallery fallback:", e); }
   }
   const norm = (p) => ({
@@ -514,6 +514,9 @@ async function loadGalleryStrip() {
     return `<div class="gal-frame"><div class="gal-photo">${media}<div class="gal-caption"><div class="gal-title">${tvEsc(p.cap)}</div></div></div></div>`;
   };
   grid.innerHTML = photos.map(tile).join("");
+  grid.querySelectorAll("img").forEach(img => {
+    img.addEventListener("error", () => { const f = img.closest(".gal-frame"); if (f) f.remove(); });
+  });
   startGalleryMarquee(grid.parentElement, grid);
 }
 
@@ -650,7 +653,7 @@ const tripDetailScrim = document.getElementById("tripDetailScrim");
 const tripDetailModal = tripDetailScrim.querySelector(".tv-trip-detail-modal");
 function tvEsc(s){ return esc(s); }
 function tvThumb(url){
-  if (url && url.indexOf("/trip-photos/") !== -1 && /\.webp$/i.test(url)) return url.replace(/\.webp$/i, ".th.webp");
+  if (url && /\/trip-photos\/[^/]+\/hero-[^/]+\.webp$/i.test(url)) return url.replace(/\.webp$/i, ".th.webp");
   return url;
 }
 function closeTripDetails(){ closeAccLightbox(); closeHeroLightbox(); tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
