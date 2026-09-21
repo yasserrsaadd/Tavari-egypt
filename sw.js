@@ -1,4 +1,4 @@
-var CACHE_NAME = "tavari-hero-v16";
+var CACHE_NAME = "tavari-hero-v17";
 
 self.addEventListener("install", function (event) {
   event.waitUntil(self.skipWaiting());

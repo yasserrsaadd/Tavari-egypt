@@ -21,7 +21,6 @@ create table if not exists public.trips (
   solo_message text,
   included text[],
   excluded text[],
-  payment_methods text[],
   price_options text[] not null default '{}',
   refund_policy text,
   created_at timestamptz not null default now()
@@ -88,6 +87,7 @@ begin
     alter table public.trips alter column guidelines type text[] using (string_to_array(coalesce(guidelines,''), chr(10)));
   end if;
 end $$;
+alter table public.trips add column if not exists is_visible boolean not null default true;
 alter table public.gallery add column if not exists media_url text;
 alter table public.gallery add column if not exists is_video boolean not null default false;
 alter table public.bookings add column if not exists deposit_amount numeric not null default 0;
@@ -116,6 +116,31 @@ create policy "bookings anon insert" on public.bookings for insert with check (t
 
 drop policy if exists "inquiries anon insert" on public.inquiries;
 create policy "inquiries anon insert" on public.inquiries for insert with check (true);
+
+-- 4b) ADMIN (AUTHENTICATED) POLICIES - powers admin.html / admin.js
+-- Requires: Supabase Auth -> Sign In/Providers -> "Allow new users to sign up" OFF,
+-- and a single admin user created in Dashboard -> Authentication -> Users.
+-- With public signups disabled, `authenticated` means admin only.
+-- Anon read/insert policies above stay untouched.
+drop policy if exists "trips admin all" on public.trips;
+create policy "trips admin all" on public.trips
+  for all to authenticated using (true) with check (true);
+
+drop policy if exists "gallery admin all" on public.gallery;
+create policy "gallery admin all" on public.gallery
+  for all to authenticated using (true) with check (true);
+
+drop policy if exists "reviews admin all" on public.reviews;
+create policy "reviews admin all" on public.reviews
+  for all to authenticated using (true) with check (true);
+
+drop policy if exists "bookings admin all" on public.bookings;
+create policy "bookings admin all" on public.bookings
+  for all to authenticated using (true) with check (true);
+
+drop policy if exists "inquiries admin all" on public.inquiries;
+create policy "inquiries admin all" on public.inquiries
+  for all to authenticated using (true) with check (true);
 
 -- 5) STORAGE BUCKETS + POLICIES (idempotent, re-runnable)
 -- Required for deposit-receipt uploads in the booking form (must be public).

@@ -73,6 +73,7 @@ client-side Supabase JS (anon key) elevated by Supabase Auth sign-in; RLS gates 
    as preview + a single **Download PDF** button using pdfmake from cdn.jsdelivr.net
    (allowed by .htaccess CSP). No print button.
 3. **Inquiries**: view all submissions, newest first.
+4. i need a toggle in each trip to make it visible or not visible on the website whenever i need
 
 ### Files
 - New: `admin.html`, `admin.js`

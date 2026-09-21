@@ -8,3 +8,7 @@ Thumbs.db
 *.log
 .vscode/*
 !.vscode/extensions.json
+
+# Migration working files (DB exports, generated SQL - contain signed storage URLs)
+backups/
+sql/

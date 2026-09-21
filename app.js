@@ -331,7 +331,6 @@ const FALLBACK_TRIPS = [
     excluded:["Flights to Marsa Matruh","Personal expenses","Travel insurance","Optional spa treatments"],
     guidelines:["Pack light, breathable clothing and a refillable water bottle.","Respect local Siwi customs — cover shoulders when visiting the village.","Drones are not permitted near the salt lakes."],
     price_options:["Single occupancy — EGP 9,800","Double occupancy (per person) — EGP 7,200","Triple occupancy (per person) — EGP 6,400"],
-    payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
   },
   { id:"fallback-dahab", title:"Dahab Reef & Blue Hole Retreat", base_price:6450, pdf_url:"#",
@@ -350,7 +349,6 @@ const FALLBACK_TRIPS = [
     excluded:["Flights to Sharm El Sheikh","Personal diving certification fees","Lunches & dinners","Tips"],
     guidelines:["Bring reef-safe sunscreen only — regular sunscreen damages the coral.","Beginners must complete a short briefing before any dive.","Alcohol is not served in the Old Town; purchase responsibly outside."],
     price_options:["Single occupancy — EGP 7,400","Double occupancy (per person) — EGP 5,900","Triple occupancy (per person) — EGP 5,200"],
-    payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
   },
   { id:"fallback-whitedesert", title:"White Desert Stargazer Camp", base_price:7100, pdf_url:"#",
@@ -368,7 +366,6 @@ const FALLBACK_TRIPS = [
     excluded:["Flights to Cairo","Personal expenses","Travel insurance","Alcoholic drinks"],
     guidelines:["No smoking inside the tents or near the chalk formations.","Stay on marked paths to protect the fragile desert ecosystem.","Warm layers are essential — desert nights drop near freezing."],
     price_options:["Single occupancy — EGP 8,100","Double occupancy (per person) — EGP 6,500","Triple occupancy (per person) — EGP 5,900"],
-    payment_methods:["Instapay — 01223744537","Vodafone Cash — 01061336882"],
     refund_policy:"Free cancellation up to 14 days before departure. 50% refund between 7–13 days. No refund within 6 days."
   }
 ];
@@ -432,7 +429,10 @@ async function loadTrips() {
   let trips = FALLBACK_TRIPS;
   if (useLiveBackend && supabaseClient) {
     try {
-      const { data, error } = await supabaseClient.from("trips").select("*").order("created_at",{ascending:false});
+      let { data, error } = await supabaseClient.from("trips").select("*").eq("is_visible",true).order("created_at",{ascending:false});
+      if (error && /is_visible/i.test(String(error.message||""))) {
+        ({ data, error } = await supabaseClient.from("trips").select("*").order("created_at",{ascending:false}));
+      }
       if (error) throw error;
       if (data && data.length) trips = data;
     } catch(e) { console.warn("Falling back to curated trips:", e); showToast("Showing sample trips — live data unavailable.", "info"); }
@@ -652,8 +652,19 @@ bindGalleryLightbox();
 const tripDetailScrim = document.getElementById("tripDetailScrim");
 const tripDetailModal = tripDetailScrim.querySelector(".tv-trip-detail-modal");
 function tvEsc(s){ return esc(s); }
+var TV_CLOUD_UPLOAD_RE = /^(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)(.+)$/i;
 function tvThumb(url){
-  if (url && /\/trip-photos\/[^/]+\/hero-[^/]+\.webp$/i.test(url)) return url.replace(/\.webp$/i, ".th.webp");
+  if (url){
+    var m = TV_CLOUD_UPLOAD_RE.exec(url);
+    if (m){
+      var segs = m[2].split("/");
+      var first = segs[0];
+      if (/^v\d+$/.test(first) || !/[a-z]+_/i.test(first) || /\.(webp|jpe?g|png|avif|gif)$/i.test(first)) return m[1] + "f_auto,q_auto,w_600/" + m[2];
+      if (/(^|,)w_/i.test(first)) return url;
+      return m[1] + first + ",w_600/" + segs.slice(1).join("/");
+    }
+    if (!/\.th\.webp$/i.test(url) && /\/trip-photos\/[^/]+\/hero-[^/]+\.webp$/i.test(url)) return url.replace(/\.webp$/i, ".th.webp");
+  }
   return url;
 }
 function closeTripDetails(){ closeAccLightbox(); closeHeroLightbox(); tripDetailScrim.classList.remove("show"); document.body.style.overflow=""; }
