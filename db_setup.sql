@@ -198,4 +198,15 @@ drop policy if exists "gallery-media public read" on storage.objects;
 create policy "gallery-media public read"
   on storage.objects for select using (bucket_id='gallery-media');
 
--- Verify: select id, name, public from storage.buckets;
+-- 6) VERIFY (read-only, safe to re-run)
+-- "trips public read" must show qual = (is_visible); "trips admin all" must exist.
+select tablename, policyname, cmd, roles, qual, with_check
+from pg_policies
+where schemaname = 'public'
+order by tablename, policyname;
+
+-- Bucket check: select id, name, public from storage.buckets;
+
+-- After this script: an anon request must NOT return hidden trips, e.g.
+--   GET /rest/v1/trips?select=id,title,is_visible   (apikey = anon key)
+-- must list only rows where is_visible = true. Signed-in admin still sees all.
