@@ -12,9 +12,21 @@ catch (e) { console.error("Supabase init failed:", e); }
 
 /* ---------- helpers ---------- */
 function esc(s) {
-  return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({
+  if (s == null) return "";
+  return String(s).replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[c]));
+}
+/* Only http(s)/relative URLs may reach a src/href attribute — blocks javascript:/data: */
+function safeUrl(u) {
+  const s = (u == null ? "" : String(u)).trim();
+  if (!s) return "";
+  if (/^[a-z][a-z0-9+.\-]*:/i.test(s) && !/^https?:/i.test(s)) return "";
+  try {
+    const p = new URL(s, window.location.href);
+    if (p.protocol === "http:" || p.protocol === "https:") return p.href;
+  } catch (e) { /* fall through */ }
+  return "";
 }
 const toastStack = document.getElementById("toastStack");
 function showToast(message, type = "info", duration = 4200) {
@@ -146,7 +158,7 @@ function renderTrips() {
   grid.innerHTML = list.map(t => `
     <div class="adm-card adm-trip-card${isVisible(t) ? "" : " adm-trip-card--hidden"}">
       ${t.is_best_seller ? `<span class="adm-badge"><i class="bi bi-fire"></i> Best seller</span>` : ""}
-      <div class="adm-trip-thumb">${thumbOf(t) ? `<img src="${esc(thumbOf(t))}" alt="" loading="lazy">` : ""}</div>
+      <div class="adm-trip-thumb">${safeUrl(thumbOf(t)) ? `<img src="${esc(safeUrl(thumbOf(t)))}" alt="" loading="lazy">` : ""}</div>
       <div class="adm-trip-body">
         <h3>${esc(t.title)}</h3>
         <div class="adm-trip-meta">
@@ -197,8 +209,9 @@ function renderUrlList(containerId, urls) {
 function urlRow(containerId, url, i, total) {
   const row = document.createElement("div");
   row.className = "adm-url-item";
+  const imgUrl = safeUrl(url);
   row.innerHTML = `
-    <img src="${esc(url)}" alt="" loading="lazy">
+    ${imgUrl ? `<img src="${esc(imgUrl)}" alt="" loading="lazy">` : ""}
     <input class="tv-input adm-url-input" value="${esc(url)}">
     <div class="adm-url-actions">
       <button class="adm-icon-btn" type="button" data-act="up" aria-label="Move up" ${i === 0 ? "disabled" : ""}><i class="bi bi-arrow-up"></i></button>
@@ -206,7 +219,12 @@ function urlRow(containerId, url, i, total) {
       <button class="adm-icon-btn danger" type="button" data-act="del" aria-label="Remove"><i class="bi bi-x-lg"></i></button>
     </div>`;
   const input = row.querySelector(".adm-url-input");
-  input.addEventListener("change", () => { const img = row.querySelector("img"); if (img) img.src = input.value.trim(); });
+  input.addEventListener("change", () => {
+    const img = row.querySelector("img");
+    if (!img) return;
+    const next = safeUrl(input.value.trim());
+    if (next) img.src = next;
+  });
   row.querySelectorAll("[data-act]").forEach(btn => btn.addEventListener("click", () => {
     const items = readUrlList(containerId);
     const act = btn.dataset.act;
@@ -305,17 +323,17 @@ function collectTrip() {
     dates_label: val("f_datesLabel") || null,
     description: val("f_description") || null,
     accommodation: val("f_accommodation") || null,
-    accommodation_photos: readUrlList("f_accommodationPhotos"),
+    accommodation_photos: readUrlList("f_accommodationPhotos").map(safeUrl).filter(Boolean),
     solo_message: val("f_soloMessage") || null,
     included: lines("f_included"),
     excluded: lines("f_excluded"),
     price_options: lines("f_priceOptions"),
     guidelines: lines("f_guidelines"),
     refund_policy: val("f_refundPolicy") || null,
-    pdf_url: val("f_pdfUrl") || null,
+    pdf_url: safeUrl(val("f_pdfUrl")) || null,
     is_visible: document.getElementById("f_visible").checked,
     is_best_seller: document.getElementById("f_bestSeller").checked,
-    image_urls: readUrlList("f_imageUrls"),
+    image_urls: readUrlList("f_imageUrls").map(safeUrl).filter(Boolean),
     itinerary: readItinerary()
   };
   return payload;
@@ -417,7 +435,7 @@ function renderBookings() {
         <td class="num">${esc(fmtMoney(b.deposit_amount))}</td>
         <td><span class="adm-status">${esc(b.status || "")}</span></td>
         <td class="adm-muted">${esc(fmtDateTime(b.created_at))}</td>
-        <td>${b.receipt_url ? `<a class="adm-link" href="${esc(b.receipt_url)}" target="_blank" rel="noopener">View</a>` : "—"}</td>
+        <td>${safeUrl(b.receipt_url) ? `<a class="adm-link" href="${esc(safeUrl(b.receipt_url))}" target="_blank" rel="noopener">View</a>` : "—"}</td>
         <td><button class="adm-btn-ghost" type="button" data-invoice="${esc(b.id)}"><i class="bi bi-receipt"></i> Invoice</button></td>
       </tr>`).join("")}</tbody></table>`;
   box.querySelectorAll("[data-invoice]").forEach(btn => btn.addEventListener("click", () => {
@@ -468,7 +486,7 @@ document.getElementById("bookingSaveBtn").addEventListener("click", async () => 
       num_persons: a.persons,
       total_price: a.fullTotal,
       deposit_amount: a.deposit,
-      receipt_url: val("b_receipt") || null,
+      receipt_url: safeUrl(val("b_receipt")) || null,
       status: val("b_status") || "pending_verification"
     };
     const { data, error } = await sb.from("bookings").insert(payload).select().single();

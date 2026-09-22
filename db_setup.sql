@@ -101,8 +101,11 @@ alter table public.bookings enable row level security;
 alter table public.inquiries enable row level security;
 
 -- 3) PUBLIC READ POLICIES (marketing content only)
+-- Hidden trips (is_visible = false) must never be readable by anon/public clients.
+-- The admin policy below ("trips admin all", to authenticated) still returns every row,
+-- because multiple permissive policies are OR'd — so the admin portal sees hidden trips.
 drop policy if exists "trips public read" on public.trips;
-create policy "trips public read" on public.trips for select using (true);
+create policy "trips public read" on public.trips for select using (is_visible);
 
 drop policy if exists "gallery public read" on public.gallery;
 create policy "gallery public read" on public.gallery for select using (true);

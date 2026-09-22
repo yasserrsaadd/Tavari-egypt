@@ -4,11 +4,26 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 // ─── Direct client-side writes (Supabase anon client) ───
 const RECEIPTS_BUCKET = "payment-receipts";
 
-// Escape user-controlled strings before inserting into innerHTML (prevents DOM XSS)
+// Escape untrusted strings before inserting into innerHTML (prevents DOM XSS)
 function esc(s) {
+  if (s == null) return "";
   return String(s).replace(/[&<>"']/g, (c) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[c]));
+}
+// Only allow http(s) (or same-origin relative) URLs in src/href attributes.
+// esc() escapes quotes but does NOT stop javascript:/data: URLs, so use this for every
+// URL that comes from the database or any other untrusted source.
+function safeUrl(u) {
+  var s = (u == null ? "" : String(u)).trim();
+  if (!s) return "";
+  /* Reject any absolute URL with a scheme other than http/https (javascript:, data:, …) */
+  if (/^[a-z][a-z0-9+.\-]*:/i.test(s) && !/^https?:/i.test(s)) return "";
+  try {
+    var p = new URL(s, window.location.href);
+    if (p.protocol === "http:" || p.protocol === "https:") return p.href;
+  } catch (e) { /* fall through */ }
+  return "";
 }
 
 let supabaseClient = null;
@@ -21,7 +36,7 @@ function showToast(message, type = "info", duration = 4200) {
   const el = document.createElement("div");
   el.className = `tv-toast ${type}`;
   const iconMap = { success: "bi-check-circle-fill", error: "bi-exclamation-circle-fill", info: "bi-info-circle-fill" };
-  el.innerHTML = `<span class="ic"><i class="bi ${iconMap[type]||iconMap.info}"></i></span><span class="msg">${message}</span><span class="close-x"><i class="bi bi-x"></i></span>`;
+  el.innerHTML = `<span class="ic"><i class="bi ${iconMap[type]||iconMap.info}"></i></span><span class="msg">${esc(message)}</span><span class="close-x"><i class="bi bi-x"></i></span>`;
   toastStack.appendChild(el);
   requestAnimationFrame(() => el.classList.add("show"));
   const remove = () => { el.classList.remove("show"); setTimeout(() => el.remove(), 500); };
@@ -386,7 +401,7 @@ const FALLBACK_REVIEWS = [
 ];
 
 let TRIPS_CACHE = [];
-function monogram(name) { return name.split(" ").filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join(""); }
+function monogram(name) { return String(name||"").split(" ").filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join(""); }
 function starString(rating) { const r=Math.max(1,Math.min(5,rating||5)); return "★★★★★".slice(0,r)+"☆☆☆☆☆".slice(0,5-r); }
 function fmtMoney(n) { return "EGP "+Number(n||0).toLocaleString(); }
 function fmtTripDateRange(t) {
@@ -429,12 +444,11 @@ async function loadTrips() {
   let trips = FALLBACK_TRIPS;
   if (useLiveBackend && supabaseClient) {
     try {
-      let { data, error } = await supabaseClient.from("trips").select("*").eq("is_visible",true).order("created_at",{ascending:false});
-      if (error && /is_visible/i.test(String(error.message||""))) {
-        ({ data, error } = await supabaseClient.from("trips").select("*").order("created_at",{ascending:false}));
-      }
+      const { data, error } = await supabaseClient.from("trips").select("*").eq("is_visible",true).order("created_at",{ascending:false});
       if (error) throw error;
-      if (data && data.length) trips = data;
+      /* Defence in depth: RLS already hides is_visible=false rows, but never render them
+         even if a future policy change lets them through. */
+      if (data && data.length) trips = data.filter(t => t.is_visible !== false);
     } catch(e) { console.warn("Falling back to curated trips:", e); showToast("Showing sample trips — live data unavailable.", "info"); }
   }
   TRIPS_CACHE = trips;
@@ -453,21 +467,21 @@ function renderTrips(trips) {
       <div class="trip-card">
         <div class="trip-thumb-wrap ${imgs.length<=1?'trip-thumb-wrap--single':''}">
           <div class="trip-thumb-track">
-            ${imgs.map((src,k)=>{const eager=(i===0&&k===0);return `<div class="trip-thumb-slide"><img src="${tvThumb(src)}" alt="${tvEsc(t.title)} photo ${k+1}" ${eager?'fetchpriority="high" decoding="async"':'loading="lazy" decoding="async"'}></div>`;}).join("")}
+             ${imgs.map((src,k)=>{const eager=(i===0&&k===0);const u=safeUrl(tvThumb(src));return u?`<div class="trip-thumb-slide"><img src="${esc(u)}" alt="${tvEsc(t.title)} photo ${k+1}" ${eager?'fetchpriority="high" decoding="async"':'loading="lazy" decoding="async"'}></div>`:"";}).join("")}
           </div>
           <button class="trip-thumb-nav trip-thumb-prev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
           <button class="trip-thumb-nav trip-thumb-next" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
           <div class="trip-thumb-dots">${imgs.map((_,k)=>`<button class="trip-thumb-dot${k===0?' active':''}" type="button" data-i="${k}" aria-label="Photo ${k+1}"></button>`).join("")}</div>
-          <span class="trip-price-chip">${fmtMoney(t.base_price)} / person</span>
+           <span class="trip-price-chip">${esc(fmtMoney(t.base_price))} / person</span>
           ${t.is_best_seller ? `<span class="best-seller-badge"><i class="bi bi-fire"></i> Best Seller</span>` : ""}
         </div>
         <div class="trip-body">
-          <h3>${t.title}</h3>
-          <div class="trip-dates"><i class="bi bi-calendar3"></i> ${dates}</div>
-          ${duration?`<div class="trip-duration"><i class="bi bi-clock"></i> ${duration}</div>`:""}
+          <h3>${esc(t.title)}</h3>
+          <div class="trip-dates"><i class="bi bi-calendar3"></i> ${esc(dates)}</div>
+          ${duration?`<div class="trip-duration"><i class="bi bi-clock"></i> ${esc(duration)}</div>`:""}
           <div class="trip-actions">
-            <button class="btn-trip-secondary" type="button" data-action="details" data-trip="${t.id}"><i class="bi bi-info-circle"></i> Show Details</button>
-            <button class="btn-trip-primary" type="button" data-action="book" data-trip="${t.id}">Book now</button>
+            <button class="btn-trip-secondary" type="button" data-action="details" data-trip="${esc(t.id)}"><i class="bi bi-info-circle"></i> Show Details</button>
+            <button class="btn-trip-primary" type="button" data-action="book" data-trip="${esc(t.id)}">Book now</button>
           </div>
         </div>
       </div>
@@ -505,12 +519,12 @@ async function loadGalleryStrip() {
       cap: p.caption || p.destination || p.title || "",
     isVideo: !!(p.is_video)
   });
-  const photos = items.map(norm).filter(p => p.url);
+  const photos = items.map(norm).map(p => ({ ...p, url: safeUrl(p.url) })).filter(p => p.url);
   const grid = document.getElementById("galleryTrack");
   const tile = (p) => {
     const media = p.isVideo
-      ? `<video src="${p.url}" autoplay muted loop playsinline preload="metadata"></video><span class="gal-play-badge" aria-hidden="true"><i class="bi bi-play-fill"></i></span>`
-      : `<img src="${tvThumb(p.url)}" alt="${tvEsc(p.cap)}" loading="lazy" decoding="async">`;
+      ? `<video src="${esc(p.url)}" autoplay muted loop playsinline preload="metadata"></video><span class="gal-play-badge" aria-hidden="true"><i class="bi bi-play-fill"></i></span>`
+      : `<img src="${esc(safeUrl(tvThumb(p.url)))}" alt="${tvEsc(p.cap)}" loading="lazy" decoding="async">`;
     return `<div class="gal-frame"><div class="gal-photo">${media}<div class="gal-caption"><div class="gal-title">${tvEsc(p.cap)}</div></div></div></div>`;
   };
   grid.innerHTML = photos.map(tile).join("");
@@ -628,11 +642,11 @@ async function loadReviews() {
   grid.innerHTML = reviews.slice(0,10).map((r) => `
     <div class="tv-review-slide">
       <div class="review-card">
-        <div class="review-mono">${monogram(r.customer_name)}</div>
-        <div class="review-stars">${starString(r.rating)}</div>
-        <p class="review-quote">&ldquo;${r.quote}&rdquo;</p>
-        <div class="review-name">${r.customer_name}</div>
-        <div class="review-trip">${r.trip_title}</div>
+        <div class="review-mono">${esc(monogram(r.customer_name))}</div>
+        <div class="review-stars">${esc(starString(r.rating))}</div>
+        <p class="review-quote">&ldquo;${esc(r.quote)}&rdquo;</p>
+        <div class="review-name">${esc(r.customer_name)}</div>
+        <div class="review-trip">${esc(r.trip_title)}</div>
       </div>
     </div>`).join("");
 
@@ -962,7 +976,7 @@ function openTripDetails(tripId){
   const excluded = (t.excluded && t.excluded.length) ? t.excluded : [];
   const prices = (t.price_options && t.price_options.length) ? t.price_options : [];
   const refund = t.refund_policy || "";
-  const pdf = (t.pdf_url && t.pdf_url!=="#") ? t.pdf_url : null;
+  const pdf = (t.pdf_url && t.pdf_url!=="#") ? safeUrl(t.pdf_url) : "";
 
   const itinHtml = itin.length ? itin.map(d => {
     const pts = (d.points && Array.isArray(d.points)) ? d.points.filter(Boolean) : [];
@@ -983,7 +997,7 @@ function openTripDetails(tripId){
   document.getElementById("tripDetailBody").innerHTML = `
     <div class="tv-td-hero ${imgs.length<=1?'tv-td-hero--single':''}">
       <div class="tv-td-hero-track" id="tdHeroTrack">
-        ${imgs.map((src,i)=>`<div class="tv-td-hero-slide"><img src="${src}" alt="${tvEsc(t.title)} photo ${i+1}" ${i?'loading="lazy"':''} decoding="async"></div>`).join("")}
+        ${imgs.map((src,i)=>{const u=safeUrl(src);return u?`<div class="tv-td-hero-slide"><img src="${esc(u)}" alt="${tvEsc(t.title)} photo ${i+1}" ${i?'loading="lazy"':''} decoding="async"></div>`:"";}).join("")}
       </div>
       <button class="tv-td-hero-nav tv-td-hero-prev" id="tdHeroPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button>
       <button class="tv-td-hero-nav tv-td-hero-next" id="tdHeroNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button>
@@ -1000,7 +1014,7 @@ function openTripDetails(tripId){
       </div>
       ${t.description?`<div class="tv-td-section"><h3><i class="bi bi-info-circle"></i> About this trip</h3><p>${tvEsc(t.description)}</p></div>`:""}
       ${itin.length?`<div class="tv-td-section"><h3><i class="bi bi-map"></i> ${singleDayItin?"Day itinerary":"Day by day"}</h3><div class="tv-td-timeline">${itinHtml}</div></div>`:""}
-      ${t.accommodation?(()=>{const accImgs=(t.accommodation_photos&&t.accommodation_photos.length)?t.accommodation_photos:[];return`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p>${accImgs.length?`<div class="tv-td-acc-photos"><div class="tv-td-acc-slider${accImgs.length<=1?' tv-td-acc-slider--single':''}" id="tdAccSlider"><div class="tv-td-acc-track" id="tdAccTrack">${accImgs.map((src,i)=>`<div class="tv-td-acc-slide"><img src="${src}" alt="Accommodation photo ${i+1}" ${i?'loading="lazy"':''} decoding="async" data-full="${src}"></div>`).join("")}</div><button class="tv-td-acc-nav tv-td-acc-prev" id="tdAccPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button><button class="tv-td-acc-nav tv-td-acc-next" id="tdAccNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button><div class="tv-td-acc-dots" id="tdAccDots">${accImgs.map((_,i)=>`<button class="tv-td-acc-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div></div></div>`:""}</div>`;})():""}
+      ${t.accommodation?(()=>{const accImgs=(t.accommodation_photos&&t.accommodation_photos.length)?t.accommodation_photos:[];return`<div class="tv-td-section"><h3><i class="bi bi-house-heart"></i> Accommodation</h3><p>${tvEsc(t.accommodation)}</p>${accImgs.length?`<div class="tv-td-acc-photos"><div class="tv-td-acc-slider${accImgs.length<=1?' tv-td-acc-slider--single':''}" id="tdAccSlider"><div class="tv-td-acc-track" id="tdAccTrack">${accImgs.map((src,i)=>{const u=safeUrl(src);return u?`<div class="tv-td-acc-slide"><img src="${esc(u)}" alt="Accommodation photo ${i+1}" ${i?'loading="lazy"':''} decoding="async" data-full="${esc(u)}"></div>`:"";}).join("")}</div><button class="tv-td-acc-nav tv-td-acc-prev" id="tdAccPrev" type="button" aria-label="Previous photo"><i class="bi bi-chevron-left"></i></button><button class="tv-td-acc-nav tv-td-acc-next" id="tdAccNext" type="button" aria-label="Next photo"><i class="bi bi-chevron-right"></i></button><div class="tv-td-acc-dots" id="tdAccDots">${accImgs.map((_,i)=>`<button class="tv-td-acc-dot${i===0?' active':''}" type="button" data-i="${i}" aria-label="Photo ${i+1}"></button>`).join("")}</div></div></div>`:""}</div>`;})():""}
        <div class="tv-td-section"><h3><i class="bi bi-clipboard-check"></i> What's included &amp; excluded</h3>
         <div class="tv-td-cols">
           <div><div class="eyebrow mb-2">Included</div>${bullets(included,"included")}</div>
@@ -1012,8 +1026,8 @@ function openTripDetails(tripId){
        ${refund?`<div class="tv-td-section"><h3><i class="bi bi-shield-check"></i> Refund policy</h3><p>${tvEsc(refund)}</p></div>`:""}
         ${(()=>{const g=t.guidelines; const items = Array.isArray(g)?g:(g?String(g).split(/\n|\u2022|\./).map(s=>s.trim()).filter(Boolean):[]); return items.length?`<div class="tv-td-section"><h3><i class="bi bi-list-check"></i> Guidelines</h3><ul class="tv-td-bullets guidelines">${items.map(x=>`<li><i class="bi bi-dot"></i><span>${tvEsc(x)}</span></li>`).join("")}</ul></div>`:"";})()}
        <div class="tv-td-cta">
-        <button class="btn-trip-primary" type="button" data-action="book-close" data-trip="${t.id}"><i class="bi bi-calendar-check"></i> Book now</button>
-        ${pdf?`<a class="btn-trip-secondary" href="${pdf}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf"></i> Itinerary PDF</a>`:""}
+         <button class="btn-trip-primary" type="button" data-action="book-close" data-trip="${esc(t.id)}"><i class="bi bi-calendar-check"></i> Book now</button>
+         ${pdf?`<a class="btn-trip-secondary" href="${esc(pdf)}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf"></i> Itinerary PDF</a>`:""}
       </div>
     </div>
   `;
@@ -1157,8 +1171,8 @@ document.getElementById("completeBookingBtn").addEventListener("click", async ()
   }
 });
 function setButtonLoading(btn,loading,label) {
-  if (loading) { btn.disabled=true; btn.innerHTML=`<span class="spinner-gold"></span>&nbsp; ${label}`; }
-  else { btn.disabled=!receiptFile; btn.classList.toggle("btn-tv-disabled",!receiptFile); btn.innerHTML=`<span class="btn-label">${label}</span>`; }
+  if (loading) { btn.disabled=true; btn.innerHTML=`<span class="spinner-gold"></span>&nbsp; ${esc(label)}`; }
+  else { btn.disabled=!receiptFile; btn.classList.toggle("btn-tv-disabled",!receiptFile); btn.innerHTML=`<span class="btn-label">${esc(label)}</span>`; }
 }
 
 const inqTravelersInput = document.getElementById("inqTravelers");
