@@ -80,10 +80,6 @@ h1,h2,h3,h4{ font-family:'Cormorant Garamond',serif; font-weight:600; margin:0; 
 .adm-bar-right{ margin-left:auto; display:flex; align-items:center; gap:0.8rem; font-size:0.82rem; color:var(--ink-soft); }
 .adm-btn-ghost{ border:1px solid var(--red-line-strong); background:transparent; border-radius:var(--radius-btn); padding:0.45rem 0.9rem; font-size:0.78rem; color:var(--ink); cursor:pointer; display:inline-flex; align-items:center; gap:0.35rem; min-height:38px; }
 .adm-btn-ghost:hover{ background:var(--red-soft); color:var(--red-deep); }
-.adm-tabs{ display:flex; gap:0.4rem; padding:0.9rem 1.4rem 0; flex-wrap:wrap; }
-.adm-tab{ border:1px solid transparent; background:transparent; border-radius:var(--radius-btn); padding:0.5rem 1.1rem; font-size:0.86rem; color:var(--ink-soft); cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem; min-height:40px; transition:background .4s var(--ease), color .4s var(--ease), border-color .4s var(--ease); }
-.adm-tab:hover{ color:var(--red-deep); }
-.adm-tab.active{ background:var(--red-soft); border-color:var(--red-line-strong); color:var(--red-deep); font-weight:600; }
 .adm-main{ padding:1.2rem 1.4rem 3rem; }
 .adm-panel{ display:none; }
 .adm-panel.active{ display:block; }
@@ -105,16 +101,7 @@ h1,h2,h3,h4{ font-family:'Cormorant Garamond',serif; font-weight:600; margin:0; 
 .adm-hidden-tag{ display:inline-flex; align-items:center; gap:0.3rem; font-size:0.7rem; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:50px; background:rgba(58,23,20,0.08); color:var(--ink-soft); align-self:flex-start; }
 .adm-trip-card--hidden .adm-trip-thumb{ opacity:0.45; filter:grayscale(0.6); }
 
-/* TABLES */
-.adm-table-wrap{ overflow-x:auto; }
-.adm-table{ width:100%; border-collapse:collapse; font-size:0.86rem; min-width:640px; }
-.adm-table th{ text-align:left; font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-faint); font-weight:600; padding:0.85rem 0.9rem; border-bottom:1px solid var(--red-line); white-space:nowrap; }
-.adm-table td{ padding:0.85rem 0.9rem; border-bottom:1px solid var(--red-line); vertical-align:top; }
-.adm-table tr:last-child td{ border-bottom:none; }
-.adm-status{ font-size:0.7rem; letter-spacing:0.06em; text-transform:uppercase; padding:0.25rem 0.6rem; border-radius:50px; background:var(--red-soft); color:var(--red-deep); white-space:nowrap; }
 .adm-muted{ color:var(--ink-faint); font-size:0.78rem; }
-.adm-link{ color:var(--red-deep); font-size:0.8rem; text-decoration:none; }
-.adm-link:hover{ text-decoration:underline; }
 
 /* MODALS */
 .adm-modal-scrim{ position:fixed; inset:0; z-index:1500; background:rgba(16,30,48,0.55); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .5s var(--ease); padding:1.2rem; }
@@ -122,7 +109,6 @@ h1,h2,h3,h4{ font-family:'Cormorant Garamond',serif; font-weight:600; margin:0; 
 .adm-modal{ width:100%; max-width:960px; max-height:92vh; overflow-y:auto; background:var(--ivory); border-radius:var(--radius-card); border:1px solid var(--red-line-strong); box-shadow:var(--shadow-lift); transform:translateY(24px) scale(0.98); transition:transform .55s var(--ease); }
 .adm-modal-scrim.show .adm-modal{ transform:translateY(0) scale(1); }
 .adm-modal--sm{ max-width:520px; }
-.adm-modal--md{ max-width:720px; }
 .adm-modal-head{ position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:1rem; padding:1.2rem 1.6rem; background:var(--ivory); border-bottom:1px solid var(--red-line); }
 .adm-modal-head h2{ font-size:1.6rem; }
 .adm-modal-close{ margin-left:auto; width:40px; height:40px; border-radius:50%; border:1px solid var(--red-line-strong); background:transparent; color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
@@ -154,27 +140,7 @@ h1,h2,h3,h4{ font-family:'Cormorant Garamond',serif; font-weight:600; margin:0; 
 .adm-itn-row .adm-icon-btn{ margin-left:auto; }
 .adm-itn-day .tv-textarea{ min-height:78px; margin-bottom:0.5rem; font-size:0.88rem; }
 
-/* INVOICE */
-.adm-invoice{ background:#fff; border:1px solid var(--red-line); border-radius:16px; padding:2rem; color:#3A1714; }
-.adm-inv-head{ display:flex; align-items:flex-start; gap:1rem; border-bottom:2px solid #E0483B; padding-bottom:1rem; margin-bottom:1.2rem; }
-.adm-inv-brand{ font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600; letter-spacing:0.06em; }
-.adm-inv-brand span{ display:block; font-family:'Inter',sans-serif; font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase; color:rgba(58,23,20,0.5); margin-top:0.2rem; }
-.adm-inv-title{ margin-left:auto; text-align:right; }
-.adm-inv-title h3{ font-family:'Cormorant Garamond',serif; font-size:1.5rem; }
-.adm-inv-title div{ font-size:0.8rem; color:rgba(58,23,20,0.7); font-variant-numeric:tabular-nums; }
-.adm-inv-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-bottom:1.2rem; }
-.adm-inv-block .eyebrow{ color:rgba(58,23,20,0.45); margin-bottom:0.35rem; }
-.adm-inv-block p{ margin:0; font-size:0.9rem; line-height:1.55; }
-.adm-inv-table{ width:100%; border-collapse:collapse; font-size:0.9rem; margin-bottom:1rem; }
-.adm-inv-table th{ text-align:left; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:rgba(58,23,20,0.5); padding:0.5rem 0; border-bottom:1px solid rgba(224,72,59,0.3); }
-.adm-inv-table td{ padding:0.6rem 0; border-bottom:1px solid rgba(224,72,59,0.15); }
-.adm-inv-table td.num, .adm-inv-table th.num{ text-align:right; font-variant-numeric:tabular-nums; }
-.adm-inv-totals{ margin-left:auto; width:min(280px,100%); }
-.adm-inv-totals div{ display:flex; justify-content:space-between; font-size:0.9rem; padding:0.28rem 0; font-variant-numeric:tabular-nums; }
-.adm-inv-totals .grand{ border-top:1px solid rgba(224,72,59,0.4); margin-top:0.3rem; padding-top:0.5rem; font-weight:600; font-size:1.02rem; }
-.adm-inv-foot{ margin-top:1.4rem; padding-top:1rem; border-top:1px solid rgba(224,72,59,0.2); font-size:0.78rem; color:rgba(58,23,20,0.6); line-height:1.6; }
 @media (max-width:640px){
-  .adm-inv-grid{ grid-template-columns:1fr; }
   .adm-modal-body{ padding:1.1rem; }
   .adm-modal-head{ padding:1rem; }
 }
@@ -189,7 +155,7 @@ h1,h2,h3,h4{ font-family:'Cormorant Garamond',serif; font-weight:600; margin:0; 
   <div class="adm-login-card">
     <img src="images/logo-01.webp" alt="Tavari Egypt">
     <h1>Tavari Admin</h1>
-    <p class="sub">Sign in to manage trips, bookings and inquiries.</p>
+    <p class="sub">Sign in to manage trips.</p>
     <form id="loginForm" autocomplete="on">
       <label class="tv-field-label" for="loginEmail">Email</label>
       <input class="tv-input" id="loginEmail" type="email" autocomplete="username" required>
@@ -214,12 +180,6 @@ h1,h2,h3,h4{ font-family:'Cormorant Garamond',serif; font-weight:600; margin:0; 
     </div>
   </header>
 
-  <nav class="adm-tabs">
-    <button class="adm-tab active" data-tab="trips" type="button"><i class="bi bi-map"></i> Trips</button>
-    <button class="adm-tab" data-tab="bookings" type="button"><i class="bi bi-calendar-check"></i> Bookings</button>
-    <button class="adm-tab" data-tab="inquiries" type="button"><i class="bi bi-chat-dots"></i> Inquiries</button>
-  </nav>
-
   <main class="adm-main">
     <section class="adm-panel active" id="panel-trips">
       <div class="adm-toolbar">
@@ -228,23 +188,6 @@ h1,h2,h3,h4{ font-family:'Cormorant Garamond',serif; font-weight:600; margin:0; 
         <button class="btn-trip-secondary" id="refreshTripsBtn" type="button"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
       </div>
       <div class="adm-trip-grid" id="tripsList"></div>
-    </section>
-
-    <section class="adm-panel" id="panel-bookings">
-      <div class="adm-toolbar">
-        <button class="btn-trip-primary" id="newBookingBtn" type="button"><i class="bi bi-plus-lg"></i> Create booking</button>
-        <button class="btn-trip-secondary" id="refreshBookingsBtn" type="button"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
-        <span class="adm-muted" id="bookingsCount"></span>
-      </div>
-      <div class="adm-card adm-table-wrap" id="bookingsList"></div>
-    </section>
-
-    <section class="adm-panel" id="panel-inquiries">
-      <div class="adm-toolbar">
-        <button class="btn-trip-secondary" id="refreshInquiriesBtn" type="button"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
-        <span class="adm-muted" id="inquiriesCount"></span>
-      </div>
-      <div class="adm-card adm-table-wrap" id="inquiriesList"></div>
     </section>
   </main>
 </div>
@@ -374,82 +317,7 @@ h1,h2,h3,h4{ font-family:'Cormorant Garamond',serif; font-weight:600; margin:0; 
   </div>
 </div>
 
-<!-- BOOKING CREATOR -->
-<div class="adm-modal-scrim" id="bookingModal">
-  <div class="adm-modal adm-modal--md">
-    <div class="adm-modal-head">
-      <h2>Create booking</h2>
-      <button class="adm-modal-close" id="bookingModalClose" type="button" aria-label="Close"><i class="bi bi-x-lg"></i></button>
-    </div>
-    <div class="adm-modal-body">
-      <div class="adm-section">
-        <label class="tv-field-label" for="b_trip">Trip</label>
-        <select class="tv-select" id="b_trip"></select>
-      </div>
-      <div class="adm-section" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:0.9rem;">
-        <div>
-          <label class="tv-field-label" for="b_name">Customer name</label>
-          <input class="tv-input" id="b_name" placeholder="Full name">
-        </div>
-        <div>
-          <label class="tv-field-label" for="b_phone">Phone</label>
-          <input class="tv-input" id="b_phone" placeholder="+20 …">
-        </div>
-        <div>
-          <label class="tv-field-label" for="b_email">Email</label>
-          <input class="tv-input" id="b_email" type="email" placeholder="name@example.com">
-        </div>
-        <div>
-          <label class="tv-field-label" for="b_persons">Persons</label>
-          <input class="tv-input" id="b_persons" type="number" min="1" max="20" value="1">
-        </div>
-        <div>
-          <label class="tv-field-label" for="b_status">Status</label>
-          <select class="tv-select" id="b_status">
-            <option value="pending_verification">pending_verification</option>
-            <option value="confirmed">confirmed</option>
-            <option value="paid">paid</option>
-            <option value="not yet">not yet</option>
-            <option value="cancelled">cancelled</option>
-          </select>
-        </div>
-        <div>
-          <label class="tv-field-label" for="b_receipt">Receipt URL (optional)</label>
-          <input class="tv-input" id="b_receipt" placeholder="https://…/receipt.png">
-        </div>
-      </div>
-      <div class="adm-section adm-card" style="padding:1rem 1.2rem;">
-        <div style="display:flex; justify-content:space-between; font-size:0.9rem; padding:0.2rem 0;"><span>Total</span><strong id="b_total">EGP 0</strong></div>
-        <div style="display:flex; justify-content:space-between; font-size:0.9rem; padding:0.2rem 0;"><span>Deposit (50%)</span><strong id="b_deposit">EGP 0</strong></div>
-        <div style="display:flex; justify-content:space-between; font-size:0.9rem; padding:0.2rem 0;"><span>Balance</span><strong id="b_balance">EGP 0</strong></div>
-      </div>
-    </div>
-    <div class="adm-modal-foot">
-      <button class="btn-trip-secondary" id="bookingModalCancel" type="button">Cancel</button>
-      <button class="btn-trip-primary" id="bookingSaveBtn" type="button"><span class="btn-label">Create booking</span></button>
-    </div>
-  </div>
-</div>
-
-<!-- INVOICE -->
-<div class="adm-modal-scrim" id="invoiceModal">
-  <div class="adm-modal adm-modal--md">
-    <div class="adm-modal-head">
-      <h2>Invoice</h2>
-      <button class="adm-modal-close" id="invoiceModalClose" type="button" aria-label="Close"><i class="bi bi-x-lg"></i></button>
-    </div>
-    <div class="adm-modal-body">
-      <div class="adm-invoice" id="invoicePreview"></div>
-    </div>
-    <div class="adm-modal-foot">
-      <button class="btn-trip-primary" id="invoiceDownloadBtn" type="button"><i class="bi bi-file-earmark-pdf"></i> Download PDF</button>
-    </div>
-  </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/pdfmake.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdfmake@0.2.10/build/vfs_fonts.js"></script>
-<script src="admin.js?v=20260922b"></script>
+<script src="admin.js?v=20260922c"></script>
 </body>
 </html>

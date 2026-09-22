@@ -4,7 +4,6 @@
 
 const SUPABASE_URL = "https://hpwgnmtlfbmaisdxezrc.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhwd2dubXRsZmJtYWlzZHhlenJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NjU1MTYsImV4cCI6MjA5OTM0MTUxNn0.0k6lSxDX4J2Qz-163fDnRsTQieQ-H2i5IFfeKx-59hY";
-const DEPOSIT_RATE = 0.5;
 
 let sb = null;
 try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); }
@@ -47,13 +46,6 @@ function fmtDate(d) {
   if (isNaN(dt)) return String(d);
   return dt.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
-function fmtDateTime(d) {
-  if (!d) return "";
-  const dt = new Date(d);
-  if (isNaN(dt)) return String(d);
-  return dt.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) +
-    " · " + dt.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-}
 function lines(id) {
   return document.getElementById(id).value.split("\n").map(s => s.trim()).filter(Boolean);
 }
@@ -79,7 +71,7 @@ function showApp(session) {
   adminShell.hidden = !signedIn;
   if (signedIn) {
     document.getElementById("adminEmail").textContent = session.user.email || "";
-    loadTrips(); loadBookings(); loadInquiries();
+    loadTrips();
   }
 }
 
@@ -112,13 +104,6 @@ if (sb) {
   document.getElementById("loginError").textContent = "Supabase client failed to initialise.";
 }
 
-document.querySelectorAll(".adm-tab").forEach(tab => {
-  tab.addEventListener("click", () => {
-    document.querySelectorAll(".adm-tab").forEach(t => t.classList.toggle("active", t === tab));
-    const name = tab.dataset.tab;
-    document.querySelectorAll(".adm-panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + name));
-  });
-});
 document.querySelectorAll(".adm-modal-scrim").forEach(scrim => {
   scrim.addEventListener("click", (e) => { if (e.target === scrim) closeModal(scrim.id); });
 });
@@ -189,7 +174,6 @@ async function loadTrips() {
     if (error) throw error;
     TRIPS = data || [];
     renderTrips();
-    fillBookingTripOptions();
   } catch (err) {
     console.error(err);
     showToast("Could not load trips: " + (err.message || err), "error");
@@ -388,276 +372,3 @@ async function deleteTrip(id) {
     showToast(err.message || "Could not delete the trip.", "error");
   }
 }
-
-/* ---------- bookings ---------- */
-let BOOKINGS = [];
-
-function fillBookingTripOptions() {
-  const sel = document.getElementById("b_trip");
-  const keep = sel.value;
-  sel.innerHTML = TRIPS.map(t => `<option value="${esc(t.id)}">${esc(t.title)} — ${esc(fmtMoney(t.base_price))} / person</option>`).join("");
-  if (keep && TRIPS.some(t => String(t.id) === keep)) sel.value = keep;
-  updateBookingAmounts();
-}
-function clampPersons(v) { let n = parseInt(v, 10); if (isNaN(n) || n < 1) n = 1; if (n > 20) n = 20; return n; }
-function bookingAmounts() {
-  const trip = TRIPS.find(t => String(t.id) === document.getElementById("b_trip").value);
-  const persons = clampPersons(document.getElementById("b_persons").value);
-  document.getElementById("b_persons").value = persons;
-  const base = trip ? Number(trip.base_price || 0) : 0;
-  const fullTotal = Math.round(base * persons);
-  const deposit = Math.round(fullTotal * DEPOSIT_RATE);
-  const balance = fullTotal - deposit;
-  document.getElementById("b_total").textContent = fmtMoney(fullTotal);
-  document.getElementById("b_deposit").textContent = fmtMoney(deposit);
-  document.getElementById("b_balance").textContent = fmtMoney(balance);
-  return { trip, persons, fullTotal, deposit, balance };
-}
-function updateBookingAmounts() { bookingAmounts(); }
-document.getElementById("b_trip").addEventListener("change", updateBookingAmounts);
-document.getElementById("b_persons").addEventListener("input", updateBookingAmounts);
-
-function renderBookings() {
-  const box = document.getElementById("bookingsList");
-  document.getElementById("bookingsCount").textContent = BOOKINGS.length ? `${BOOKINGS.length} booking${BOOKINGS.length === 1 ? "" : "s"}` : "";
-  if (!BOOKINGS.length) { box.innerHTML = `<div class="adm-empty">No bookings yet.</div>`; return; }
-  box.innerHTML = `<table class="adm-table">
-    <thead><tr>
-      <th>Client</th><th>Trip</th><th class="num">Persons</th><th class="num">Total</th>
-      <th class="num">Deposit (50%)</th><th>Status</th><th>Created</th><th>Receipt</th><th></th>
-    </tr></thead>
-    <tbody>${BOOKINGS.map(b => `
-      <tr>
-        <td><strong>${esc(b.customer_name)}</strong><div class="adm-muted">${esc(b.customer_phone || "")}</div><div class="adm-muted">${esc(b.customer_email || "")}</div></td>
-        <td>${esc(b.trip_title || b.trip_id || "—")}</td>
-        <td class="num">${esc(b.num_persons)}</td>
-        <td class="num">${esc(fmtMoney(b.total_price))}</td>
-        <td class="num">${esc(fmtMoney(b.deposit_amount))}</td>
-        <td><span class="adm-status">${esc(b.status || "")}</span></td>
-        <td class="adm-muted">${esc(fmtDateTime(b.created_at))}</td>
-        <td>${safeUrl(b.receipt_url) ? `<a class="adm-link" href="${esc(safeUrl(b.receipt_url))}" target="_blank" rel="noopener">View</a>` : "—"}</td>
-        <td><button class="adm-btn-ghost" type="button" data-invoice="${esc(b.id)}"><i class="bi bi-receipt"></i> Invoice</button></td>
-      </tr>`).join("")}</tbody></table>`;
-  box.querySelectorAll("[data-invoice]").forEach(btn => btn.addEventListener("click", () => {
-    const b = BOOKINGS.find(x => String(x.id) === btn.dataset.invoice);
-    if (b) openInvoice(b);
-  }));
-}
-
-async function loadBookings() {
-  try {
-    const { data, error } = await sb.from("bookings").select("*").order("created_at", { ascending: false });
-    if (error) throw error;
-    BOOKINGS = data || [];
-    renderBookings();
-  } catch (err) {
-    console.error(err);
-    showToast("Could not load bookings: " + (err.message || err), "error");
-  }
-}
-
-document.getElementById("newBookingBtn").addEventListener("click", () => {
-  if (!TRIPS.length) { showToast("Create a trip first.", "error"); return; }
-  ["b_name", "b_phone", "b_email", "b_receipt"].forEach(id => { document.getElementById(id).value = ""; });
-  document.getElementById("b_persons").value = 1;
-  document.getElementById("b_status").value = "pending_verification";
-  fillBookingTripOptions();
-  openModal("bookingModal");
-});
-document.getElementById("refreshBookingsBtn").addEventListener("click", loadBookings);
-document.getElementById("bookingModalClose").addEventListener("click", () => closeModal("bookingModal"));
-document.getElementById("bookingModalCancel").addEventListener("click", () => closeModal("bookingModal"));
-
-document.getElementById("bookingSaveBtn").addEventListener("click", async () => {
-  const btn = document.getElementById("bookingSaveBtn");
-  const a = bookingAmounts();
-  const name = val("b_name"), phone = val("b_phone"), email = val("b_email");
-  if (!a.trip) { showToast("Pick a trip.", "error"); return; }
-  if (!name) { showToast("Customer name is required.", "error"); return; }
-  if (email && !/^\S+@\S+\.\S+$/.test(email)) { showToast("That email address doesn't look right.", "error"); return; }
-  setButtonLoading(btn, true, "Creating…");
-  try {
-    const payload = {
-      trip_id: a.trip.id,
-      trip_title: a.trip.title,
-      customer_name: name,
-      customer_phone: phone || null,
-      customer_email: email || null,
-      num_persons: a.persons,
-      total_price: a.fullTotal,
-      deposit_amount: a.deposit,
-      receipt_url: safeUrl(val("b_receipt")) || null,
-      status: val("b_status") || "pending_verification"
-    };
-    const { data, error } = await sb.from("bookings").insert(payload).select().single();
-    if (error) throw error;
-    closeModal("bookingModal");
-    showToast("Booking created.", "success");
-    await loadBookings();
-    openInvoice(data);
-  } catch (err) {
-    console.error(err);
-    showToast(err.message || "Could not create the booking.", "error");
-  } finally {
-    setButtonLoading(btn, false, "Create booking");
-  }
-});
-
-/* ---------- invoice ---------- */
-let CURRENT_INVOICE = null;
-
-function invoiceNumber(b) {
-  const raw = String((b && b.id) || "").replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
-  return "INV-" + (raw ? raw.slice(0, 8) : "DRAFT");
-}
-function invoiceData(b) {
-  const total = Number(b.total_price || 0);
-  const deposit = Number(b.deposit_amount || 0);
-  const persons = Number(b.num_persons || 0);
-  return {
-    number: invoiceNumber(b),
-    date: fmtDateTime(b.created_at || new Date()),
-    client: b.customer_name || "",
-    phone: b.customer_phone || "",
-    email: b.customer_email || "",
-    trip: b.trip_title || b.trip_id || "",
-    persons: persons,
-    unit: persons ? Math.round(total / persons) : total,
-    total: total,
-    deposit: deposit,
-    balance: total - deposit,
-    status: b.status || ""
-  };
-}
-function renderInvoicePreview(inv) {
-  document.getElementById("invoicePreview").innerHTML = `
-    <div class="adm-inv-head">
-      <div class="adm-inv-brand">TAVARI<span>EGYPT · BESPOKE TRAVEL</span></div>
-      <div class="adm-inv-title">
-        <h3>Invoice</h3>
-        <div>${esc(inv.number)}</div>
-        <div>${esc(inv.date)}</div>
-      </div>
-    </div>
-    <div class="adm-inv-grid">
-      <div class="adm-inv-block">
-        <span class="eyebrow">Billed to</span>
-        <p><strong>${esc(inv.client)}</strong><br>${esc(inv.phone)}<br>${esc(inv.email)}</p>
-      </div>
-      <div class="adm-inv-block">
-        <span class="eyebrow">Trip</span>
-        <p><strong>${esc(inv.trip)}</strong><br>${esc(inv.persons)} traveller${inv.persons === 1 ? "" : "s"}<br>Status: ${esc(inv.status)}</p>
-      </div>
-    </div>
-    <table class="adm-inv-table">
-      <thead><tr><th>Description</th><th class="num">Qty</th><th class="num">Unit</th><th class="num">Amount</th></tr></thead>
-      <tbody>
-        <tr><td>${esc(inv.trip)} — per person</td><td class="num">${esc(inv.persons)}</td><td class="num">${esc(fmtMoney(inv.unit))}</td><td class="num">${esc(fmtMoney(inv.total))}</td></tr>
-      </tbody>
-    </table>
-    <div class="adm-inv-totals">
-      <div><span>Total</span><span>${esc(fmtMoney(inv.total))}</span></div>
-      <div><span>Deposit paid (50%)</span><span>${esc(fmtMoney(inv.deposit))}</span></div>
-      <div class="grand"><span>Balance due</span><span>${esc(fmtMoney(inv.balance))}</span></div>
-    </div>
-    <div class="adm-inv-foot">Thank you for travelling with Tavari Egypt. The balance is settled before departure; our payment desk confirms every booking by phone or WhatsApp.</div>`;
-}
-function openInvoice(b) {
-  CURRENT_INVOICE = invoiceData(b);
-  renderInvoicePreview(CURRENT_INVOICE);
-  openModal("invoiceModal");
-}
-document.getElementById("invoiceModalClose").addEventListener("click", () => closeModal("invoiceModal"));
-document.getElementById("invoiceDownloadBtn").addEventListener("click", () => {
-  if (!CURRENT_INVOICE) return;
-  if (typeof pdfMake === "undefined") { showToast("PDF library not loaded — check your connection.", "error"); return; }
-  const inv = CURRENT_INVOICE;
-  const doc = {
-    content: [
-      { text: "TAVARI EGYPT", style: "brand" },
-      { text: "BESPOKE TRAVEL · CAIRO", style: "brandSub", margin: [0, 0, 0, 14] },
-      {
-        columns: [
-          { width: "*", text: [
-            { text: "INVOICE\n", style: "docTitle" },
-            { text: inv.number + "\n" + inv.date, style: "small" }
-          ] },
-          { width: "auto", text: [
-            { text: "Billed to\n", style: "label" },
-            { text: inv.client + "\n", bold: true },
-            { text: (inv.phone ? inv.phone + "\n" : "") + (inv.email || ""), style: "small" }
-          ], alignment: "right" }
-        ]
-      },
-      { text: "Trip", style: "label", margin: [0, 16, 0, 2] },
-      { text: inv.trip + "  ·  " + inv.persons + " traveller" + (inv.persons === 1 ? "" : "s") + "  ·  " + inv.status, margin: [0, 0, 0, 14] },
-      {
-        table: {
-          widths: ["*", "auto", "auto", "auto"],
-          body: [
-            [
-              { text: "Description", style: "th" },
-              { text: "Qty", style: "th", alignment: "right" },
-              { text: "Unit", style: "th", alignment: "right" },
-              { text: "Amount", style: "th", alignment: "right" }
-            ],
-            [inv.trip + " — per person", String(inv.persons), fmtMoney(inv.unit), fmtMoney(inv.total)]
-          ]
-        },
-        layout: "lightHorizontalLines",
-        margin: [0, 0, 0, 14]
-      },
-      {
-        table: {
-          widths: ["*", "auto"],
-          body: [
-            [{ text: "Total", alignment: "right" }, { text: fmtMoney(inv.total), alignment: "right" }],
-            [{ text: "Deposit paid (50%)", alignment: "right" }, { text: fmtMoney(inv.deposit), alignment: "right" }],
-            [{ text: "Balance due", alignment: "right", bold: true }, { text: fmtMoney(inv.balance), alignment: "right", bold: true }]
-          ]
-        },
-        layout: "noBorders",
-        margin: [0, 0, 0, 18]
-      },
-      { text: "Thank you for travelling with Tavari Egypt. The balance is settled before departure; our payment desk confirms every booking by phone or WhatsApp.", style: "small" }
-    ],
-    styles: {
-      brand: { fontSize: 22, bold: true, color: "#B33025" },
-      brandSub: { fontSize: 8, color: "#8a6a66", characterSpacing: 1.5 },
-      docTitle: { fontSize: 14, bold: true, color: "#3A1714" },
-      label: { fontSize: 8, bold: true, color: "#8a6a66" },
-      small: { fontSize: 9, color: "#6b4f4c" },
-      th: { fontSize: 8, bold: true, color: "#8a6a66" }
-    },
-    defaultStyle: { font: "Roboto", fontSize: 10, color: "#3A1714" }
-  };
-  pdfMake.createPdf(doc).download("Tavari-" + inv.number + ".pdf");
-});
-
-/* ---------- inquiries ---------- */
-async function loadInquiries() {
-  try {
-    const { data, error } = await sb.from("inquiries").select("*").order("created_at", { ascending: false });
-    if (error) throw error;
-    const rows = data || [];
-    const box = document.getElementById("inquiriesList");
-    document.getElementById("inquiriesCount").textContent = rows.length ? `${rows.length} submission${rows.length === 1 ? "" : "s"}` : "";
-    if (!rows.length) { box.innerHTML = `<div class="adm-empty">No inquiries yet.</div>`; return; }
-    box.innerHTML = `<table class="adm-table">
-      <thead><tr><th>Name</th><th>Contact</th><th>Interest</th><th class="num">Persons</th><th>Notes</th><th>Status</th><th>Submitted</th></tr></thead>
-      <tbody>${rows.map(r => `
-        <tr>
-          <td><strong>${esc(r.customer_name)}</strong></td>
-          <td><div>${esc(r.customer_phone || "")}</div><div class="adm-muted">${esc(r.customer_email || "")}</div></td>
-          <td>${esc(r.interested_trip || r.trip_interest || "—")}<div class="adm-muted">${esc(r.trip_type || "")}</div></td>
-          <td class="num">${esc(r.num_persons)}</td>
-          <td>${esc(r.notes || "—")}</td>
-          <td><span class="adm-status">${esc(r.status || "")}</span></td>
-          <td class="adm-muted">${esc(fmtDateTime(r.created_at))}</td>
-        </tr>`).join("")}</tbody></table>`;
-  } catch (err) {
-    console.error(err);
-    showToast("Could not load inquiries: " + (err.message || err), "error");
-  }
-}
-document.getElementById("refreshInquiriesBtn").addEventListener("click", loadInquiries);
